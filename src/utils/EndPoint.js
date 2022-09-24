@@ -1,0 +1,1 @@
+export const EndPoint = 'https://toprathi-api.herokuapp.com/api/';
