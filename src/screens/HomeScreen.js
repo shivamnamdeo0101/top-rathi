@@ -6,10 +6,11 @@ import LoadingComp from '../components/LoadingComp';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
-  const user = useSelector(state=>state.userAuth);
+  const user = useSelector(state=>state.userAuth.user.user);
+  const profile = useSelector(state=>state.userAuth.profile);
   const data = JSON.stringify(user);
   const [loading, setloading] = useState(false);
-  console.log(user.isLoading)
+  
 
   const Logout = async  ()=>{
     setloading(true);
@@ -38,8 +39,6 @@ export default function HomeScreen({navigation}) {
 
   return (
     <View>
-
-      
       <Text >{
         data
       }</Text>

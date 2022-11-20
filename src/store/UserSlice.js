@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
   user: {},
+  profile:{},
   isLoading: false,
   isSuccess: false,
   errMsg: '',
@@ -23,9 +24,14 @@ export const UserSlice = createSlice({
     setUserDetails: (state, action) => {
       state.user = action.payload;
     },
+    setProfileDetaiils: (state, action) => {
+      state.profile = action.payload;
+    },
+    
     registerAuthUser:(state,action)=>{
         state.isLoading = true;
     },
+
     setLoadingUser:(state)=>{
       state.isLoading = true;
     },
@@ -33,6 +39,9 @@ export const UserSlice = createSlice({
       state.isLoading = false;
       state.errMsg = action?.payload;
     },
+    setFirstTime:(state)=>{
+      state.isFirstTime = false;
+    } ,
     flushAuthData: (state) => {
      
       state.user= {};
@@ -41,12 +50,10 @@ export const UserSlice = createSlice({
       state.errMsg ='';
       AsyncStorage.clear();
        
-    },
-    setFirstTime:(state)=>{
-      state.isFirstTime = false;
-    } 
+    }
+    
   },
 });
-export const { setUserDetails, flushAuthData,getAuthFetch, setLoadingUser ,getAuthSuccess ,registerAuthUser,getAuthFailure} = UserSlice.actions;
+export const { setUserDetails, flushAuthData,getAuthFetch,setProfileDetaiils, setLoadingUser ,getAuthSuccess ,registerAuthUser,getAuthFailure,setFirstTime} = UserSlice.actions;
 
 export default UserSlice.reducer;

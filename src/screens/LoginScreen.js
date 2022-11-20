@@ -47,10 +47,13 @@ const LoginScreen = ({ navigation }) => {
     if (userauth.isLoading) {
       return;
     }
-    
+
+    console.log("Login",data)
+
     try {
 
       dispatch(getAuthFetch(data));
+
     
     } catch (e) {
       Alert.alert('Oops', e.message);
@@ -119,7 +122,7 @@ if(userauth.isLoading){
           type="TERTIARY"
         />
 
-        <SocialSignInButtons />
+        {/* <SocialSignInButtons /> */}
 
         <CustomButton
           text="Don't have an account? Create one"

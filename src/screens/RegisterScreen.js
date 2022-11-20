@@ -6,9 +6,9 @@ import CustomButton from "../components/CustomButton/CustomButton";
 import { useNavigation } from '@react-navigation/core';
 import { useForm } from 'react-hook-form';
 import axios from "react-native-axios";
-import { useDispatch ,useSelector} from 'react-redux';
-import { getAuthFetch, setUserDetails,registerAuthUser, flushAuthData } from '../store/UserSlice';
-import {userRegister} from "../service/apis/UserService"
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthFetch, setUserDetails, registerAuthUser, flushAuthData ,getAuthSuccess} from '../store/UserSlice';
+import { userRegister } from "../service/apis/UserService"
 import LoadingComp from '../components/LoadingComp';
 const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -17,18 +17,32 @@ const RegisterScreen = ({ navigation }) => {
     const { control, handleSubmit, watch } = useForm();
     const [user, setuser] = useState({});
     const pwd = watch('password');
-    const userauth = useSelector(state=>state.userAuth);
+    const userauth = useSelector(state => state.userAuth);
     const dispatch = useDispatch();
-   
+
     const onRegisterPressed = async data => {
         const { password, email, name } = data;
         const payload = {
-            "username": name,
-            "email":email,
-            "password": password
+           
+                "username": name,
+                "email": email,
+                "password": password,
+                "education": {
+                    "school": {
+                        "class_": "",
+                        "stream": ""
+                    },
+                    "college": {
+                        "college_type": "",
+                        "branch": ""
+                    }
+                },
+                "interest":[]
+            
         }
         try {
-           dispatch(registerAuthUser(payload))
+            dispatch(registerAuthUser(payload))
+            dispatch(getAuthSuccess())
         } catch (e) {
             Alert.alert('Oops', e.message);
         }
@@ -46,9 +60,9 @@ const RegisterScreen = ({ navigation }) => {
     const onPrivacyPressed = () => {
     };
 
-    if(userauth.isLoading){
-        return(
-          <LoadingComp/>
+    if (userauth.isLoading) {
+        return (
+            <LoadingComp />
         )
     }
 
@@ -123,7 +137,7 @@ const RegisterScreen = ({ navigation }) => {
                     </Text>
                 </Text>
 
-                <SocialSignInButtons />
+                {/* <SocialSignInButtons /> */}
 
                 <CustomButton
                     text="Have an account? Sign in"

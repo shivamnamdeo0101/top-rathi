@@ -5,14 +5,18 @@ import {Controller} from 'react-hook-form';
 const CustomInput = ({
   control,
   name,
+  value,
+  defaultValue,
   rules = {},
   placeholder,
   secureTextEntry,
+  editable
 }) => {
   return (
     <Controller
       control={control}
       name={name}
+      defaultValue={defaultValue}
       rules={rules}
       render={({field: {value, onChange, onBlur}, fieldState: {error}}) => (
         <>
@@ -21,7 +25,9 @@ const CustomInput = ({
               styles.container,
               {borderColor: error ? 'red' : '#e8e8e8'},
             ]}>
+              <Text style={{paddingLeft:5,paddingTop:5,color:"#666",fontFamily:"Poppins-Bold"}}>{name.toUpperCase()}</Text>
             <TextInput
+              editable={editable}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}

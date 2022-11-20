@@ -15,6 +15,8 @@ import { persistedReducer } from './src/store/RootReducer';
 import { rootSaga } from './src/service/sagas/RootSaga';
 import createSagaMiddleware from 'redux-saga';
 import ProfileStartupStack from './src/navigation/ProfileStartupStack';
+import AppStack from './src/navigation/AppStack';
+import axios from 'react-native-axios';
 
 
 const saga = createSagaMiddleware();
@@ -28,18 +30,16 @@ const store = configureStore({
 saga.run(rootSaga)
 
 function Root() {
-  const userauth =useSelector(state=>state.userAuth)
-  return(
-  <NavigationContainer >
-    {!userauth?.user?.user?._id? <AuthStack /> : 
-    
-    false?
-    <TabStack />
-    :
-    <ProfileStartupStack/>
-    
-    }
-  </NavigationContainer>
+  const userauth = useSelector(state => state.userAuth)
+  const token = useSelector(state => state.userAuth.user.token)
+
+
+  return (
+    <NavigationContainer >
+      {!userauth?.user?.user?._id ? <AuthStack /> :
+          <AppStack />
+      }
+    </NavigationContainer>
   )
 }
 

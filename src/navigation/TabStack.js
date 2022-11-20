@@ -6,19 +6,22 @@ import NewsScreen from '../screens/NewsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
+import HomeScreen from '../screens/HomeScreen';
 const Tab = AnimatedTabBarNavigator();
 
 export default function TabStack({navigation}) {
   return (
+    
     <Tab.Navigator initialRouteName='Home' tabBarOptions={{
       activeTintColor: "#000",
       inactiveTintColor: "#000",
       labelStyle:{
-        color:"#000"
-      }
+        color:"#000",
+      },
+      tabBarLabelStyle: { fontFamily:"Poppins-Regular"}
      
     }}>
-      <Tab.Screen name="Ask" component={AppStack}
+      <Tab.Screen name="Ask" component={HomeScreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
               <MaterialCommunityIcons
