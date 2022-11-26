@@ -8,37 +8,39 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import { NEWS_API } from '../service/apis/NewsService';
 
-const ENTRIES1 = [
-  {
-    title: 'Beautiful and dramatic Antelope Canyon',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/UYiroysl.jpg',
-  },
-  {
-    title: 'Earlier this morning, NYC',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
-  },
-  {
-    title: 'White Pocket Sunset',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-    illustration: 'https://i.imgur.com/MABUbpDl.jpg',
-  },
-  {
-    title: 'Acrocorinth, Greece',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
-  },
-  {
-    title: 'The lone tree, majestic landscape of New Zealand',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
-  },
-];
+// const ENTRIES1 = [
+//   {
+//     title: 'Beautiful and dramatic Antelope Canyon',
+//     subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+//     illustration: 'https://i.imgur.com/UYiroysl.jpg',
+//   },
+//   {
+//     title: 'Earlier this morning, NYC',
+//     subtitle: 'Lorem ipsum dolor sit amet',
+//     illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
+//   },
+//   {
+//     title: 'White Pocket Sunset',
+//     subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
+//     illustration: 'https://i.imgur.com/MABUbpDl.jpg',
+//   },
+//   {
+//     title: 'Acrocorinth, Greece',
+//     subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+//     illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
+//   },
+//   {
+//     title: 'The lone tree, majestic landscape of New Zealand',
+//     subtitle: 'Lorem ipsum dolor sit amet',
+//     illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
+//   },
+// ];
 const {width: screenWidth} = Dimensions.get('window');
 
-const CarouselComp = props => {
+const CarouselComp = ({navigation}) => {
+
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
 
@@ -50,14 +52,20 @@ const CarouselComp = props => {
     carouselRef.current.snapToPrev();
   };
   useEffect(() => {
-    setEntries(ENTRIES1);
-  }, []);
+   async function fetchData (){
+    const res = await NEWS_API.slideFetch();
+      setEntries(res.data.data)
+   }
+
+   fetchData();
+    
+  }, [entries]);
 
   const renderItem = ({item, index}, parallaxProps) => {
     return (
-      <View style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("NewsComp", { post: item })}>
         <ParallaxImage
-          source={{uri: item.illustration}}
+          source={{uri: item.image}}
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.4}
@@ -66,7 +74,7 @@ const CarouselComp = props => {
         <Text style={styles.title} numberOfLines={2}>
           {item.title}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -93,14 +101,16 @@ const styles = StyleSheet.create({
 
   },
   item: {
-    width: screenWidth - 70,
-    height: screenWidth - 150,
-    
+    width: screenWidth-40,
+    height: screenWidth+20,
+    marginLeft:-16,
   },
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
+    
+    borderRadius:10
   },
   title:{
     fontFamily:"Poppins-ExtraBold",

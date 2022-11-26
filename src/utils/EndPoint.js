@@ -1,1 +1,1 @@
-export const EndPoint = 'https://toprathi-api.herokuapp.com/api/';
+export const EndPoint = 'http://localhost:5000/api/';

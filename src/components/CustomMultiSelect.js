@@ -1,18 +1,22 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, value, editable }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [search, setsearch] = useState("")
-  const [selectedInterest, setselectedInterest] = useState([])
+  const [selectedInterest, setselectedInterest] = useState(defaultValue)
+
+  useEffect(() => {
+    setValue(selectedInterest)
+  }, [selectedInterest])
+  
 
   const getList = () => {
     return list.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
   }
 
-  console.log(selectedInterest)
 
   const CloseModal = () => {
     setModalVisible(false)
@@ -21,11 +25,11 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
 
   const addToList = (e) => {
     if (!IsAvail(e)) {
-      console.log(selectedInterest)
-      setselectedInterest([...selectedInterest, e])
+      setselectedInterest(current => [...current, e]);
     } else {
-      const res = selectedInterest.filter((item) => item.id !== e.id);
+      const res = selectedInterest.filter((item) => item.name !== e.name);
       setselectedInterest(res)
+      
     }
 
 
@@ -34,7 +38,6 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
   const IsAvail = (e) => {
     const li = []
     Object.values(selectedInterest).forEach((item) => li.push(item.name))
-    console.log(li.includes(e.name))
     return li.includes(e.name)
 
   }
@@ -55,8 +58,8 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
         </Text>
 
           <View style={{flexDirection:"row",marginBottom:30,flexWrap:"wrap"}}>
-            {[...selectedInterest].map((item) =>
-              <Text key={item.id} style={{color: "#666", borderRadius:8,fontFamily: "Poppins-Bold",marginRight:5,backgroundColor:"#f0f3f5",padding:5,marginTop:5}}>
+            {[...selectedInterest].map((item,index) =>
+              <Text key={index} style={{color: "#666", borderRadius:8,fontFamily: "Poppins-Bold",marginRight:5,backgroundColor:"#f0f3f5",padding:5,marginTop:5}}>
                 {item.name}
               </Text>
             )}

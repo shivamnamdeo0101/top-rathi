@@ -7,6 +7,7 @@ import NewsComp from '../components/NewsComp';
 import CarouselComp from '../components/CarouselComp';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import InsightComp from '../components/InsightComp';
 
 
 export default function NewsScreen({ navigation }) {
@@ -32,7 +33,7 @@ export default function NewsScreen({ navigation }) {
     redirect: 'follow'
   };
   useEffect(() => {
-    fetch(`https://toprathi-api.herokuapp.com/api/private/news/1/${page}`, requestOptions)
+    fetch(`http://localhost:5000/api/private/news/1/${page}`, requestOptions)
       .then(response => response.json())
       .then(data => { set_news_data(data); setloading(false) })
   }, [page, loading])
@@ -54,12 +55,15 @@ export default function NewsScreen({ navigation }) {
     setPage(page + 4)
     { console.log(news_data.count) }
   }
+
   const renderHeader = () => (
     <View>
       <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>Top Stories</Text>
-      <CarouselComp />
+      <CarouselComp navigation={navigation} />
+      <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>Top Insights</Text>
+      <InsightComp navigation={navigation} />
       <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>For You</Text>
-         
+
     </View>
    
   )
