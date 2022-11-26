@@ -88,9 +88,9 @@ const EditProfileScreen = ({ navigation }) => {
         }
         try {
             API.userUpdate({ payload: payload, userId: userauth._id })
-                .then(res => {
+            .then(res => {
                     console.log(JSON.stringify(res))
-                })
+            })
         } catch (e) {
             Alert.alert('Oops', e.message);
         }

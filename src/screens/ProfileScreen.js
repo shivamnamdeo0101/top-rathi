@@ -9,13 +9,15 @@ import { flushAuthData, setProfileDetaiils } from '../store/UserSlice';
 import { API } from '../service/apis/UserService';
 
 
-export default function ProfileScreen({ navigation }) {
 
+export default function ProfileScreen({ navigation }) {
+  
   const dispatch = useDispatch();
   const user = useSelector(state => state.userAuth.user.user)
   const [profile, setprofile] = useState(user)
   const education = useSelector(state => state.EducationSlice)
   useEffect(() => {
+  
      API.userFetch({userId:user._id})
     .then(res=>{
         setprofile(res.data.data)
@@ -53,12 +55,27 @@ export default function ProfileScreen({ navigation }) {
           
 
           <ScrollView>
+
+          <View style={{flexDirection:"row",margin:8,justifyContent:"space-around",alignItems:"center"}}>
+            <Image
+              style={{height:120,width:120,borderRadius:99}}
+              source={{
+                uri: 'https://d.newsweek.com/en/full/1962972/spacex-owner-tesla-ceo-elon-musk.jpg',
+              }} />
+
+              <View>
+                <Text style={{fontSize:25,fontFamily:"Poppins-SemiBold",color:"#fff"}}>{profile?.username}</Text>
+                <Text style={{fontSize:12,fontFamily:"Poppins-Regular",width:"90%",color:"#f0f3f5"}}>{profile?.email}</Text>
+              </View>
+
+          </View>
+
           <View style={{margin:8}}>
-          <Image
+          {/* <Image
             style={styles.tinyLogo}
             source={{
               uri: 'https://d.newsweek.com/en/full/1962972/spacex-owner-tesla-ceo-elon-musk.jpg',
-            }} />
+            }} /> */}
 
           <TouchableOpacity style={styles.button}>
             <Text style={styles.text}>Update Image</Text>
@@ -119,6 +136,21 @@ export default function ProfileScreen({ navigation }) {
               <Text style={styles.text}>{profile?.education?.college?.branch}</Text>
             </View>
           </View>
+          <View style={styles.bottom_view_comp}>
+            <View>
+              <Text style={styles.heading}>Interest</Text>
+              <View style={{flexDirection:"row",marginBottom:30,flexWrap:"wrap"}}>
+            {[...profile?.interest].map((item,index) =>
+              <Text key={index} style={{color: "#666", borderRadius:8,fontFamily: "Poppins-Bold",marginRight:5,backgroundColor:"#f0f3f5",padding:5,marginTop:5}}>
+                {item.name}
+              </Text>
+            )}
+          </View>
+            </View>
+          </View>
+
+
+          
         </View>
           
         </ScrollView>
@@ -137,7 +169,7 @@ const styles = StyleSheet.create({
 
   },
   top: {
-    backgroundColor: "#f2c305",
+    backgroundColor: "#eb9d0c",
     flex: 2,
     
 
