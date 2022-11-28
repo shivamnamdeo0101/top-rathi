@@ -10,21 +10,23 @@ import {
   ScrollView,Image
 } from 'react-native';
 import { NEWS_API } from '../service/apis/NewsService';
+import { useDispatch, useSelector } from 'react-redux';
+import { addInsight } from '../store/NewsSlice';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 const InsightComp = ({navigation}) => {
   const [entries, setEntries] = useState([]);
-  
+  const dispatch = useDispatch();
+  const insight = useSelector((state)=>state.NewsSlice.insight)
   useEffect(() => {
     async function fetchData (){
         const res = await NEWS_API.InsightFetch();
-            console.log(res)
-          setEntries(res.data.data)
+          dispatch(addInsight(res.data.data))
        }
     
        fetchData();
-  }, [entries]);
+  }, []);
 
   const Comp = ({item, index}) => {
     return (
@@ -43,13 +45,13 @@ const InsightComp = ({navigation}) => {
     <View style={styles.container}>
 
 
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {
-                entries.map((item,index)=>{
-                    return (<View key={index}>
+                insight.map((item,index)=>
+                   <View key={item._id}>
                         <Comp item={item} index={index}/>
-                    </View>)
-                })
+                    </View>
+                )
             }
       </ScrollView>
      

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "418906309485",
+    "project_id": "toprathi-9ce5d",
+    "storage_bucket": "toprathi-9ce5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418906309485:android:91106713e1b2624f1cd064",
+        "android_client_info": {
+          "package_name": "com.toprathi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418906309485-4pjj7ndd9spjuoe6mgh1oevehr03eeoa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.toprathi",
+            "certificate_hash": "99e8a9038ea037111f260d0e361fb9f3a647fffb"
+          }
+        },
+        {
+          "client_id": "418906309485-61m0kf0j9hqt6fmnu0tc4ikdqv3nun7m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.toprathi",
+            "certificate_hash": "c89467f59a10c1435713497ab781178d4a85afd0"
+          }
+        },
+        {
+          "client_id": "418906309485-jv9r66slivispvl3kl7l8uo0rrgil869.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC48eb8cUvXCv7eF2In-1tkiEUqJQJEFho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418906309485-jv9r66slivispvl3kl7l8uo0rrgil869.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

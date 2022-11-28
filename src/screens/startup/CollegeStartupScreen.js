@@ -11,18 +11,17 @@ import { API } from '../../service/apis/UserService';
 
 export default function CollegeStartupScreen({ navigation }) {
   const { control, handleSubmit, watch } = useForm();
-  const userauth = useSelector(state=>state.userAuth.user.user);
+  const userauth = useSelector(state => state.userAuth.user.user);
   const [user, setuser] = useState({});
   const pwd = watch('password');
   const education = useSelector(state => state.EducationSlice);
   const dispatch = useDispatch();
-
-
+  const [college_type, setcollege_type] = useState("")
+  const [branch, setbranch] = useState("")
 
 
 
   const Next = async data => {
-    const { college_type, branch } = data;
 
     try {
       dispatch(setCollegeType(college_type))
@@ -40,11 +39,11 @@ export default function CollegeStartupScreen({ navigation }) {
 
 
       }
-      
+
       API.userUpdate({ payload: payload, userId: userauth._id })
-          .then(res => {
-            console.log(JSON.stringify(res))
-      })
+        .then(res => {
+          console.log(JSON.stringify(res))
+        })
 
       navigation.navigate("Home")
     } catch (e) {
@@ -56,32 +55,34 @@ export default function CollegeStartupScreen({ navigation }) {
       <View style={styles.top_view}>
 
         <Text style={styles.heading_text}>College Type</Text>
-        <CustomInput name="college_type"
+        <CustomSelect
+          name="College Type"
           control={control}
+          list={[{ id: 0, name: "Graduation" }, { id: 1, name: "Post Graduation" }]}
           placeholder="College Type"
+          setValue={setcollege_type}
+          value={college_type}
           rules={{
-            required: 'College Type is required',
-
-          }} />
-
-
+            required: 'College type is required',
+          }}
+          editable={false}
+        />
 
         <View>
           <Text style={styles.heading_text}>Branch</Text>
-          <CustomInput name="branch"
+          <CustomSelect
+            name="branch"
             control={control}
+            list={[{ id: 0, name: "IT" }, { id: 1, name: "CS" }, { id: 2, name: "Civil" },]}
             placeholder="Branch"
+            setValue={setbranch}
+            value={branch}
             rules={{
-              required: 'Branch is required',
-              minLength: {
-                value: 3,
-                message: 'Branch should be at least 3 characters long',
-              },
-              maxLength: {
-                value: 24,
-                message: 'Branch should be max 24 characters long',
-              },
-            }} />
+              required: 'Stream is required',
+            }}
+            editable={false}
+            searchable={true}
+          />
 
         </View>
       </View>

@@ -9,41 +9,18 @@ import {
   Platform,
 } from 'react-native';
 import { NEWS_API } from '../service/apis/NewsService';
+import { useDispatch, useSelector } from 'react-redux';
+import { addSlide } from '../store/NewsSlice';
 
-// const ENTRIES1 = [
-//   {
-//     title: 'Beautiful and dramatic Antelope Canyon',
-//     subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-//     illustration: 'https://i.imgur.com/UYiroysl.jpg',
-//   },
-//   {
-//     title: 'Earlier this morning, NYC',
-//     subtitle: 'Lorem ipsum dolor sit amet',
-//     illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
-//   },
-//   {
-//     title: 'White Pocket Sunset',
-//     subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-//     illustration: 'https://i.imgur.com/MABUbpDl.jpg',
-//   },
-//   {
-//     title: 'Acrocorinth, Greece',
-//     subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-//     illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
-//   },
-//   {
-//     title: 'The lone tree, majestic landscape of New Zealand',
-//     subtitle: 'Lorem ipsum dolor sit amet',
-//     illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
-//   },
-// ];
+
 const {width: screenWidth} = Dimensions.get('window');
 
 const CarouselComp = ({navigation}) => {
 
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
-
+  const slide = useSelector(state => state.NewsSlice.slide);
+  const dispatch = useDispatch()
   const goForward = () => {
     carouselRef.current.snapToNext();
   };
@@ -54,12 +31,12 @@ const CarouselComp = ({navigation}) => {
   useEffect(() => {
    async function fetchData (){
     const res = await NEWS_API.slideFetch();
-      setEntries(res.data.data)
+    dispatch(addSlide(res.data.data))
    }
 
    fetchData();
     
-  }, [entries]);
+  }, []);
 
   const renderItem = ({item, index}, parallaxProps) => {
     return (
@@ -80,13 +57,14 @@ const CarouselComp = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      
+
+
       <Carousel
         ref={carouselRef}
         sliderWidth={screenWidth}
         sliderHeight={screenWidth}
         itemWidth={screenWidth - 50}
-        data={entries}
+        data={slide}
         renderItem={renderItem}
         hasParallaxImages={true}
       />

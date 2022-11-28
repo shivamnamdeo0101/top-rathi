@@ -8,10 +8,11 @@ import { useForm } from 'react-hook-form';
 import axios from "react-native-axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuthFetch, setProfileDetaiils, registerAuthUser, flushAuthData } from '../store/UserSlice';
-import { API, userRegister } from "../service/apis/UserService"
 import LoadingComp from '../components/LoadingComp';
 import CustomSelect from '../components/CustomSelect';
 import CustomMultiSelect from '../components/CustomMultiSelect';
+import Snackbar from 'react-native-snackbar';
+import { API } from '../service/apis/UserService';
 
 const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -22,9 +23,9 @@ const EditProfileScreen = ({ navigation }) => {
     const pwd = watch('password');
     const userauth = useSelector(state => state.userAuth?.user.user);
     const profile = useSelector(state => state.userAuth.profile);
-    console.log(profile, "Edit")
     const dispatch = useDispatch();
     const [selectedItems, setselectedItems] = useState([])
+
 
 
     const [stream, setStream] = useState(profile?.education?.school?.stream)
@@ -87,10 +88,28 @@ const EditProfileScreen = ({ navigation }) => {
 
         }
         try {
+
             API.userUpdate({ payload: payload, userId: userauth._id })
-            .then(res => {
-                    console.log(JSON.stringify(res))
-            })
+                .then(res => {
+                    
+                    
+
+
+                    Snackbar.show({
+                        text: 'Profile Updated...',
+                        duration: Snackbar.LENGTH_SHORT,
+                        action: {
+                            text: 'OK',
+                            textColor: 'green',
+                            onPress: () => { dispatch(setProfileDetaiils(res.data.data)) },
+                          },
+                      });
+
+
+                    
+                    
+                    
+                })
         } catch (e) {
             Alert.alert('Oops', e.message);
         }
@@ -190,19 +209,7 @@ const EditProfileScreen = ({ navigation }) => {
                     editable={false}
                     searchable={true}
                 />
-                {/* <CustomInput
-                   name="stream"
-                   control={control}
-                   list={[{ id: 0, name: "math" }, { id: 1, name: "science" }, { id: 2, name: "history" },]}
-                   defaultValue={profile?.education?.school?.stream}
-                   placeholder="Stream"
-                   setValue={setStream}
-                   value={stream}
-                   rules={{
-                       required: 'Stream is required',
-                   }}
-                /> */}
-
+              
 
 
 
@@ -250,6 +257,7 @@ const EditProfileScreen = ({ navigation }) => {
                     editable={false}
                     searchable={true}
                 />
+
                 <CustomMultiSelect
                     name="interest"
                     control={control}

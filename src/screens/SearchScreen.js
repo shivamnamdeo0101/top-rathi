@@ -8,48 +8,30 @@ import CarouselComp from '../components/CarouselComp';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import InsightComp from '../components/InsightComp';
-import { addNews, flushHomeData } from '../store/NewsSlice';
+import { NEWS_API } from '../service/apis/NewsService';
 
 
-export default function NewsScreen({ navigation }) {
+export default function SearchScreen({ navigation }) {
 
   const deviceWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
 
-
   const dispatch = useDispatch();
-  const news = useSelector(state => state.NewsSlice.news);
-
   const [loading, setloading] = useState(true);
+  const [query, setquery] = useState("To");
   const [news_data, set_news_data] = useState([]);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [news_comp_data, set_news_comp_data] = useState({});
-  const [page, setPage] = useState(1);
-  const [news_arr, setnews_arr] = useState([])
-  var myHeaders = new Headers();
 
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
+
   useEffect(() => {
-    
-    fetch(`http://localhost:5000/api/private/news/${page}/5`, requestOptions)
-      .then(response => response.json())
-      .then(data => { 
-        set_news_data(data); 
-          setloading(false) ;
-          
-          setnews_arr([...news_arr,...data.data])
-         dispatch(addNews(news_arr));
-        })
-  }, [page])
+    NEWS_API.SearchNews(query)
+    .then((res)=>{
+        console.log(res)
+        // set_news_data(res.data)
+        // setloading(false)
+    })
+  }, [query, loading])
 
-  const ShowNewsModal = (item) => {
-    set_news_comp_data(item);
-    setModalVisible(true)
-  }
+
   const separator = () => (
     <View style={{height: 0.8, width: '100%', backgroundColor: '#fff'}} />
   )
@@ -60,34 +42,23 @@ export default function NewsScreen({ navigation }) {
     )
   }
   const fetchMoreData = () => {
-
-    if(news_arr.length < news_data.count){
-      setPage(page + 1)
-      console.log(page)
-    }
-
-   
+    { console.log(news_data.count) }
   }
 
   const renderHeader = () => (
     <View>
-      <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>Top Stories</Text>
-      <CarouselComp navigation={navigation} />
-      <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>Top Insights</Text>
-      <InsightComp navigation={navigation} />
-      <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>For You</Text>
-
+      {news_data ? 
+        <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>Search Results</Text>
+        :
+        <Text style={{fontSize:20,fontFamily:"Poppins-Bold",color:"#000"}}>Top Stories</Text>
+      }
+    
     </View>
    
   )
   const renderFooter = () => (
     <View style={styles.footerText}>
-      {
-        news_arr.length == news_data.count ?
-          <Text></Text>
-          :
-          <ActivityIndicator />
-      }
+     
     </View>
   )
   const renderEmpty = () => (
@@ -97,8 +68,8 @@ export default function NewsScreen({ navigation }) {
   )
 
 
-  const renderItem = ({ item,index }) => (
-    <TouchableOpacity  style={styles.news_comp} key={index} onPress={() => navigation.navigate("NewsComp", { post: item })}>
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={styles.news_comp} key={item._id} onPress={() => navigation.navigate("NewsComp", { post: item })}>
       <Image style={styles.post_img} source={{ uri: item.image }} />
 
       <View style={styles.content_data}>
@@ -126,44 +97,44 @@ export default function NewsScreen({ navigation }) {
     <View style={styles.root}>
 
 
-      <View style={styles.container}>
+
+
+      {/* <View style={styles.container}>
 
         
-        <TouchableOpacity  onPress={()=>navigation.navigate("Search")} style={{ display: "flex", flexDirection: "row", alignItems: "center", padding: 5, backgroundColor: "#f0f3f5", margin: 5, borderRadius: 40, justifyContent: "space-around" }}>
+        <TouchableOpacity onPress={() => navigation.navigate("Search")} style={{ display: "flex", flexDirection: "row", alignItems: "center", padding: 5, backgroundColor: "#f0f3f5", margin: 5, borderRadius: 40, justifyContent: "space-around" }}>
           <Ionicons name="search" style={{ marginLeft: 10 }} color="#000" size={20}  />
           <TextInput
             placeholder='Search...'
-            editable={false}
+            editable={true}
+            onChangeText={(e)=>setquery(e)}
+            value={query}
             style={{ width: "80%", color: "#000", width: "90%", marginLeft: 10, padding: 5, borderRadius: 16, fontFamily: "Poppins-Regular" }}
-           
           />
         </TouchableOpacity>
         <>
+        
 
         <View style={{margin:5}}>
 
+          
           <View>
           <FlatList
             
-            style={{ marginBottom:100}}
-            data={news_arr}
+            data={news_data}
             keyExtractor={item => item._id}
             renderItem={renderItem}
-            ListHeaderComponent={renderHeader}
-            ListFooterComponent={renderFooter}
-            ListEmptyComponent={renderEmpty}
-            onEndReachedThreshold={0.2}
-            onEndReached={fetchMoreData}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={separator}
+           
           />
           </View>
         </View>
         </>
 
 
-      </View>
+      </View> */}
 
+   
+   
     </View>
   )
 }
