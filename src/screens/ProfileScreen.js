@@ -60,7 +60,7 @@ export default function ProfileScreen({ navigation }) {
             <Image
               style={{height:120,width:120,borderRadius:99}}
               source={{
-                uri: 'https://d.newsweek.com/en/full/1962972/spacex-owner-tesla-ceo-elon-musk.jpg',
+                uri: 'https://fyooyzbm.filerobot.com/v7/php8p8Rdz.jpg?vh=37060b&ci_seal=0c0920b67d&w=480&h=382&gravity=auto&func=crop',
               }} />
 
               <View>

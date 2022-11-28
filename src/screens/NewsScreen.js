@@ -18,7 +18,7 @@ export default function NewsScreen({ navigation }) {
 
 
   const dispatch = useDispatch();
-  const news = useSelector(state => state.NewsSlice.news);
+ 
 
   const [loading, setloading] = useState(true);
   const [news_data, set_news_data] = useState([]);
@@ -38,11 +38,10 @@ export default function NewsScreen({ navigation }) {
     fetch(`http://localhost:5000/api/private/news/${page}/5`, requestOptions)
       .then(response => response.json())
       .then(data => { 
-        set_news_data(data); 
+          set_news_data(data); 
           setloading(false) ;
-          
           setnews_arr([...news_arr,...data.data])
-         dispatch(addNews(news_arr));
+          //dispatch(addNews(news_arr));
         })
   }, [page])
 
@@ -147,7 +146,7 @@ export default function NewsScreen({ navigation }) {
             
             style={{ marginBottom:100}}
             data={news_arr}
-            keyExtractor={item => item._id}
+            keyExtractor={(item ,index)=> index}
             renderItem={renderItem}
             ListHeaderComponent={renderHeader}
             ListFooterComponent={renderFooter}

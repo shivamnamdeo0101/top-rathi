@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel-v4';
+import Carousel, {ParallaxImage,Pagination} from 'react-native-snap-carousel-v4';
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ const {width: screenWidth} = Dimensions.get('window');
 const CarouselComp = ({navigation}) => {
 
   const [entries, setEntries] = useState([]);
+  const [activeSlide, setactiveSlide] = useState(1);
   const carouselRef = useRef(null);
   const slide = useSelector(state => state.NewsSlice.slide);
   const dispatch = useDispatch()
@@ -65,9 +66,28 @@ const CarouselComp = ({navigation}) => {
         sliderHeight={screenWidth}
         itemWidth={screenWidth - 50}
         data={slide}
+        onSnapToItem={(index) => setactiveSlide(index) }
         renderItem={renderItem}
         hasParallaxImages={true}
       />
+        <Pagination
+              dotsLength={slide.length}
+              activeDotIndex={activeSlide}
+              containerStyle={{ backgroundColor: "transparent"}}
+              dotStyle={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 5,
+                  marginHorizontal: 8,
+                  backgroundColor: "#666"
+              }}
+              inactiveDotStyle={{
+                  // Define styles for inactive dots here
+              }}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={0.6}
+            />
+
     </View>
   );
 };

@@ -23,8 +23,57 @@ export const NEWS_API = {
           
         return axios.request({
             method: 'get',
-            url: `${EndPoint}private/search${payload}`,
+            url: `${EndPoint}private/search/${payload}`,
         })
     },
+
+    AddToCollection: async function (payload) {
+          
+        return axios.request({
+            method: 'post',
+            url: `${EndPoint}private/collection`,
+            data:payload
+        })
+    },
+    RemToCollection: async function (payload) {
+          
+        return axios.request({
+            method: 'delete',
+            url: `${EndPoint}private/collection`,
+            data:payload
+        })
+    },
+    GetToCollection: async function (payload) {
+        const {postId,userId} = payload;
+        return axios.request({
+            method: 'get',
+            url: `${EndPoint}private/collection/${userId}/${postId}`,
+        })
+    },
+    GetPoll: async function (payload) {
+        const postId = payload;
+        return axios.request({
+            method: 'get',
+            url: `${EndPoint}private/poll/${postId}`,
+        })
+    },
+    AddPoll: async function (payload) {
+        return axios.request({
+            method: 'post',
+            url: `${EndPoint}private/poll`,
+            data:payload
+
+        })
+    },
+    RemPoll: async function (payload) {
+        return axios.request({
+            method: 'delete',
+            url: `${EndPoint}private/poll`,
+            data:payload
+
+        })
+    }
+
+    
 
 };
