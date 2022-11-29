@@ -72,7 +72,17 @@ export const NEWS_API = {
             data:payload
 
         })
-    }
+    },
+    GetNewsById: async function (payload) {
+        const postId = payload;
+        return axios.request({
+            method: 'get',
+            headers,
+            url: `${EndPoint}private/news/${postId}`,
+
+        })
+    },
+
 
     
 

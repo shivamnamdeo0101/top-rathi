@@ -38,7 +38,32 @@ export const API = {
         data: payload,
       })
     },
+    userGetCollection:async function(payload){
+      const userId = payload;
+      return axios.request({
+        method: 'get',
+        url: `${EndPoint}private/collection/${userId}`,
+      })
+    },
+    userUpdateProfileImg:async function(payload){
+      return axios.request({
+        method: 'put',
+        url: `${EndPoint}private/profile-img/`,
+        data:payload
+      })
+    },
+    userGetProfileImg:async function(payload){
+      const userId = payload;
+      return axios.request({
+        method: 'get',
+        url: `${EndPoint}private/profile-img/${userId}`,
+      })
+    },
 
+    
+
+
+      
     
 
 

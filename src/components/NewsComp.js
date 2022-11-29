@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView ,Linking, LogBox} from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity,ImageBackground, ScrollView ,Linking, LogBox} from 'react-native'
 import React,{useEffect,useState} from 'react'
 import moment from 'moment'
 import CustomButton from './CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+
 import { NEWS_API } from '../service/apis/NewsService';
 import { useSelector } from 'react-redux';
 import PollComp from './PollComp';
@@ -61,13 +64,22 @@ export default function NewsComp({ route, navigation }) {
       <ScrollView showsVerticalScrollIndicator={true}>
         <View>
          
-          <View style={styles.tags_row}>
+         <View style={{display:"flex",flexDirection:"row",alignItems:"flex-end",justifyContent:"space-between"}}>
+         <View style={styles.tags_row}>
+            
             {post.tags.map((tag) =>
               <View key={tag._id}>
                 <Text style={styles.tag}>{tag.value}</Text>
               </View>
             )}
           </View>
+       
+         </View>
+          
+          
+
+
+
           <View style={{ height: "85%" }}>
             <Text style={{ color: "#000", fontSize: 20, marginTop: 10 ,fontFamily: 'Poppins-Bold'}}>{post.title}</Text>
             <Text style={{
@@ -78,7 +90,7 @@ export default function NewsComp({ route, navigation }) {
           }}>{moment(post.timestamp).fromNow()}</Text>
             
             <Image source={{ uri: post.image }} style={{ width: "100%", height: 200, borderColor: "#eee", borderWidth: 1, marginTop: 10 }} />
-            <Text style={{ color: "#000", fontSize: 16, marginTop: 10 ,fontFamily: 'Poppins-Light'}}>{post.content}{post.content}{post.content}{post.content}</Text>
+            <Text style={{ color: "#000", fontSize: 14, marginTop: 10 ,fontFamily: 'Poppins-Light'}}>{post.content}{post.content}{post.content}{post.content}</Text>
             <Text style={{ color: "#034efc", fontSize: 20, marginBottom: 10 }}
               onPress={()=>navigation.navigate("WebView",{link:post.read_more_link})}
             >READ MORE...</Text>
@@ -88,12 +100,22 @@ export default function NewsComp({ route, navigation }) {
       {
         post.poll_title && <PollComp navigation={navigation} user={user} post={post}/>
       }
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        {post.form_link && <CustomButton
-          text="Fill This Form"
-          onPress={()=>navigation.navigate("WebView",{link:post.form_link})}
-        />}
-      </View>
+        {
+        post.form_link && 
+        <TouchableOpacity onPress={()=>navigation.navigate("WebView",{link:post.form_link})}>
+        <ImageBackground
+                source={{ uri: post.image }}
+                borderRadius={5}
+                blurRadius={90} style={{ display:'flex',flexDirection:"row", alignItems: "center", backgroundColor: "#f0f3f5", padding: 10,margin:10,marginLeft:0,width:150, }}
+                
+            >
+                  <FontAwesome style={{marginRight:10}} name="hand-o-right" color="#fff" size={25}  />
+                <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "bold", fontSize: 16, color: "#f0f3f5" }}>Fill This Form</Text>
+                
+            </ImageBackground>
+            </TouchableOpacity>
+      }
+      
       </View>
     </View>
   )
