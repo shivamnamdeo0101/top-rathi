@@ -7,6 +7,14 @@ const headers = {
 }
 export const NEWS_API = {
 
+
+    FeedFetch: async function (payload) {
+        const {page,perPage} = payload;
+        return axios.request({
+            method: 'get',
+            url: `${EndPoint}private/news/${page}/${perPage}`,
+        })
+    },
     slideFetch: async function () {
         return axios.request({
             method: 'get',

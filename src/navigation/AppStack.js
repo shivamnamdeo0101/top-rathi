@@ -13,6 +13,7 @@ import CollegeStartupScreen from '../screens/startup/CollegeStartupScreen';
 
 import { useSelector } from 'react-redux';
 import SearchScreen from '../screens/SearchScreen';
+import InsightScreen from '../screens/InsightScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,8 @@ export default function AppStack({navigation}) {
       <Stack.Screen name="ProfileStartup" component={ProfileStartupScreen} />
       <Stack.Screen name="SchoolStartup" component={SchoolStartupScreen} />
       <Stack.Screen name="CollegeStartup" component={CollegeStartupScreen} />
+
+      <Stack.Screen name="InsightScreen" component={InsightScreen} options={{headerShown:false}}/>
 
       
       

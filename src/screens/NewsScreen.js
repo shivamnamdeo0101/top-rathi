@@ -9,6 +9,7 @@ import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import InsightComp from '../components/InsightComp';
 import { addNews, flushHomeData } from '../store/NewsSlice';
+import { NEWS_API } from '../service/apis/NewsService';
 
 
 export default function NewsScreen({ navigation }) {
@@ -34,7 +35,16 @@ export default function NewsScreen({ navigation }) {
     redirect: 'follow'
   };
   useEffect(() => {
-    
+    const fetchData = async ()=>{
+        const payload = {
+          "page":page,
+          "perPage":5,
+        }
+        const res = NEWS_API.FeedFetch(payload);
+        console.log(res)
+    }
+
+    fetchData()
     fetch(`http://localhost:5000/api/private/news/${page}/5`, requestOptions)
       .then(response => response.json())
       .then(data => { 
