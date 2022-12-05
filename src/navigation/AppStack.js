@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import SettingScreen from '../screens/SettingScreen';
@@ -14,6 +14,8 @@ import CollegeStartupScreen from '../screens/startup/CollegeStartupScreen';
 import { useSelector } from 'react-redux';
 import SearchScreen from '../screens/SearchScreen';
 import InsightScreen from '../screens/InsightScreen';
+import { API } from '../service/apis/UserService';
+import EmailVerifyScreen from '../components/EmailVerify';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,8 +23,10 @@ export default function AppStack({navigation}) {
 
   const profile_done = false;
   const userauth = useSelector(state => state.userAuth)
+
+
   return (
-    <Stack.Navigator initialRouteName={!userauth.isFirstTime?"Home":"ProfileStartup"} >
+    <Stack.Navigator initialRouteName={!userauth.isFirstTime ?   "Home" :"ProfileStartup"} >
       <Stack.Screen name="Home" component={TabStack}  options={{headerShown:false}} />
       <Stack.Screen name="Setting" component={SettingScreen} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
@@ -35,7 +39,7 @@ export default function AppStack({navigation}) {
       <Stack.Screen name="CollegeStartup" component={CollegeStartupScreen} />
 
       <Stack.Screen name="InsightScreen" component={InsightScreen} options={{headerShown:false}}/>
-
+      
       
       
     </Stack.Navigator>

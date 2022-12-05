@@ -3,7 +3,7 @@ import React ,{useState} from 'react'
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value,editable,searchable }) => {
+const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value,editable,searchable ,dataapi}) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [search, setsearch] = useState("")
 
@@ -14,6 +14,14 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value,e
   const CloseModal = ()=>{
     setModalVisible(false)
     setsearch("");
+  }
+
+  const setData = (item)=>{
+    if(dataapi){
+      setValue(item.iso2+"-"+item.name)
+    }else{
+      setValue(item.name)
+    }
   }
 
   return (
@@ -45,11 +53,14 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value,e
           {getList().map((item,index) => {
             return (
               <View key={index}>
-              <TouchableOpacity onPress={()=>{setValue(item.name);CloseModal()}} style={styles.itemContainer}>
-                <Text style={styles.item} key={index}>{index+1}. {item.name}</Text>
+              <TouchableOpacity onPress={()=>{setData(item);CloseModal()}} style={styles.itemContainer}>
+                <Text style={styles.item} key={index}>{index+1}. {dataapi ? item.iso2+"-"+item.name : item.name}</Text>
                { item.name === value && <Ionicons name="checkmark-done-circle-outline" color="#509403" size={25} />}
               </TouchableOpacity>
               </View>
+
+
+
             );
 
           })}
@@ -61,7 +72,6 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value,e
         name={name}
         defaultValue={defaultValue}
         value={value}
-        
         onChangeText={(e) =>{ setValue(e)}}
         placeholder={placeholder}
         style={styles.input}

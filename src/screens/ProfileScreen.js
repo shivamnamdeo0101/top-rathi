@@ -20,24 +20,35 @@ export default function ProfileScreen({ navigation }) {
   const [profile, setprofile] = useState(user)
   const education = useSelector(state => state.EducationSlice)
 
-  const [image, setimage] = useState("https://i.imgur.com/UPrs1EWl.jp");
+  const [image, setimage] = useState("");
 
+  const payload = { userId: user._id }
   useEffect(() => {
 
-    API.userFetch({ userId: user._id })
-      .then(res => {
+    const fetchData = async () => {
+      const res = await API.userFetch(payload)
+      if (res.data.success) {
         setprofile(res.data.data)
         dispatch(setProfileDetaiils(res.data.data))
+      }
+    }
 
-      })
+    fetchData()
+
   }, [profile])
 
   useEffect(() => {
-      API.userGetProfileImg(user._id).then((res)=>{
+    const fetchData = async () => {
+      const res = await API.userGetProfileImg(payload)
+      if (res.data.success) {
         setimage(res.data.data)
-      })
+      }
+    }
+
+    fetchData()
+    
   }, [image])
-  
+
 
 
   const logout = () => {
@@ -57,25 +68,28 @@ export default function ProfileScreen({ navigation }) {
 
   }
 
-  const SelectImage = async () => {
+  const SelectImage =  async () => {
     await ImagePicker.openPicker({
       width: 300,
       height: 300,
       cropping: true
     }).then(img => {
-       ImgToBase64.getBase64String(img.path)
-        .then(base64String => UpdateToServer("data:image/png;base64,"+base64String))
+      ImgToBase64.getBase64String(img.path)
+        .then(base64String => UpdateToServer("data:image/png;base64," + base64String))
         .catch(err => console.log(err));
     })
   }
 
-  const UpdateToServer = async (img)=>{
+  const UpdateToServer = async (img) => {
     const payload = {
-      "userId":user._id,
-      "profile_img":img
+      "userId": user._id,
+      "profile_img": img
     }
     const res = await API.userUpdateProfileImg(payload)
-    setimage(res.data.data.profile_img)
+    if(res.data.success){
+      setimage(res.data.data.profile_img)
+    }
+   
   }
 
 
@@ -99,7 +113,7 @@ export default function ProfileScreen({ navigation }) {
 
               style={{ height: 120, width: 120, borderRadius: 99 }}
               source={{
-                uri: image,
+                uri: image ? image : "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg",
               }} />
 
             <View>
@@ -205,8 +219,8 @@ export default function ProfileScreen({ navigation }) {
         </ScrollView>
       </View>
 
-   
-   
+
+
     </View>
 
   )

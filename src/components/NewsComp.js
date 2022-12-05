@@ -36,6 +36,7 @@ export default function NewsComp({ route, navigation }) {
 
 
   const toogleSave = async ()=>{
+    
     if(saved){
       await NEWS_API.RemToCollection(payload).then((res)=>{
         setsaved(false)

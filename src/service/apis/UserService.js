@@ -30,12 +30,12 @@ export const API = {
         data: payload,
       })
     },
-    userFetch:async function({payload,userId}){
+    userFetch:async function(payload){
+      const {userId} = payload;
       return axios.request({
         method: 'get',
         headers:headers,
         url: `${EndPoint}private/user/${userId}`,
-        data: payload,
       })
     },
     userGetCollection:async function(payload){
@@ -53,14 +53,31 @@ export const API = {
       })
     },
     userGetProfileImg:async function(payload){
-      const userId = payload;
+      const {userId} = payload;
       return axios.request({
         method: 'get',
         url: `${EndPoint}private/profile-img/${userId}`,
       })
     },
+    userForgotPass:async function(payload){
+      return axios.request({
+        method: 'post',
+        url: `${EndPoint}auth/forgotpassword`,
+        data:payload
+      })
+    },
+    userSendEmailVerifyLink:async function(payload){
+      return axios.request({
+        method: 'post',
+        url: `${EndPoint}auth/send-emailverification`,
+        data:payload
+      })
+    },
+
 
     
+
+   
 
 
       

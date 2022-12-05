@@ -18,6 +18,8 @@ const CollectionComp = ({navigation,user}) => {
         fetchData()
     }, [collection])
     
+  
+    
     
   return (
     <View>

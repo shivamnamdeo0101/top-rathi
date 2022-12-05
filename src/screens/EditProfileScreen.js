@@ -13,6 +13,7 @@ import CustomSelect from '../components/CustomSelect';
 import CustomMultiSelect from '../components/CustomMultiSelect';
 import Snackbar from 'react-native-snackbar';
 import { API } from '../service/apis/UserService';
+import { DATA_API } from '../service/apis/DataService';
 
 const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -26,6 +27,14 @@ const EditProfileScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const [selectedItems, setselectedItems] = useState([])
 
+    const [country_list, setcountry_list] = useState([]);
+    const [state_list, setstate_list] = useState([]);
+    const [cities_list, setcities_list] = useState([]);
+
+
+    const [country, setcountry] = useState("")
+    const [state, setstate] = useState("")
+    const [city, setcity] = useState("")
 
 
     const [stream, setStream] = useState(profile?.education?.school?.stream)
@@ -35,6 +44,43 @@ const EditProfileScreen = ({ navigation }) => {
     const [from_state, setfrom_state] = useState(profile?.education?.college ? "college" : "school")
     const [college_type, setcollege_type] = useState(profile?.education?.college?.college_type)
 
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            const res = await DATA_API.GetCountries()
+            if (res.status == '200') {
+                setcountry_list(res?.data)
+            }
+        }
+        fetchCountries()
+    }, [country])
+    
+    useEffect(() => {
+       
+        const fetchStates = async () => {
+            const c = country.split("-")[0];
+            const res = await DATA_API.GetStates(c)
+            if (res.status == '200') {
+                setstate_list(res?.data)
+            }
+        }
+       
+        fetchStates()
+    }, [country])
+    
+    useEffect(() => {
+      
+        const fetchCities = async () => {
+            const c = country.split("-")[0];
+            const s = state.split("-")[0];
+            const res = await DATA_API.GetCities(c, s)
+            if (res.status == '200') {
+                setcities_list(res?.data)
+            }
+        }
+
+        fetchCities()
+    }, [state])
 
     const items = [{
         id: '92iijs7yta',
@@ -67,8 +113,9 @@ const EditProfileScreen = ({ navigation }) => {
     ];
 
 
+
     const onRegisterPressed = async data => {
-        const { email, username  } = data;
+        const { email, username } = data;
         const payload = {
             "user_data": {
                 "username": username,
@@ -91,8 +138,8 @@ const EditProfileScreen = ({ navigation }) => {
 
             API.userUpdate({ payload: payload, userId: userauth._id })
                 .then(res => {
-                    
-                    
+
+
 
 
                     Snackbar.show({
@@ -102,13 +149,13 @@ const EditProfileScreen = ({ navigation }) => {
                             text: 'OK',
                             textColor: 'green',
                             onPress: () => { dispatch(setProfileDetaiils(res.data.data)) },
-                          },
-                      });
+                        },
+                    });
 
 
-                    
-                    
-                    
+
+
+
                 })
         } catch (e) {
             Alert.alert('Oops', e.message);
@@ -132,6 +179,10 @@ const EditProfileScreen = ({ navigation }) => {
             <LoadingComp />
         )
     }
+
+
+
+
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -169,6 +220,57 @@ const EditProfileScreen = ({ navigation }) => {
                         pattern: { value: EMAIL_REGEX, message: 'Email is invalid' },
                     }}
                 />
+
+                <CustomSelect
+
+                    name="country"
+                    control={control}
+                    list={country_list}
+                    placeholder="Select country"
+                    setValue={setcountry}
+                    value={country}
+                    rules={{
+                        required: 'Country is required',
+                    }}
+                    editable={false}
+                    searchable={true}
+                    dataapi={true}
+                />
+                <CustomSelect
+                    name="state"
+                    control={control}
+                    list={state_list}
+                    placeholder="Select State"
+                    setValue={setstate}
+                    value={state}
+                    rules={{
+                        required: 'State is required',
+                    }}
+                    editable={false}
+                    searchable={true}
+                    dataapi={true}
+                />
+
+
+                <CustomSelect
+
+                    name="city"
+                    control={control}
+                    list={cities_list}
+                    placeholder="Select City"
+                    setValue={setcity}
+                    value={city}
+                    rules={{
+                        required: 'City is required',
+                    }}
+                    editable={false}
+                    searchable={true}
+                    
+                />
+
+
+
+
                 <CustomSelect
                     name="from where"
                     control={control}
@@ -209,7 +311,7 @@ const EditProfileScreen = ({ navigation }) => {
                     editable={false}
                     searchable={true}
                 />
-              
+
 
 
 

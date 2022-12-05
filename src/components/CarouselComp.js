@@ -46,7 +46,7 @@ const CarouselComp = ({navigation}) => {
           source={{uri: item.image}}
           containerStyle={styles.imageContainer}
           style={styles.image}
-          parallaxFactor={0.4}
+          parallaxFactor={0}
           {...parallaxProps}
         />
         <Text style={styles.title} numberOfLines={2}>
