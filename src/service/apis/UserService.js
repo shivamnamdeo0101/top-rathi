@@ -74,6 +74,14 @@ export const API = {
       })
     },
 
+    userSendToken:async function(payload){
+      return axios.request({
+        method: 'put',
+        url: `${EndPoint}private//notify-token-update`,
+        data:payload
+      })
+    },
+
 
     
 

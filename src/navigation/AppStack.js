@@ -16,6 +16,8 @@ import SearchScreen from '../screens/SearchScreen';
 import InsightScreen from '../screens/InsightScreen';
 import { API } from '../service/apis/UserService';
 import EmailVerifyScreen from '../components/EmailVerify';
+import AddressScreen from "../screens/startup/AddressScreen";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -24,21 +26,26 @@ export default function AppStack({navigation}) {
   const profile_done = false;
   const userauth = useSelector(state => state.userAuth)
 
+  
+
 
   return (
     <Stack.Navigator initialRouteName={!userauth.isFirstTime ?   "Home" :"ProfileStartup"} >
       <Stack.Screen name="Home" component={TabStack}  options={{headerShown:false}} />
-      <Stack.Screen name="Setting" component={SettingScreen} />
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{headerShown:false}}/>
       <Stack.Screen name="NewsComp" component={NewsComp} options={{headerShown:false}}/>
       <Stack.Screen name="WebView" component={WebViewScreen} />
       <Stack.Screen name="Search" component={SearchScreen} options={{headerShown:false}} />
 
       <Stack.Screen name="ProfileStartup" component={ProfileStartupScreen} />
       <Stack.Screen name="SchoolStartup" component={SchoolStartupScreen} />
-      <Stack.Screen name="CollegeStartup" component={CollegeStartupScreen} />
+      <Stack.Screen name="CollegeStartup" component={CollegeStartupScreen} /> 
+      <Stack.Screen name="Address" component={AddressScreen} />
+      
 
       <Stack.Screen name="InsightScreen" component={InsightScreen} options={{headerShown:false}}/>
+
+
       
       
       

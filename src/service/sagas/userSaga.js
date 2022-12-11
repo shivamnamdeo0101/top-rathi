@@ -4,6 +4,7 @@ import { setUserDetails,getAuthSuccess,getAuthFailure,setProfileDetaiils,setFirs
 import { EndPoint } from '../../utils/EndPoint';
 import { Alert } from 'react-native';
 import { API } from '../apis/UserService';
+import Snackbar from 'react-native-snackbar';
 
 
 function* workerGetUserFetch(action){
@@ -21,7 +22,7 @@ function* workerGetUserFetch(action){
     }catch(error){
 
         
-        Alert.alert('Oops', error.message);
+        Alert.alert('Oops', JSON.stringify(error?.response?.data?.error));
         yield put(getAuthFailure(error?.response?.data?.message ?? 'Something Went Wrong'))
     }
    
@@ -31,18 +32,24 @@ function* workerRegisterUser(action){
     try{
         
         const response = yield call(API.userRegister,action.payload);
-        console.log(action.payload)
         if (response.status >= 200 && response.status < 300) {
             yield put(setUserDetails(response.data.data))
-            yield put(setProfileDetaiils(response.data.data.user)),
-            yield put(getAuthSuccess())
+            yield put(setProfileDetaiils(response.data.data.user))
+                yield put(getAuthSuccess())
+            const temp = {
+                "email":action.payload.email
+            }
             
+            yield call(API.userSendEmailVerifyLink,temp);
+         
+
+          
           } else {
             throw response;
         }
        
     }catch(error){
-        Alert.alert('Oops', error.message);
+        Alert.alert('Oops', JSON.stringify(error?.message));
         yield put(getAuthFailure(error?.response?.data?.message ?? 'Something Went Wrong'))
     }
 }

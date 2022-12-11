@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert ,Image,useWindowDimensions} from 'react-native';
 import CustomInput from '../components/CustomInput/CustomInput';
 import SocialSignInButtons from "../components/SocialSignInButtons/SocialSignInButtons";
 import CustomButton from "../components/CustomButton/CustomButton";
@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/core';
 import { useForm } from 'react-hook-form';
 import axios from "react-native-axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthFetch, setUserDetails, registerAuthUser, flushAuthData ,getAuthSuccess} from '../store/UserSlice';
+import { getAuthFetch, setUserDetails, registerAuthUser, flushAuthData, getAuthSuccess } from '../store/UserSlice';
 import { userRegister } from "../service/apis/UserService"
 import LoadingComp from '../components/LoadingComp';
 const EMAIL_REGEX =
@@ -19,26 +19,33 @@ const RegisterScreen = ({ navigation }) => {
     const pwd = watch('password');
     const userauth = useSelector(state => state.userAuth);
     const dispatch = useDispatch();
+    const { height } = useWindowDimensions();
+
 
     const onRegisterPressed = async data => {
         const { password, email, name } = data;
         const payload = {
-           
-                "username": name,
-                "email": email,
-                "password": password,
-                "education": {
-                    "school": {
-                        "class_": "",
-                        "stream": ""
-                    },
-                    "college": {
-                        "college_type": "",
-                        "branch": ""
-                    }
+
+            "username": name,
+            "email": email,
+            "password": password,
+            "education": {
+                "school": {
+                    "class_": "",
+                    "stream": ""
                 },
-                "interest":[]
-            
+                "college": {
+                    "college_type": "",
+                    "branch": ""
+                }
+            },
+            "address": {
+                "country": "",
+                "state": "",
+                "city": ""
+            },
+            "interest": []
+
         }
         try {
             dispatch(registerAuthUser(payload))
@@ -67,9 +74,15 @@ const RegisterScreen = ({ navigation }) => {
     }
 
     return (
+
+        <View style={{flex:1,backgroundColor:"#fff",}}>
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
-                <Text style={styles.title}>Create an account</Text>
+                <Image
+                    source={require("../assets/logo.png")}
+                    style={[styles.logo, { height: height * 0.3 }]}
+                    resizeMode="contain"
+                />
 
                 <CustomInput
                     name="name"
@@ -146,6 +159,7 @@ const RegisterScreen = ({ navigation }) => {
                 />
             </View>
         </ScrollView>
+        </View>
     );
 };
 
@@ -167,6 +181,11 @@ const styles = StyleSheet.create({
     link: {
         color: '#FDB075',
     },
+    logo: {
+        maxWidth: 100,
+        maxHeight: 100,
+        borderRadius:50
+      },
 });
 
 export default RegisterScreen;

@@ -79,14 +79,14 @@ if(userauth.isLoading){
 }
 
   return (
+    <View style={{flex:1,backgroundColor:"#fff",}}>
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
-        {/* <Image
-          source={"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"}
+        <Image
+          source={require("../assets/logo.png")}
           style={[styles.logo, {height: height * 0.3}]}
           resizeMode="contain"
-        /> */}
-
+        />
         <CustomInput
           name="email"
           control={control}
@@ -133,6 +133,7 @@ if(userauth.isLoading){
         />
       </View>
     </ScrollView>
+    </View>
   );
 };
 
@@ -140,11 +141,12 @@ const styles = StyleSheet.create({
   root: {
     alignItems: 'center',
     padding: 20,
+    
   },
   logo: {
-    width: '70%',
-    maxWidth: 300,
-    maxHeight: 200,
+    maxWidth: 100,
+    maxHeight: 100,
+    borderRadius:50 
   },
 });
 

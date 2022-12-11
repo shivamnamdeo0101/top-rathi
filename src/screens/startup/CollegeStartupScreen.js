@@ -19,33 +19,37 @@ export default function CollegeStartupScreen({ navigation }) {
   const [college_type, setcollege_type] = useState("")
   const [branch, setbranch] = useState("")
 
-
+  const [error, seterror] = useState("");
 
   const Next = async data => {
 
+    
+    if(!branch && !college_type){
+      seterror("Please fill the required value")
+      return
+    }
+
+    if(!college_type){
+      seterror("is required")
+      return
+    }
+
+    if(!branch){
+      seterror("is required")
+      return
+    }
+    
+    
+
+    
+
     try {
+      
       dispatch(setCollegeType(college_type))
       dispatch(setBranch(branch))
       dispatch(setFirstTime());
-      const payload = {
-        "user_data": {
-          "education": {
-            "college": {
-              "college_type": college_type,
-              "branch": branch
-            }
-          }
-        }
-
-
-      }
-
-      API.userUpdate({ payload: payload, userId: userauth._id })
-        .then(res => {
-          console.log(JSON.stringify(res))
-        })
-
-      navigation.navigate("Home")
+     
+      navigation.navigate("Address")
     } catch (e) {
       Alert.alert('Oops', e.message);
     }
@@ -66,6 +70,7 @@ export default function CollegeStartupScreen({ navigation }) {
             required: 'College type is required',
           }}
           editable={false}
+          error={(error && !college_type ) && "College Type "+error}
         />
 
         <View>
@@ -82,7 +87,10 @@ export default function CollegeStartupScreen({ navigation }) {
             }}
             editable={false}
             searchable={true}
+            error={ (error && !branch)&& error && "Branch "+ error}
           />
+
+
 
         </View>
       </View>

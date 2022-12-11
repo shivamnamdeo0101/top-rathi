@@ -5,49 +5,82 @@ import NewsScreen from '../screens/NewsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+
+ 
 import HomeScreen from '../screens/HomeScreen';
+import CollectionScreen from '../screens/CollectionScreen';
+import SettingScreen from '../screens/SettingScreen';
+
 const Tab = AnimatedTabBarNavigator();
 
 export default function TabStack({navigation}) {
   return (
     
-    <Tab.Navigator initialRouteName='News' tabBarOptions={{
-      activeTintColor: "#000",
-      inactiveTintColor: "#000",
+    <Tab.Navigator initialRouteName='NEWS'  
+      tabBarOptions={{
       labelStyle:{
-        color:"#000",
+        fontFamily:"Poppins-Bold",
       },
-      tabBarLabelStyle: { fontFamily:"Poppins-Regular"}
-     
+      activeTintColor: "#666",
+      inactiveTintColor: "#222222"
     }}>
       
-      <Tab.Screen name="News" component={NewsScreen}
+      <Tab.Screen name="NEWS" component={NewsScreen}
          options={{
-          tabBarIcon: ({ focused, color, size }) => (
+          
+          tabBarIcon: ({ focused, color, size=20 }) => (
               <Icon
                   name="home"
-                  size={size ? size : 24}
-                  color={focused ? color : "#222222"}
-                  focused={focused}
+                  size={size}
                   color={color}
+                  focused={focused}
               />
           )
         }}
       
       />
-      <Tab.Screen name="Profile" component={ProfileScreen} 
+      <Tab.Screen name="PROFILE" component={ProfileScreen} 
          options={{
-          tabBarIcon: ({ focused, color, size }) => (
+        
+          tabBarIcon: ({ focused, color, size=20 }) => (
               <Icon
                   name="user"
-                  size={size ? size : 24}
-                  color={focused ? color : "#222222"}
-                  focused={focused}
+                  size={size }
                   color={color}
+                  focused={focused}
               />
           )
         }}
       />
+      <Tab.Screen  
+       name="COLLECTION" component={CollectionScreen} 
+         options={{
+          tabBarIcon: ({ focused, color, size=20 }) => (
+              <FontAwesome
+                  name="bookmark"
+                  size={size }
+                  color={color}
+                  focused={focused}
+              />
+          )
+        }}
+      />
+      <Tab.Screen  
+       name="SETTING" component={SettingScreen} 
+         options={{
+          tabBarIcon: ({ focused, color, size=20 }) => (
+              <Icon
+                  name="settings"
+                  size={size }
+                  color={color}
+                  focused={focused}
+              />
+          )
+        }}
+      />
+      
     </Tab.Navigator>
   )
 }

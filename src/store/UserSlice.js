@@ -7,6 +7,8 @@ const initialState = {
   isSuccess: false,
   errMsg: '',
   isFirstTime:true,
+  address:{}
+
 };
 export const UserSlice = createSlice({
   name: 'user',
@@ -27,7 +29,13 @@ export const UserSlice = createSlice({
     setProfileDetaiils: (state, action) => {
       state.profile = action.payload;
     },
+    setAddress: (state, action) => {
+      state.address = action.payload;
+    },
     
+
+
+
     registerAuthUser:(state,action)=>{
         state.isLoading = true;
     },
@@ -54,6 +62,6 @@ export const UserSlice = createSlice({
     
   },
 });
-export const { setUserDetails, flushAuthData,getAuthFetch,setProfileDetaiils, setLoadingUser ,getAuthSuccess ,registerAuthUser,getAuthFailure,setFirstTime} = UserSlice.actions;
+export const { setUserDetails,setAddress, flushAuthData,getAuthFetch,setProfileDetaiils, setLoadingUser ,getAuthSuccess ,registerAuthUser,getAuthFailure,setFirstTime} = UserSlice.actions;
 
 export default UserSlice.reducer;

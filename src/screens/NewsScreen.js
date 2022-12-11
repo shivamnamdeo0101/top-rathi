@@ -83,8 +83,9 @@ export default function NewsScreen({ navigation }) {
       }
     }
 
-    fetchData()
-
+   //if(news_arr.length <= news_data.count){
+      fetchData()
+  // }
     // fetch(`http://localhost:5000/api/private/news/${page}/5`, requestOptions)
     //   .then(response => response.json())
     //   .then(data => { 
@@ -203,6 +204,7 @@ export default function NewsScreen({ navigation }) {
     <View style={styles.root}>
 
       <Modal isVisible={isModalVisible} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        
         <View style={{ flex: 1, alignItems: 'center', }}>
 
           {/* fill space at the top */}

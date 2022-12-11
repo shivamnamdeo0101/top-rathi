@@ -14,8 +14,13 @@ export default function ProfileStartupScreen({ navigation }) {
   const education = useSelector(state => state.EducationSlice);
   const dispatch = useDispatch();
   const [from_state, setfrom_state] = useState("")
+  const [error, seterror] = useState("")
   const Next =  () => {
 
+    if(!from_state){
+      seterror("Please select the value")
+      return
+    }
     console.log(from_state)
     try {
       dispatch(setFromWhere(from_state))
@@ -26,6 +31,7 @@ export default function ProfileStartupScreen({ navigation }) {
       if (from_state == "college") {
         navigation.navigate("CollegeStartup")
       }
+      seterror("")
     } catch (e) {
       Alert.alert('Oops', e.message);
     }
@@ -48,6 +54,7 @@ export default function ProfileStartupScreen({ navigation }) {
             required: 'Stream is required',
           }}
           editable={false}
+          error={error}
         />
       </View>
 

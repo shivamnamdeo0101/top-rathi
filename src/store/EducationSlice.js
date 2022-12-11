@@ -31,7 +31,7 @@ export const EducationSlice = createSlice({
     setCollegeType:(state,action)=>{
       state.college_type = action.payload
     },
-
+    
 
     setEducationSuccess: (state) => {
       state.isLoading = false;

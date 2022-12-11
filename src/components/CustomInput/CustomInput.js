@@ -25,8 +25,9 @@ const CustomInput = ({
               styles.container,
               {borderColor: error ? 'red' : '#e8e8e8'},
             ]}>
-              <Text style={{paddingLeft:5,paddingTop:5,color:"#666",fontFamily:"Poppins-Bold"}}>{name.toUpperCase()}</Text>
+              <Text style={{paddingLeft:5,paddingTop:5,color:"#666",fontFamily:"Poppins-Bold"}}>{name.toUpperCase()} </Text>
             <TextInput
+              defaultValue={defaultValue?.toString()}
               editable={editable}
               value={value}
               onChangeText={onChange}

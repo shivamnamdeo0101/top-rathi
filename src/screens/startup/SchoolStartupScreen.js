@@ -22,24 +22,11 @@ export default function SchoolStartupScreen({ navigation }) {
     const { stream, class_ } = data;
 
     try {
-      dispatch(setClass(class_))
-      dispatch(setStream(stream))
+      dispatch(setClass(class_state))
+      dispatch(setStream(stream_state))
       dispatch(setFirstTime())
-      const payload = {
-        "user_data": {
-          "education": {
-            "school": {
-              "class_": class_,
-              "stream": stream
-            }
-          }
-        }
-      }
-      API.userUpdate({ payload: payload, userId: userauth._id })
-        .then(res => {
-          console.log(JSON.stringify(res))
-        })
-      navigation.navigate("Home")
+     
+      navigation.navigate("Address")
     } catch (e) {
       Alert.alert('Oops', e.message);
     }

@@ -22,6 +22,8 @@ import messaging from '@react-native-firebase/messaging';
 import { Alert } from 'react-native';
 import notifee, { AndroidStyle, AndroidColor } from '@notifee/react-native';
 import { flushHomeData } from './src/store/NewsSlice';
+import { API } from './src/service/apis/UserService';
+
 
 
 const saga = createSagaMiddleware();
@@ -37,9 +39,38 @@ saga.run(rootSaga)
 function Root() {
   const userauth = useSelector(state => state.userAuth)
   const token = useSelector(state => state.userAuth.user.token)
- 
 
-  
+
+  async function saveTokenToDatabase(token) {
+
+    console.log(userauth.profile._id)
+    const payload = {
+      "userId":userauth?.profile?._id,
+      "notifyToken":token
+    }
+
+    const res = await API.userSendToken(payload)
+
+  }
+
+
+  useEffect(() => {
+
+
+    messaging()
+      .getToken()
+      .then(token => {
+        return saveTokenToDatabase(token);
+      });
+
+
+   
+
+
+    return messaging().onTokenRefresh(token => {
+      saveTokenToDatabase(token);
+    });
+  }, []);
 
   return (
     <NavigationContainer >
@@ -50,13 +81,9 @@ function Root() {
   )
 }
 
-async function saveTokenToDatabase(token) {
-  console.log("token", token)
-}
 
 async function onDisplayNotification(payload) {
 
-  console.log(payload)
 
   // Create a channel
   const channelId = await notifee.createChannel({
@@ -65,8 +92,8 @@ async function onDisplayNotification(payload) {
   });
   // Display a notification
   await notifee.displayNotification({
-    title: 'Image uploaded',
-    body: 'Your image has been successfully uploaded',
+    title: payload.data.title,
+    body: payload.data.body,
     android: {
       channelId,
       style: { type: AndroidStyle.BIGPICTURE, picture: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg' },
@@ -76,48 +103,25 @@ async function onDisplayNotification(payload) {
 
 
 export default function App() {
+
   useEffect(() => {
-    // Get the device token
 
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      onDisplayNotification(remoteMessage)
+    });
     
-
-    messaging()
-      .getToken()
-      .then(token => {
-        return saveTokenToDatabase(token);
-      });
-
-        const unsubscribe = messaging().onMessage(async remoteMessage => {
-          onDisplayNotification(remoteMessage)
-        });
+    messaging().getInitialNotification().then(remoteMessage => {
+      onDisplayNotification(remoteMessage)
+    });
+    
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      onDisplayNotification(remoteMessage)
+    });
+   
 
     return unsubscribe;
-
-
-    return messaging().onTokenRefresh(token => {
-      saveTokenToDatabase(token);
-    });
-  }, []);
-
-  useEffect(() => {
-   
-    // messaging().setBackgroundMessageHandler(async remoteMessage => {
-    //   console.log('Message handled in the background!', remoteMessage);
-    //   onDisplayNotification(remoteMessage);
-
-
-    // });
-    
-
-    messaging().onMessage(async remoteMessage => {
-      console.log('Message handled in the foregourp!', remoteMessage);
-      onDisplayNotification(remoteMessage);
-    });
   }, [])
-
-
-
-
+  
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistStore(store)}>

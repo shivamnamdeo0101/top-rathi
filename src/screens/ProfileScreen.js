@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, StyleSheet, Image,ImageBackground, TouchableOpacity, Alert, TouchableHighlight } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -11,14 +11,23 @@ import CollectionComp from '../components/CollectionComp';
 
 import ImagePicker from 'react-native-image-crop-picker';
 import ImgToBase64 from 'react-native-image-base64';
+import ProfileTabView from '../components/ProfileTabView';
 
 
 export default function ProfileScreen({ navigation }) {
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.userAuth.user.user)
+
+
+
   const [profile, setprofile] = useState(user)
   const education = useSelector(state => state.EducationSlice)
+
+  const address = useSelector(state => state.userAuth.address)
+
+
+
 
   const [image, setimage] = useState("");
 
@@ -33,6 +42,7 @@ export default function ProfileScreen({ navigation }) {
       }
     }
 
+
     fetchData()
 
   }, [profile])
@@ -46,29 +56,14 @@ export default function ProfileScreen({ navigation }) {
     }
 
     fetchData()
-    
+
   }, [image])
 
 
 
-  const logout = () => {
 
-    Alert.alert(
-      "Are you sure to logout..?",
-      "Press ok to logout",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => dispatch(flushAuthData()) }
-      ]
-    );
 
-  }
-
-  const SelectImage =  async () => {
+  const SelectImage = async () => {
     await ImagePicker.openPicker({
       width: 300,
       height: 300,
@@ -86,10 +81,12 @@ export default function ProfileScreen({ navigation }) {
       "profile_img": img
     }
     const res = await API.userUpdateProfileImg(payload)
-    if(res.data.success){
+    if (res.data.success) {
       setimage(res.data.data.profile_img)
     }
-   
+
+
+
   }
 
 
@@ -97,131 +94,41 @@ export default function ProfileScreen({ navigation }) {
 
   return (
 
+    <ImageBackground blurRadius={30} source={{uri:image ? image : "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg"}} style={{ flex:1,height:"100%",width:"100%"}}>
+      <View style={styles.header}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+            <TouchableOpacity style={{ padding: 3, backgroundColor: "#fff", borderRadius: 99, marginRight: 10 }}>
+              <Ionicons name="arrow-back" color="#000" size={23} onPress={() => navigation.goBack()} />
+            </TouchableOpacity>
+            <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#000" }}>PROFILE</Text>
+          </View>
+          
+      </View>
 
-    <View style={styles.container}>
-      <View style={styles.top}>
-        <View style={styles.header}>
-          <Ionicons name="arrow-back" color="#000" size={25} onPress={() => navigation.navigate("News")} />
-          <MaterialIcons name="logout" color="#f03" size={25} onPress={() => logout()} />
-        </View>
+      <View style={{ flexDirection: "column", justifyContent: "center", padding: 10, alignItems: "center", }}>
 
-
-        <ScrollView>
-
-          <View style={{ flexDirection: "row", margin: 8, justifyContent: "space-around", alignItems: "center" }}>
+        <TouchableOpacity onPress={() => SelectImage()}>
+          <View style={{ flexDirection: "column", justifyContent: "center", padding: 10, alignItems: "center", }}>
             <Image
 
-              style={{ height: 120, width: 120, borderRadius: 99 }}
+              style={{ height: 130, width: 130, borderRadius: 99 }}
               source={{
                 uri: image ? image : "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg",
               }} />
-
-            <View>
-              <Text style={{ fontSize: 25, fontFamily: "Poppins-SemiBold", color: "#fff" }}>{profile?.username}</Text>
-              <Text style={{ fontSize: 12, fontFamily: "Poppins-Regular", width: "90%", color: "#f0f3f5" }}>{profile?.email}</Text>
-            </View>
-
+            <Text style={{ fontSize: 10, fontFamily: "Poppins-Regular", color: "#eb9d0c" }}>Change Photo</Text>
           </View>
 
-          <View style={{ margin: 8 }}>
-            {/* <Image
-            style={styles.tinyLogo}
-            source={{
-              uri: 'https://d.newsweek.com/en/full/1962972/spacex-owner-tesla-ceo-elon-musk.jpg',
-            }} /> */}
+        </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={() => SelectImage()}>
-              <Text style={styles.text}>Update Image</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfile")}>
-              <Text style={styles.text}>Update Profile</Text>
-            </TouchableOpacity>
-
-          </View>
-
-          <View style={styles.bottom_view}>
-            <Text style={styles.main_heading}>Personal Details</Text>
-            <View style={styles.bottom_view_comp}>
-              <View>
-                <Text style={styles.heading}>Full Name</Text>
-                <Text style={styles.text}>{profile?.username}</Text>
-              </View>
-            </View>
-
-            <View style={styles.bottom_view_comp}>
-              <View>
-                <Text style={styles.heading}>Email</Text>
-                <Text style={styles.text}>{profile?.email}</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.bottom_view}>
-            <Text style={styles.main_heading}>Education Details</Text>
-            <View style={styles.bottom_view_comp}>
-
-              <View>
-                <Text style={styles.heading}>Class</Text>
-                <Text style={styles.text}>{profile?.education?.school?.class_}</Text>
-              </View>
-            </View>
-            <View style={styles.bottom_view_comp}>
-
-              <View>
-                <Text style={styles.heading}>Stream</Text>
-                <Text style={styles.text}>{profile?.education?.school?.stream}</Text>
-              </View>
-            </View>
-
-
-            <View style={styles.bottom_view_comp}>
-
-              <View>
-                <Text style={styles.heading}>College Type</Text>
-                <Text style={styles.text}>{profile?.education?.college?.college_type}</Text>
-              </View>
-            </View>
-
-
-            <View style={styles.bottom_view_comp}>
-              <View>
-                <Text style={styles.heading}>Branch</Text>
-                <Text style={styles.text}>{profile?.education?.college?.branch}</Text>
-              </View>
-            </View>
-            <View style={styles.bottom_view_comp}>
-              <View>
-                <Text style={styles.heading}>Interest</Text>
-                <View style={{ flexDirection: "row", marginBottom: 30, flexWrap: "wrap" }}>
-                  {[...profile?.interest].map((item, index) =>
-                    <Text key={index} style={{ color: "#666", borderRadius: 8, fontFamily: "Poppins-Bold", marginRight: 5, backgroundColor: "#f0f3f5", padding: 5, marginTop: 5 }}>
-                      {item.name}
-                    </Text>
-                  )}
-                </View>
-              </View>
-            </View>
-
-
-
-          </View>
-          <View style={styles.bottom_view}>
-            <Text style={styles.main_heading}>Your Collection</Text>
-            <View style={styles.bottom_view_comp}>
-              <CollectionComp navigation={navigation} user={user} />
-
-
-            </View>
-
-
-          </View>
-
-        </ScrollView>
+        {/* <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", }}>
+          <Text style={{ fontSize: 20, fontFamily: "Poppins-Regular", color: "#000" }}>{profile?.username}</Text>
+          <Text style={{ fontSize: 12, fontFamily: "Poppins-Regular", color: "#8888", textAlign: "center" }}>{profile?.email}</Text>
+        </View> */}
       </View>
+      <ProfileTabView navigation={navigation} user={user} />
+    </ImageBackground>
 
 
-
-    </View>
 
   )
 }
@@ -254,7 +161,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#fff",
     marginBottom: 8,
-    padding: 16
+    padding: 12,
+    elevation: 4
   },
   tinyLogo: {
     marginBottom: 10,

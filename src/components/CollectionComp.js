@@ -19,11 +19,18 @@ const CollectionComp = ({navigation,user}) => {
     }, [collection])
     
   
+  if(collection.length === 0){
+    return(
+      <View style={{flex:1,alignItems:"center",justifyContent:"center"}}>
+        <Text style={{color:"#000",fontFamily:"Poppins-Bold"}}>You don't have any collection !</Text>
+      </View>
+    )
+  }
     
     
   return (
     <View>
-      <ScrollView horizontal={true}>
+      <ScrollView>
         {collection && collection.map((item,index)=>
             <View key={index}>
                 <FetchCollection navigation={navigation} postId={item.postId}/>
