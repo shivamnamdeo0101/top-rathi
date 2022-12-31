@@ -31,7 +31,7 @@ const InsightComp = ({navigation}) => {
   const Comp = ({item, index}) => {
     return (
       <View style={styles.item}>
-        <TouchableOpacity style={styles.imageContainer}  onPress={() => navigation.navigate("InsightScreen", { post: item })}>
+        <TouchableOpacity style={styles.imageContainer}  onPress={() => navigation.navigate("Insight", { post: item })}>
             <Image
             source={{uri: item.image}}
             style={styles.image}

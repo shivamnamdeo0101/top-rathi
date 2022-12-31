@@ -3,30 +3,38 @@ import React, { useEffect, useState } from 'react'
 import { NEWS_API } from '../service/apis/NewsService';
 import NewsComp from './NewsComp';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import LoadingComp from './LoadingComp';
 
-const FetchCollection = ({ navigation, postId }) => {
+const FetchCollection = ({ navigation, postId}) => {
     const [post, setpost] = useState(null);
     const [loading, setloading] = useState(true)
+    
     const { width: screenWidth } = Dimensions.get('window');
-
+    const user = useSelector(state=>state.userAuth.user)
+    const payload = {
+      "postId":postId,
+      "token":user?.token
+    }
     useEffect(() => {
+       
+
         const fetchData = async () => {
-            const res = await NEWS_API.GetNewsById(postId);
+            const res = await NEWS_API.GetNewsById(payload);
             if (res.data.success) {
                 setpost(res.data.data)
+                setloading(false)
             }
         }
         fetchData()
-        setloading(false)
+        
     }, [post])
+
 
     if(loading){
         return(
-            <TouchableOpacity style={{ margin: 10 }}>
-                    <View style={{ width: screenWidth - 60, height: 200, borderColor: "#eee", borderWidth: 1, marginTop: 10 }}>
-                        <Text>Loading...</Text>
-                    </View>
-            </TouchableOpacity>
+          <View >
+          </View>
         )
     }
 
@@ -35,11 +43,21 @@ const FetchCollection = ({ navigation, postId }) => {
             <View />
         )
     }
+
+    const routeNavigation = ()=>{
+      if(post?.news_type === "feed" || post?.news_type === "slide" ){
+        navigation.navigate("NewsComp", { post: post })
+      }else if(post?.news_type === "insight"){
+        navigation.navigate("Insight", { post: post })
+      }
+      
+    }
+
     return (
-        <View>
+        <View style={styles.root}>
             {
                 post!=null &&
-                    <TouchableOpacity style={styles.news_comp} key={post._id} onPress={() => navigation.navigate("NewsComp", { post: post })}>
+                    <TouchableOpacity style={styles.news_comp} key={post._id} onPress={() => routeNavigation()}>
                         <Image style={styles.post_img} source={{ uri: post.image }} />
 
                         <View style={styles.content_data}>

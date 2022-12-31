@@ -7,9 +7,11 @@ import { useNavigation } from '@react-navigation/core';
 import { useForm } from 'react-hook-form';
 import axios from "react-native-axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthFetch, setUserDetails, registerAuthUser, flushAuthData, getAuthSuccess } from '../store/UserSlice';
+import { getAuthFetch, setUserDetails, registerAuthUser, flushAuthData, getAuthSuccess, setProfileDetaiils } from '../store/UserSlice';
 import { userRegister } from "../service/apis/UserService"
 import LoadingComp from '../components/LoadingComp';
+import {API} from "../service/apis/UserService";
+
 const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -21,7 +23,7 @@ const RegisterScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const { height } = useWindowDimensions();
 
-
+    
     const onRegisterPressed = async data => {
         const { password, email, name } = data;
         const payload = {
@@ -48,8 +50,19 @@ const RegisterScreen = ({ navigation }) => {
 
         }
         try {
-            dispatch(registerAuthUser(payload))
-            dispatch(getAuthSuccess())
+
+            const res = await API.userRegister(payload)
+        
+
+            if (res.status === 200) {
+                dispatch(setUserDetails(res.data.data))
+                dispatch(setProfileDetaiils(res.data.data.user))
+                if (res.data.data.user.isSuccess) {
+                  dispatch(getAuthSuccess())
+                } else {
+                  navigation.navigate("ProfileStartup")
+                }
+              }
         } catch (e) {
             Alert.alert('Oops', e.message);
         }
@@ -135,7 +148,7 @@ const RegisterScreen = ({ navigation }) => {
                 />
 
                 <CustomButton
-                    text="Register"
+                    text="SIGNUP"
                     onPress={handleSubmit(onRegisterPressed)}
                 />
 

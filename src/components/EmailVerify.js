@@ -43,21 +43,27 @@ export default function EmailVerify({ navigation, emailVerified, email, setcount
 
 
     const SubmitEmail = async () => {
+        const val = parseInt((counter - Date.now()) / 1000)
 
-        if(counter > 0){
+        if(val < 60 && val > 0){
+            Alert.alert("H")
+
             return
         }
+        
+        setloading(true)
 
-        setCounter(60)
+        setCounter(Date.now() + 60000)
         const data = { "email": email }
         try {
-            if (!loading) {
-                setloading(true)
+          
+               
                 await API.userSendEmailVerifyLink(data)
                     .then((res) => {
                         setloading(false)
                         if (res.data.success) {
                             setemail_sent(true);
+                            setloading(false)
                             Snackbar.show({
                                 text: 'Verificaion email has been sent, click on the link to verify your account',
                                 duration: Snackbar.LENGTH_INDEFINITE,
@@ -73,7 +79,7 @@ export default function EmailVerify({ navigation, emailVerified, email, setcount
 
                     })
 
-            }
+            
 
         } catch (e) {
             setloading(false)
@@ -86,42 +92,27 @@ export default function EmailVerify({ navigation, emailVerified, email, setcount
 
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
-            <View>
-
-
-                <View style={styles.root}>
+        <View style={styles.root}>
+         
+                <ScrollView>
 
                     {/* <Text style={{ padding: 20, fontFamily: "Poppins-Regular", fontSize: 16, fontWeight: "bold", backgroundColor: "#f0f3f5", margin: 3, borderRadius: 10 }}>{email}</Text> */}
 
-                    <CustomInput
-                        name="email"
-                        editable={false}
-                        defaultValue={email}
-                        control={control}
-                        placeholder="Email"
-                        rules={{
-                            required: 'Email is required',
-                            pattern: { value: EMAIL_REGEX, message: 'Email is invalid' },
-                        }}
-                    />
-                    {!(email_sent && counter > 0) && <CustomButton
-
-                        text={loading ? "Sending email..." : "Send the verification Link"}
-                        onPress={loading ? handleSubmit : handleSubmit(SubmitEmail)}
+                    <Text style={{ padding: 16, paddingLeft: 10, fontFamily: "Poppins-Regular", borderRadius: 10, borderColor: "#ccc", borderWidth: 2, }}>{email}</Text>
+                    {!email_sent && <CustomButton
+                        
+                        text={loading ? "Sending email..." :  "Send the verification Link"}
+                        onPress={()=>SubmitEmail()}
                     />}
+                    
+                    {(Date.now() <= counter) && <Text style={{ color:"green",fontFamily:"Poppins-SemiBold"}}>Email sent and link expired in {parseInt((counter - Date.now()) / 1000)} second</Text>}
 
-                    {(email_sent && counter > 0) && <Text style={{ fontSize: 14, fontFamily: "Poppins-Bold", color: "green", textAlign: "center" }}>Email sent and link expired in {counter} second</Text>}
-                    {emailVerified && <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "green", textAlign: "center" }}>Email Verified</Text>}
+                    {(Date.now() > counter && email_sent) && <Text style={{ fontSize: 12, fontFamily: "Poppins-Bold", color: "#f003", textAlign: "center",marginTop:10 }}> Link has been expired, resend the verification email</Text>}
 
-                    {(counter === 0) && <Text style={{ fontSize: 12, fontFamily: "Poppins-Bold", color: "#f003", textAlign: "center" }}> Link has been expired, resend the verification email</Text>}
+                </ScrollView>
+            {(email_sent)  && <Text style={{color:"green",fontFamily:"Poppins-SemiBold" ,alignSelf:"flex-start"}} onPress={()=>SubmitEmail()} > Didn't get the email ? Resend Email</Text>}
 
-
-
-                </View>
-
-            </View>
-        </ScrollView>
+        </View>
     )
 }
 

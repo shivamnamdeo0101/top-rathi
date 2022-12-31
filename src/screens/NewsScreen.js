@@ -18,40 +18,39 @@ import EmailVerify from '../components/EmailVerify';
 
 export default function NewsScreen({ navigation }) {
 
+  const userauth = useSelector(state => state.userAuth)
   const deviceWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
-
 
   const dispatch = useDispatch();
 
 
   const [loading, setloading] = useState(true);
   const [news_data, set_news_data] = useState([]);
-  const [isModalVisible, setModalVisible] = useState(true);
+  const [isModalVisible, setModalVisible] = useState(userauth?.profile?.emailVerified);
   const [news_comp_data, set_news_comp_data] = useState({});
   const [page, setPage] = useState(1);
 
   const [email, setemail] = useState("");
 
-  const userauth = useSelector(state => state.userAuth)
+
   const [email_verified, setemail_verified] = useState(false);
   const [counter_callback, setcounter_callback] = useState(0);
 
 
 
-  const payload = { userId: userauth?.profile?._id }
+  const payload = { userId: userauth?.profile?._id ,token:userauth?.user?.token}
   useEffect(() => {
-
+    
     const fetchData = async () => {
       const res = await API.userFetch(payload)
-
+      console.log("RESULT",res)
       if (res.data.success) {
         setemail(res?.data?.data?.email)
-        setemail_verified(res?.data?.data?.emailVerified)
-        const temp = res?.data?.data?.emailVerified
-        setemail_verified(temp)
-        setModalVisible(!temp)
+        setemail_verified(!res?.data?.data?.emailVerified)
+
       }
+
     }
 
 
@@ -203,7 +202,7 @@ export default function NewsScreen({ navigation }) {
   return (
     <View style={styles.root}>
 
-      <Modal isVisible={isModalVisible} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Modal isVisible={email_verified} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         
         <View style={{ flex: 1, alignItems: 'center', }}>
 
@@ -214,12 +213,10 @@ export default function NewsScreen({ navigation }) {
           </View>
 
 
-          <View style={{ flex: 1, backgroundColor: 'white', padding: 10, borderRadius: 10, }}>
+          <View style={{ flex: 1, backgroundColor: 'white', padding: 10, borderRadius: 10,}}>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10 }}>
               <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#000", textAlign: "center" }}>Verify Your Email</Text>
-              <TouchableOpacity onPress={() => closeModal()}>
-                <Ionicons name="close" style={{ marginLeft: 10 }} color="#000" size={20} />
-              </TouchableOpacity>
+              
             </View>
 
 

@@ -20,7 +20,7 @@ const CollectionScreen = ({navigation}) => {
          
       </View>
 
-        <CollectionComp navigation={navigation} user={user} />
+        <CollectionComp navigation={navigation} user={user}  />
     </View>
   )
 }

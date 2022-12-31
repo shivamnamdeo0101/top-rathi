@@ -23,24 +23,10 @@ export default function ForgotPasswordScreen({ navigation }) {
     const val = getValues();
 
 
-    useEffect(() => {
-
-
-
-        const timer = counter > 0 && setInterval(() => { setCounter(counter - 1) }, 1000);
-        return () => clearInterval(timer);
-
-
-    }, [counter]);
 
 
     const SubmitEmail = async data => {
-        
-        if (counter > 0) {
-            return
-        }
-
-        setCounter(60)
+        setloading(true)
         try {
 
             
@@ -90,14 +76,13 @@ export default function ForgotPasswordScreen({ navigation }) {
                             pattern: { value: EMAIL_REGEX, message: 'Email is invalid' },
                         }}
                     />
-                    {!(email_sent && counter > 0) && <CustomButton
+                    <CustomButton
 
                         text={loading ? "Sending email..." : "Send the verification Link"}
                         onPress={loading ? handleSubmit : handleSubmit(SubmitEmail)}
-                    />}
+                    />
 
-                    {(email_sent && counter > 0) && <Text style={{ fontSize: 14, fontFamily: "Poppins-Bold", color: "green", textAlign: "center" }}>Email sent and link expired in {counter} second</Text>}
-                    {true && <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "green", textAlign: "center" }}>Email Verified</Text>}
+                    {(email_sent) && <Text style={{ fontSize: 14, fontFamily: "Poppins-Bold", color: "green", textAlign: "center" }}>Email sent and link expired 1 min</Text>}
 
                     {(counter === 0) && <Text style={{ fontSize: 12, fontFamily: "Poppins-Bold", color: "#f003", textAlign: "center" }}> Link has been expired, resend the verification email</Text>}
 

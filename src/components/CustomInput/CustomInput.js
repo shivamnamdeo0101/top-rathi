@@ -1,6 +1,8 @@
-import React from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import React ,{useState}from 'react';
+import {View, Text, TextInput, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native';
 import {Controller} from 'react-hook-form';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 const CustomInput = ({
   control,
@@ -12,6 +14,9 @@ const CustomInput = ({
   secureTextEntry,
   editable
 }) => {
+
+  const [show, setshow] = useState(secureTextEntry && true)
+
   return (
     <Controller
       control={control}
@@ -23,10 +28,17 @@ const CustomInput = ({
           <View
             style={[
               styles.container,
-              {borderColor: error ? 'red' : '#e8e8e8'},
+              { borderColor: error ? 'red' : '#e8e8e8'},
             ]}>
               <Text style={{paddingLeft:5,paddingTop:5,color:"#666",fontFamily:"Poppins-Bold"}}>{name.toUpperCase()} </Text>
-            <TextInput
+            
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent:"space-between",
+              paddingRight:16
+            }}>
+              <TextInput
               defaultValue={defaultValue?.toString()}
               editable={editable}
               value={value}
@@ -34,11 +46,21 @@ const CustomInput = ({
               onBlur={onBlur}
               placeholder={placeholder}
               style={styles.input}
-              secureTextEntry={secureTextEntry}
+              secureTextEntry={show}
             />
+             {secureTextEntry && 
+            <TouchableOpacity style={{width:20,height:20}}>
+           <Icon onPress={()=>setshow(!show)} name={!show ? "eye" : "eye-off"} type="ionicon" color="#000" size={20} />
+            </TouchableOpacity>
+            }
+
+            </View>
+            
+         
+         
           </View>
           {error && (
-            <Text style={{color: 'red', alignSelf: 'stretch'}}>{error.message || 'Error'}</Text>
+            <Text style={{fontFamily:"Poppins-Regular",color: 'red', alignSelf: 'stretch'}}>{error.message || 'Error'}</Text>
           )}
         </>
       )}
@@ -50,15 +72,17 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     width: '100%',
-
     borderColor: '#e8e8e8',
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 5,
 
     paddingHorizontal: 10,
     marginVertical: 5,
   },
-  input: {},
+  input: {
+    fontFamily:"Poppins-Regular",
+    flex:1
+  },
 });
 
 export default CustomInput;

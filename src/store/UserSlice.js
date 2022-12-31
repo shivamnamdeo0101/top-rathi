@@ -34,8 +34,6 @@ export const UserSlice = createSlice({
     },
     
 
-
-
     registerAuthUser:(state,action)=>{
         state.isLoading = true;
     },

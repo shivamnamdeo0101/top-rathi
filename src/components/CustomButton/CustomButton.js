@@ -14,7 +14,8 @@ const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
         style={[
           styles.text,
           styles[`text_${type}`],
-          fgColor ? {color: fgColor} : {},
+
+          fgColor ? {color: fgColor,fontFamily:"Poppins-Regular"} : {},
         ]}>
         {text}
       </Text>
@@ -45,8 +46,8 @@ const styles = StyleSheet.create({
   container_TERTIARY: {},
 
   text: {
-    fontWeight: 'bold',
     color: 'white',
+    fontFamily:"Poppins-Bold"
   },
 
   text_SECONDARY: {
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
 
   text_TERTIARY: {
     color: 'gray',
+    fontFamily:"Poppins-SemiBold"
   },
 });
 

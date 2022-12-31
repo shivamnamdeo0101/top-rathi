@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/CustomButton';
 import { setFromWhere } from '../../store/EducationSlice';
 import CustomInput from '../../components/CustomInput/CustomInput';
+import CustomSelectTap from '../../components/CustomSelectTap';
 
 export default function ProfileStartupScreen({ navigation }) {
   const { control, handleSubmit, watch } = useForm();
@@ -40,26 +41,22 @@ export default function ProfileStartupScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.top_view}>
 
-        <Text style={styles.heading_text}>Are you from school/college ...?</Text>
+        <Text style={styles.heading_text}>ARE YOU FROM SCHOOL / COLLEGE ?</Text>
 
-        
-        <CustomSelect
-          name="from where"
-          control={control}
-          list={[{ id: 0, name: "college" }, { id: 1, name: "school" }]}
-          placeholder="From Where School Or College"
+        <CustomSelectTap 
+          list={[{ id: 0, name: "college",image:"https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/college.png?ik-sdk-version=javascript-1.4.3&updatedAt=1672397794520" },
+           { id: 1, name: "school" ,image:"https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/school.png?ik-sdk-version=javascript-1.4.3&updatedAt=1672397813359"}]}
           setValue={setfrom_state}
           value={from_state}
-          rules={{
-            required: 'Stream is required',
-          }}
-          editable={false}
           error={error}
+          seterror={seterror}
         />
+        
+        
       </View>
 
       <View style={styles.bottom_view}>
-        <CustomButton text="Next" onPress={handleSubmit(Next)} />
+        <CustomButton text="NEXT" onPress={handleSubmit(Next)} />
       </View>
     </View>
   )
@@ -69,7 +66,7 @@ export default function ProfileStartupScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f3f5",
+    backgroundColor: "#fff",
     justifyContent: "space-between",
     padding: 10
   },
@@ -80,7 +77,9 @@ const styles = StyleSheet.create({
   },
   heading_text: {
     fontSize: 20,
-
-    fontWeight: "bold"
+    color:"#000",
+    fontWeight: "bold",
+    textAlign:"center",
+    marginBottom:20
   }
 });

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/CustomButton';
 import { setClass, setFromWhere, setStream } from '../../store/EducationSlice';
-import { setAddress, setFirstTime } from '../../store/UserSlice';
+import { getAuthSuccess, setAddress, setFirstTime } from '../../store/UserSlice';
 import { API } from '../../service/apis/UserService';
 import { DATA_API } from '../../service/apis/DataService';
 import CustomInput from "../../components/CustomInput";
@@ -24,7 +24,7 @@ export default function AddressScreen({ navigation }) {
 
 
     const edu = useSelector(state => state.EducationSlice)
-    console.log(edu,"=>")
+    console.log(edu, "=>")
 
     const [country, setcountry] = useState("")
     const [state, setstate] = useState("")
@@ -73,7 +73,7 @@ export default function AddressScreen({ navigation }) {
     const Next = async data => {
         try {
 
-            
+
             const payload = {
                 "user_data": {
                     "education": {
@@ -94,12 +94,26 @@ export default function AddressScreen({ navigation }) {
                     }
                 }
             }
+
+
             dispatch(setAddress(payload.user_data.address))
+
             await API.userUpdate({ payload: payload, userId: userauth._id })
                 .then(res => {
                     console.log(JSON.stringify(res.data.data))
                 })
-            navigation.navigate("Home")
+
+
+                
+            const res = await API.userSuccess({ isSuccess: true, userId: userauth._id })
+            console.log(res)
+            if (res.status === 200) {
+
+                dispatch(getAuthSuccess())
+            }
+
+
+
         } catch (e) {
             Alert.alert('Oops', e.message);
         }

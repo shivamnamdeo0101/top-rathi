@@ -1,23 +1,33 @@
 import { View, Text, ScrollView } from 'react-native'
 import React,{useEffect,useState} from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { API } from '../service/apis/UserService'
 import FetchCollection from './FetchCollection'
+import LoadingComp from './LoadingComp'
+import NewsSlice, { setCollection } from '../store/NewsSlice'
 
 const CollectionComp = ({navigation,user}) => {
 
-    const [collection, setcollection] = useState([]);
-
+    const dispatch = useDispatch()
+    const collection = useSelector(state=>state.NewsSlice.collection);
+    const [loading, setloading] = useState(true)
     useEffect(() => {
         const fetchData = async()=>{
             const res = await API.userGetCollection(user._id);
             if(res.data.success){
-                setcollection(res.data.data)
+                dispatch(setCollection(res.data.data))
+                setloading(false);
             }
         }
         fetchData()
+
     }, [collection])
     
+  if(loading){
+    return(
+      <LoadingComp />
+    )
+  }
   
   if(collection.length === 0){
     return(
@@ -29,9 +39,9 @@ const CollectionComp = ({navigation,user}) => {
     
     
   return (
-    <View>
+    <View style={{flex:1}}>
       <ScrollView>
-        {collection && collection.map((item,index)=>
+        {collection?.map((item,index)=>
             <View key={index}>
                 <FetchCollection navigation={navigation} postId={item.postId}/>
             </View>

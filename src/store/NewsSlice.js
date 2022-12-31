@@ -3,7 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
     news: [],
     slide: [],
-    insight: []
+    insight: [],
+    collection:[]
 };
 export const NewsSlice = createSlice({
     name: 'news',
@@ -18,15 +19,19 @@ export const NewsSlice = createSlice({
         addInsight:(state,action)=>{
             state.insight = action.payload;
         },
+        setCollection:(state,action)=>{
+            state.collection = action.payload;
+        },
 
         flushHomeData: (state) => {
             state.news = [];
             state.slide = [];
-            state.insight = []
+            state.insight = [];
+            state.collection = [];
         }
 
     },
 });
-export const { addNews ,addInsight,addSlide,flushHomeData} = NewsSlice.actions;
+export const { addNews ,addInsight,addSlide,flushHomeData,setCollection} = NewsSlice.actions;
 
 export default NewsSlice.reducer;

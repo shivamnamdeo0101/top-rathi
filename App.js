@@ -43,7 +43,6 @@ function Root() {
 
   async function saveTokenToDatabase(token) {
 
-    console.log(userauth.profile._id)
     const payload = {
       "userId":userauth?.profile?._id,
       "notifyToken":token
@@ -74,7 +73,7 @@ function Root() {
 
   return (
     <NavigationContainer >
-      {!userauth?.user?.user?._id ? <AuthStack /> :
+      {!userauth?.isSuccess ? <AuthStack /> :
         <AppStack />
       }
     </NavigationContainer>
