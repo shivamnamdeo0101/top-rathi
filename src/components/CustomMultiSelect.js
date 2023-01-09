@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MultiSelectUi from './MultiSelectUi';
 
 const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, value, editable }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -11,7 +12,7 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
   useEffect(() => {
     setValue(selectedInterest)
   }, [selectedInterest])
-  
+
 
   const getList = () => {
     return list.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
@@ -29,7 +30,7 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
     } else {
       const res = selectedInterest.filter((item) => item.name !== e.name);
       setselectedInterest(res)
-      
+
     }
 
 
@@ -54,50 +55,67 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
         ]}>
 
 
-        <Text style={{ paddingLeft: 5, paddingTop: 5, color: "#666", fontFamily: "Poppins-Bold" }}>{name.toUpperCase()}
+        <Text style={{ paddingLeft: 5, paddingTop: 5, color: "#15295c", fontFamily: "Poppins-SemiBold", fontSize: 16 }}>{name.toUpperCase()}
         </Text>
 
-          <View style={{flexDirection:"row",marginBottom:30,flexWrap:"wrap"}}>
-            {[...selectedInterest].map((item,index) =>
-              <Text key={index} style={{color: "#666", borderRadius:8,fontFamily: "Poppins-Bold",marginRight:5,backgroundColor:"#f0f3f5",padding:5,marginTop:5}}>
-                {item.name}
-              </Text>
-            )}
-          </View>
+        <View style={{ flexDirection: "row", marginBottom: 30, flexWrap: "wrap" }}>
+          {[...selectedInterest].length>0  ? [...selectedInterest].map((item, index) =>
+            <Text key={index} style={{ color: "#666", borderRadius: 8, fontFamily: "Poppins-Bold", marginRight: 5, backgroundColor: "#f0f3f5", padding: 5, marginTop: 5 }}>
+              {item.name}
+            </Text>
+          )
+        
+        :
+        <Text style={{fontFamily:"Poppins-Regular",marginLeft:10}}>Click Here To Update Your Interest</Text>}
+        </View>
         <Modal
           isVisible={isModalVisible}
           onSwipeComplete={() => CloseModal()}
           swipeDirection="down"
           onBackButtonPress={() => CloseModal()}
-          style={{ flex: 1, backgroundColor: "#f0f3f5", margin: 0, marginTop: "50%", borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 16 }}
+          style={{ flex: 1, backgroundColor: "#fff", margin: 0, marginTop: "50%", borderTopLeftRadius: 10, borderTopRightRadius: 10, padding: 16 }}
         >
           <View style={{ flex: 1 }}>
-            <Text style={{ fontFamily: "Poppins-Bold", fontSize: 16 }}>SELECT {name.toUpperCase()}</Text>
-            <TextInput
-              placeholder={"Search " + name}
-              value={search}
-              onChangeText={(e) => setsearch(e)}
-              style={{ backgroundColor: "#fff", borderRadius: 10, padding: 10, fontFamily: "Poppins-Bold", marginBottom: 10 }}
-            />
+            <View style={{ width: 100, height: 3, borderRadius:33, backgroundColor: "#ccc", alignSelf: "center", margin: 5 }}>
 
-           
+            </View>
+
+            <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 20, color: "#15295c", margin: 5, marginBottom: 16, borderLeftColor: "#f2c305", borderLeftWidth: 2, paddingLeft: 10 }}>SELECT {name.toUpperCase()}</Text>
+
+
+            <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: "#fff", marginBottom: 10, elevation: 2, padding: 3, paddingLeft: 10, borderRadius: 10 }}>
+              <Ionicons name={"search-outline"} color={"#f2c305"} size={20} />
+
+              <TextInput
+                placeholder='Search...'
+                onChangeText={setsearch}
+                value={search}
+                style={{ flex: 1, fontFamily: "Poppins-Regular", paddingLeft: 10, fontSize: 16, }}
+              />
+            </View>
+            
+
+
             <ScrollView showsVerticalScrollIndicator={false}>
-              {getList().map((item, index) => {
-                return (
-                  <View key={index}>
-                    <TouchableOpacity onPress={() => { addToList(item) }} style={styles.itemContainer}>
-                      <Text style={styles.item} key={index}>{index + 1}. {item.name}</Text>
-                      {IsAvail(item) && <Ionicons name="checkmark-done-circle-outline" color="#509403" size={25} />}
-                    </TouchableOpacity>
-                  </View>
-                );
+              <View style={{ flexDirection: "row", flexWrap: "wrap", margin: 5, }}>
+                {getList().map((item, index) => {
+                  return (
+                    <View key={index}>
+                      <TouchableOpacity onPress={() => { addToList(item) }} style={{ flexDirection: "row", alignItems: "center", alignContent: "center", borderWidth: 2, borderColor: IsAvail(item) ? "#f2c305" : "#fff", borderRadius: 10, margin: 10, marginBottom: 0, marginLeft: 0, padding: 10, backgroundColor: "#fff", elevation: 2 }}>
+                        <Text style={{ marginRight: 10, fontFamily: "Poppins-Regular", fontWeight: "400", textAlign: "center", fontSize: 16 }} key={index}>{index + 1}. {item.name}</Text>
+                        {IsAvail(item) && <Ionicons name="checkmark-done-circle-outline" color={"#509403"} size={25} />}
+                      </TouchableOpacity>
+                    </View>
+                  );
 
-              })}
+                })}
+              </View>
+
             </ScrollView>
           </View>
         </Modal>
 
-        
+
 
       </TouchableOpacity>
     </View>

@@ -19,7 +19,11 @@ export const API = {
         
       })
     },
-    userUpdate:async function({payload,userId}){
+    userUpdate:async function({payload,userId,token}){
+      const headers = { 
+        'Authorization': 'Bearer '+token, 
+        'Content-Type': 'application/json'
+      }
       return axios.request({
         method: 'put',
         headers:headers,
@@ -79,7 +83,7 @@ export const API = {
     userSendToken:async function(payload){
       return axios.request({
         method: 'put',
-        url: `${EndPoint}private//notify-token-update`,
+        url: `${EndPoint}private/notify-token-update`,
         data:payload
       })
     },
@@ -90,6 +94,19 @@ export const API = {
         method: 'put',
         url: `${EndPoint}private/success/${userId}`,
         data:payload
+      })
+    },
+
+    userNotifications:async function(payload){
+      const {userId,token} = payload; 
+      const headers = { 
+        'Authorization': 'Bearer '+token, 
+        'Content-Type': 'application/json'
+      }
+      return axios.request({
+        method: 'get',
+        url: `${EndPoint}private/user-notifications/${userId}`,
+        headers:headers
       })
     },
 

@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/core';
 import { useForm } from 'react-hook-form';
 import axios from "react-native-axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthFetch, setProfileDetaiils, registerAuthUser, flushAuthData, setAddress } from '../store/UserSlice';
+import { getAuthFetch, setProfileDetaiils, registerAuthUser, flushAuthData, setAddress, setLoadingUser } from '../store/UserSlice';
 import LoadingComp from '../components/LoadingComp';
 import CustomSelect from '../components/CustomSelect';
 import CustomMultiSelect from '../components/CustomMultiSelect';
@@ -15,6 +15,7 @@ import Snackbar from 'react-native-snackbar';
 import { API } from '../service/apis/UserService';
 import { DATA_API } from '../service/apis/DataService';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import messaging from '@react-native-firebase/messaging';
 
 const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -23,9 +24,10 @@ const EditProfileScreen = ({ navigation }) => {
     const { control, handleSubmit, watch } = useForm();
     const [user, setuser] = useState({});
     const pwd = watch('password');
-    const userauth = useSelector(state => state.userAuth?.user.user);
+    const userauth = useSelector(state => state.userAuth?.user?.user);
     const profile = useSelector(state => state.userAuth.profile);
 
+    console.log(userauth)
 
     const dispatch = useDispatch();
     const [selectedItems, setselectedItems] = useState([])
@@ -46,6 +48,8 @@ const EditProfileScreen = ({ navigation }) => {
     const [class_state, setclass_state] = useState(profile?.education?.school?.class_)
     const [from_state, setfrom_state] = useState(profile?.education?.college ? "college" : "school")
     const [college_type, setcollege_type] = useState(profile?.education?.college?.college_type)
+
+
 
 
     useEffect(() => {
@@ -87,38 +91,33 @@ const EditProfileScreen = ({ navigation }) => {
         fetchCities()
     }, [state])
 
-    const items = [{
-        id: '92iijs7yta',
-        name: 'Ondo'
-    }, {
-        id: 'a0s0a8ssbsd',
-        name: 'Ogun'
-    }, {
-        id: '16hbajsabsd',
-        name: 'Calabar'
-    }, {
-        id: 'nahs75a5sg',
-        name: 'Lagos'
-    }, {
-        id: '667atsas',
-        name: 'Maiduguri'
-    }, {
-        id: 'hsyasajs',
-        name: 'Anambra'
-    }, {
-        id: 'djsjudksjd',
-        name: 'Benue'
-    }, {
-        id: 'sdhyaysdj',
-        name: 'Kaduna'
-    }, {
-        id: 'suudydjsjd',
-        name: 'Abuja'
-    }
-    ];
+    const checkPresent = (name, arr) => {
 
+        return arr.some(e => e.name === name);
+    }
+
+    const switchSubcription = async ({ prevInterest, currInterest }) => {
+
+        await currInterest.forEach(async (item) => {
+            if (!checkPresent(item?.name, prevInterest)) {
+                await messaging()
+                    .subscribeToTopic(item?.name)
+                    .then(() => console.log(item?.name, 'Subscribed to topic!'));
+            }
+
+        })
+        await prevInterest.forEach(async (item) => {
+            if (!checkPresent(item?.name, currInterest)) {
+                await messaging()
+                    .unsubscribeFromTopic(item?.name)
+                    .then(() => console.log(item?.name, 'UnsubscribeFromTopic to topic!'));
+            }
+
+        })
+    }
 
     const onRegisterPressed = async data => {
+
         const { email, username } = data;
         const address_obj = {
             "country": country,
@@ -142,27 +141,31 @@ const EditProfileScreen = ({ navigation }) => {
                 },
                 "interest": Interest
             }
-
-
         }
         try {
+            const tempInterest = Interest;
+            dispatch(setLoadingUser(true))
+            await API.userUpdate({ payload: payload, userId: userauth?._id, token: userauth?.user?.token })
+                .then(async (res) => {
 
-            API.userUpdate({ payload: payload, userId: userauth._id })
-                .then(res => {
+                    console.log(res)
 
-                    dispatch(setProfileDetaiils(res.data.data))
-                    Snackbar.show({
-                        text: 'Profile Updated...',
-                        duration: Snackbar.LENGTH_SHORT,
-                        action: {
-                            text: 'OK',
-                            textColor: 'green',
-                            onPress: () => { dispatch(setProfileDetaiils(res.data.data)) },
-                        },
-                    });
-                    navigation.navigate("PROFILE")
-
-                })
+                    if (res?.status === 200) {
+                        await switchSubcription({ prevInterest: profile?.interest, currInterest: tempInterest })
+                        dispatch(setProfileDetaiils(res.data.data))
+                        dispatch(setLoadingUser(false))
+                        Snackbar.show({
+                            text: 'Profile Updated...',
+                            duration: Snackbar.LENGTH_SHORT,
+                            action: {
+                                text: 'OK',
+                                textColor: 'green',
+                                onPress: () => { dispatch(setProfileDetaiils(res.data.data)) },
+                            },
+                        })
+                        navigation.navigate("PROFILE")
+                    }
+            })
         } catch (e) {
             Alert.alert('Oops', e.message);
         }
@@ -180,14 +183,11 @@ const EditProfileScreen = ({ navigation }) => {
     const onPrivacyPressed = () => {
     };
 
-    if (userauth.isLoading) {
+    if (userauth?.isLoading) {
         return (
             <LoadingComp />
         )
     }
-
-
-
 
 
     return (
@@ -202,7 +202,7 @@ const EditProfileScreen = ({ navigation }) => {
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.root}>
-                    <Text style={styles.title}>UPDATE YOUR PROFILE</Text>
+                    <Text style={styles.title}>Personal Details</Text>
 
                     <CustomInput
                         name="username"
@@ -236,64 +236,8 @@ const EditProfileScreen = ({ navigation }) => {
                         }}
                     />
 
-                    <CustomSelect
 
-                        name="country"
-                        control={control}
-                        list={country_list}
-                        placeholder="Select country"
-                        setValue={setcountry}
-                        value={country}
-                        rules={{
-                            required: 'Country is required',
-                        }}
-                        editable={false}
-                        searchable={true}
-                        dataapi={true}
-                    />
-                    <CustomSelect
-                        name="state"
-                        control={control}
-                        list={state_list}
-                        placeholder="Select State"
-                        setValue={setstate}
-                        value={state}
-                        rules={{
-                            required: 'State is required',
-                        }}
-                        editable={false}
-                        searchable={true}
-                        dataapi={true}
-                    />
-
-
-                    <CustomSelect
-
-                        name="city"
-                        control={control}
-                        list={cities_list}
-                        placeholder="Select City"
-                        setValue={setcity}
-                        value={city}
-                        rules={{
-                            required: 'City is required',
-                        }}
-                        editable={false}
-                        searchable={true}
-
-                    />
-                    <CustomInput
-                        name="pincode"
-                        editable={true}
-                        defaultValue={profile?.address?.pincode}
-                        control={control}
-                        placeholder={"Pincode"}
-                        rules={{
-                            required: 'Pincode is required',
-                        }}
-                    />
-
-
+                    <Text style={styles.title}>Education Details</Text>
 
                     <CustomSelect
                         name="from where"
@@ -365,7 +309,7 @@ const EditProfileScreen = ({ navigation }) => {
                             required: 'Class is required',
                         }}
                         editable={false}
-                        searchable={true}
+                        searchable={false}
                     />
 
 
@@ -384,6 +328,8 @@ const EditProfileScreen = ({ navigation }) => {
                         searchable={true}
                     />
 
+
+
                     <CustomMultiSelect
                         name="interest"
                         control={control}
@@ -397,6 +343,65 @@ const EditProfileScreen = ({ navigation }) => {
                         }}
                         editable={false}
                     />
+
+                    <Text style={styles.title}>Address Details</Text>
+                    <CustomSelect
+
+                        name="country"
+                        control={control}
+                        list={country_list}
+                        placeholder="Select country"
+                        setValue={setcountry}
+                        value={country}
+                        rules={{
+                            required: 'Country is required',
+                        }}
+                        editable={false}
+                        searchable={true}
+                        dataapi={true}
+                    />
+                    <CustomSelect
+                        name="state"
+                        control={control}
+                        list={state_list}
+                        placeholder="Select State"
+                        setValue={setstate}
+                        value={state}
+                        rules={{
+                            required: 'State is required',
+                        }}
+                        editable={false}
+                        searchable={true}
+                        dataapi={true}
+                    />
+
+
+                    <CustomSelect
+
+                        name="city"
+                        control={control}
+                        list={cities_list}
+                        placeholder="Select City"
+                        setValue={setcity}
+                        value={city}
+                        rules={{
+                            required: 'City is required',
+                        }}
+                        editable={false}
+                        searchable={true}
+
+                    />
+                    <CustomInput
+                        name="pincode"
+                        editable={true}
+                        defaultValue={profile?.address?.pincode}
+                        control={control}
+                        placeholder={"Pincode"}
+                        rules={{
+                            required: 'Pincode is required',
+                        }}
+                    />
+
 
 
 
@@ -424,9 +429,15 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#f2c305',
+        fontSize: 18,
+        textTransform: "uppercase",
+        borderLeftColor: "#f2c305",
+        borderLeftWidth: 2, paddingLeft: 10,
+        marginBottom: 10,
+        marginTop: 10,
+        fontFamily: "Poppins-SemiBold",
+        color: '#15295c',
+
     },
     text: {
         color: 'gray',

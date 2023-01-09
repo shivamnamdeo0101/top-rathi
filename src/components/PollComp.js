@@ -125,8 +125,8 @@ export default function PollComp({ navigation, user, post }) {
     }
 
     return (
-        <View>
-            <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "bold", color: "#fff", fontSize: 16, textAlign: "center" ,backgroundColor:"#000",width:120,borderTopLeftRadius:10,borderTopRightRadius:10,padding:4}}>POLL</Text>
+        <View style={{marginBottom:10}}>
+            <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "bold", color: "#fff", fontSize: 12, textAlign: "center" ,backgroundColor:"#000",width:100,borderTopLeftRadius:10,borderTopRightRadius:10,padding:4}}>POLL</Text>
             <ImageBackground
                 source={{ uri: post.image }}
                 borderBottomLeftRadius={10}
@@ -137,8 +137,8 @@ export default function PollComp({ navigation, user, post }) {
 
 
 
-                <View style={{ display: "flex", flexDirection: "row", marginBottom: 20,marginTop:10 }}>
-                    <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "bold", fontSize: 16, color: "#f0f3f5" }}>
+                <View style={{ display: "flex", flexDirection: "row",  marginBottom: 10,marginTop:10 }}>
+                    <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "bold", fontSize: 12, color: "#f0f3f5" }}>
                         {post.poll_title}</Text>
                 </View>
                 
@@ -147,10 +147,10 @@ export default function PollComp({ navigation, user, post }) {
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" ,marginTop:10,marginBottom:10}}>
 
                     <TouchableOpacity onPress={() => userResponse?.msg ? Undo() : addPoll("Yes")} style={{  paddingLeft: 16, paddingRight: 16, padding: 5 }}>
-                        <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "200", fontSize: 16, color: userResponse.msg == "Yes" ? "#2e81f5" : "#ccc",}}>Yes {getPercentage()["yes"]} %</Text>
+                        <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "200", fontSize: 14, color: userResponse.msg == "Yes" ? "#2e81f5" : "#ccc",}}>Yes {getPercentage()["yes"]} %</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => userResponse?.msg ? Undo() : addPoll("No")} style={{  paddingLeft: 16, paddingRight: 16, padding: 5 }}>
-                        <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "200", fontSize: 16, color: userResponse.msg == "No" ? "#2e81f5" : "#ccc",}}>No {getPercentage()["no"]} %</Text>
+                        <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "200", fontSize: 14, color: userResponse.msg == "No" ? "#2e81f5" : "#ccc",}}>No {getPercentage()["no"]} %</Text>
                     </TouchableOpacity>
 
                 </View>

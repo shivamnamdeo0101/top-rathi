@@ -19,7 +19,7 @@ export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector(state => state.userAuth.user.user)
 
-
+  const token = useSelector(state=>state.userAuth.user.token)
 
   const [profile, setprofile] = useState(user)
   const education = useSelector(state => state.EducationSlice)
@@ -31,7 +31,7 @@ export default function ProfileScreen({ navigation }) {
 
   const [image, setimage] = useState("");
 
-  const payload = { userId: user._id }
+  const payload = { userId: user._id,token:token }
   useEffect(() => {
 
     const fetchData = async () => {
@@ -45,7 +45,7 @@ export default function ProfileScreen({ navigation }) {
 
     fetchData()
 
-  }, [profile])
+  }, [user])
 
   useEffect(() => {
     const fetchData = async () => {

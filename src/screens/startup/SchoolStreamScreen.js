@@ -2,12 +2,12 @@ import { View, Text, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
 import MultiSelectUi from '../../components/MultiSelectUi'
 import { useDispatch } from 'react-redux'
-import { setBranch, setClass } from '../../store/EducationSlice'
+import { setBranch, setClass, setStream } from '../../store/EducationSlice'
 import CustomButton from '../../components/CustomButton'
 
-const SchoolStartupScreen = ({ navigation }) => {
+const SchoolStreamScreen = ({ navigation }) => {
 
-  const [class_, setclass] = useState("")
+  const [stream, setstream] = useState("")
   const [error, seterror] = useState("")
   const dispatch = useDispatch();
 
@@ -15,20 +15,14 @@ const SchoolStartupScreen = ({ navigation }) => {
 
   const Next = () => {
 
-    if(!class_){
-      seterror("Please select the option given")
-      return
-  }
+    if(!stream){
+        seterror("Please select the option given")
+        return
+    }
 
     try {
-      dispatch(setClass(class_))
-
-      if(class_?.split("Class")[1] > 10){
-        navigation.navigate("SchoolStream")
-      }else{
-        navigation.navigate("Address")
-      }
-
+      dispatch(setStream(stream))
+      navigation.navigate("Address")
     } catch (e) {
 
       Alert.alert('Oops', e.message);
@@ -40,28 +34,21 @@ const SchoolStartupScreen = ({ navigation }) => {
     <View style={styles.container}>
 
       <View style={{ flex: 1 }}>
-        <Text style={styles.heading_text}>SELECT YOUR CLASS</Text>
+        <Text style={styles.heading_text}>SELECT YOUR STREAM</Text>
         <MultiSelectUi 
           type="class"
           error={error}
           seterror={seterror}
           list={[
-            { id: 0, name: "Class 1" },
-            { id: 1, name: "Class 2" },
-            { id: 2, name: "Class 3" },
-            { id: 3, name: "Class 4" },
-            { id: 4, name: "Class 5" },
-            { id: 5, name: "Class 6" },
-            { id: 6, name: "Class 7" },
-            { id: 7, name: "Class 8" },
-            { id: 8, name: "Class 9" },
-            { id: 9, name: "Class 10" },
-            { id: 10, name: "Class 11" },
-            { id: 11, name: "Class 12" },
+            { id: 0, name: "Mathematics" },
+            { id: 1, name: "Biology" },
+            { id: 2, name: "Commerce" },
+            { id: 3, name: "Science" },
+           
 
 
           ]}
-          setValue={setclass} value={class_}
+          setValue={setstream} value={stream}
         />
 
        
@@ -75,7 +62,7 @@ const SchoolStartupScreen = ({ navigation }) => {
   )
 }
 
-export default SchoolStartupScreen
+export default SchoolStreamScreen
 
 
 const styles = StyleSheet.create({

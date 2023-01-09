@@ -1,9 +1,11 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react'
 import { View, useWindowDimensions,Text ,StyleSheet, ScrollView} from 'react-native';
 import { TabView, TabBar,SceneMap } from 'react-native-tab-view';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
+import { API } from '../service/apis/UserService';
+import Snackbar from 'react-native-snackbar';
 
 
 
@@ -11,6 +13,45 @@ import { useSelector } from 'react-redux';
 const PersonalRoute = () => {
   const user = useSelector(state=>state.userAuth.profile)
 
+ 
+
+  const [loading, setloading] = useState(false)
+  const [sent, setsent] = useState(false)
+
+  const sendVerify = async ()=>{
+    setloading(true)
+    const data = { "email": user?.email }
+    try {
+      
+            await API.userSendEmailVerifyLink(data)
+                .then((res) => {
+                    setloading(false)
+                    if (res.data.success) {
+                      setsent(true)
+                        setloading(false)
+                        Snackbar.show({
+                            text: "Email sent. if you didn't get the email click on the Resend ",
+                            duration: Snackbar.LENGTH_SHORT,
+                            action: {
+                                text: 'RESEND',
+                                textColor: 'green',
+                                onPress: () => sendVerify(),
+                            },
+                        });
+
+
+                    }
+
+                })
+
+        
+
+    } catch (e) {
+        setloading(false)
+        Alert.alert('Oops', e.message);
+    }
+
+  }
 
   return(
     <View style={styles.route}>
@@ -24,12 +65,17 @@ const PersonalRoute = () => {
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>EMAIL</Text>
           <Text style={styles.route_comp_text}>{user?.email} </Text>
-          {user?.emailVerified && <Text style={{color:"#fff",fontSize:12,backgroundColor:"green",width:60,padding:4,textAlign:"center",borderRadius:10}}>VERIFIED</Text>}
+          {user?.emailVerified ? <Text style={{color:"#fff",fontSize:12,backgroundColor:"green",width:60,padding:4,textAlign:"center",borderRadius:10}}>VERIFIED</Text>
+            : <View style={{flexDirection:"row",alignItems:"center",}}>
+              <Text style={{color:"#fff",fontSize:12,backgroundColor:"red",width:70,padding:4,textAlign:"center",borderRadius:10}}>UNVERIFIED</Text>
+              <Text onPress={()=>sendVerify()} style={{fontSize:12,color:"green",padding:4,textAlign:"center",borderRadius:10,fontFamily:"Poppins-SemiBold"}}> {loading ? "Sending email.." : sent? "Email Sent. Click to resend" : "Send email to verify" } </Text>
+            </View>
+          }
         </View>
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>INTEREST</Text>
           {
-            user?.interest && 
+           ( user?.interest && user?.interest?.length > 0 )?
             <View style={{flexDirection:"row",flexWrap:"wrap",}}>
                 {
                   user?.interest.map((item,index)=>{
@@ -38,9 +84,13 @@ const PersonalRoute = () => {
                      )
                   })
                 }
-            </View>  
+            </View> 
+            :
+            <View>  
+              <Text style={styles.route_comp_text}>{"Go to settings -> edit profile -> In Education section update your interest"}</Text>
+            </View>   
           }
-        </View>
+    </View>
     </View>
   )
 }

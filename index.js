@@ -11,9 +11,6 @@ import notifee, { AndroidStyle ,EventType} from '@notifee/react-native';
 
 
 async function onDisplayNotification(payload) {
-
-    console.log(JSON.stringify(payload), "Hiiiiiiiiiiiiiiiiiiiiiiiii")
-
     // Create a channel
     const channelId = await notifee.createChannel({
         id: 'default',
@@ -21,17 +18,18 @@ async function onDisplayNotification(payload) {
     });
     // Display a notification
     await notifee.displayNotification({
-        title: payload.data.title,
-        body: payload.data.body,
+        title: payload.notification.title,
+        body: payload.notification.body,
         android: {
             channelId,
-            style: { type: AndroidStyle.BIGPICTURE, picture: 'https://wallup.net/wp-content/uploads/2017/03/28/424982-digital_art-landscape-trees-night-anime_girls-sky-748x466.png' },
+            style: { type: AndroidStyle.BIGPICTURE, picture: payload?.data?.url },
         },
     });
 }
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-    onDisplayNotification(remoteMessage)
+    console.log(remoteMessage,"Index")
+//    onDisplayNotification(remoteMessage)
 
 });
 

@@ -38,18 +38,20 @@ saga.run(rootSaga)
 
 function Root() {
   const userauth = useSelector(state => state.userAuth)
-  const token = useSelector(state => state.userAuth.user.token)
 
+  async function saveTokenToDatabase(notifyToken) {
 
-  async function saveTokenToDatabase(token) {
-
-    const payload = {
-      "userId":userauth?.profile?._id,
-      "notifyToken":token
+    if(userauth?.isSuccess){
+      const payload = {
+        "userId":userauth?.profile?._id,
+        "notifyToken":notifyToken
+      }
+  
+      const res = await API.userSendToken(payload)
+  
+      console.log(res)
     }
-
-    const res = await API.userSendToken(payload)
-
+    
   }
 
 
@@ -59,11 +61,10 @@ function Root() {
     messaging()
       .getToken()
       .then(token => {
+        console.log(token)
         return saveTokenToDatabase(token);
       });
 
-
-   
 
 
     return messaging().onTokenRefresh(token => {

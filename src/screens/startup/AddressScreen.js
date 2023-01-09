@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, Alert } from 'react-native'
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import CustomSelect from '../../components/CustomSelect'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../components/CustomButton';
 import { setClass, setFromWhere, setStream } from '../../store/EducationSlice';
-import { getAuthSuccess, setAddress, setFirstTime } from '../../store/UserSlice';
+import { getAuthSuccess, setAddress, setFirstTime, setProfileDone } from '../../store/UserSlice';
 import { API } from '../../service/apis/UserService';
 import { DATA_API } from '../../service/apis/DataService';
 import CustomInput from "../../components/CustomInput";
@@ -17,14 +17,14 @@ export default function AddressScreen({ navigation }) {
     const { control, handleSubmit, watch } = useForm();
     const [user, setuser] = useState({});
     const userauth = useSelector(state => state.userAuth.profile);
+    const userToken = useSelector(state => state?.userAuth?.user?.token)
     const [country_list, setcountry_list] = useState([]);
     const [state_list, setstate_list] = useState([]);
     const [cities_list, setcities_list] = useState([]);
 
-
+    const profileDone = useSelector((state) => state?.userAuth?.user?.isProfileDone)
 
     const edu = useSelector(state => state.EducationSlice)
-    console.log(edu, "=>")
 
     const [country, setcountry] = useState("")
     const [state, setstate] = useState("")
@@ -47,13 +47,17 @@ export default function AddressScreen({ navigation }) {
         const fetchStates = async () => {
 
             const c = country.split("-")[0];
+            console.log(c)
             const res = await DATA_API.GetStates(c)
             if (res.status == '200') {
                 setstate_list(res?.data)
             }
         }
 
-        fetchStates()
+            fetchStates()
+        
+
+       
     }, [country])
 
     useEffect(() => {
@@ -67,7 +71,9 @@ export default function AddressScreen({ navigation }) {
             }
         }
 
-        fetchCities()
+            fetchCities()
+        
+       
     }, [state])
 
     const Next = async data => {
@@ -91,14 +97,16 @@ export default function AddressScreen({ navigation }) {
                         "state": state,
                         "city": city,
                         "pincode": data?.pincode
-                    }
+                    },
+                    "isProfileDone":profileDone,
+                    "notifyToken":""
                 }
             }
 
 
             dispatch(setAddress(payload.user_data.address))
 
-            await API.userUpdate({ payload: payload, userId: userauth._id })
+            await API.userUpdate({ payload: payload, userId: userauth._id,token:userToken })
                 .then(res => {
                     console.log(JSON.stringify(res.data.data))
                 })
@@ -109,7 +117,7 @@ export default function AddressScreen({ navigation }) {
             console.log(res)
             if (res.status === 200) {
 
-                dispatch(getAuthSuccess())
+               dispatch(getAuthSuccess())
             }
 
 
@@ -118,6 +126,7 @@ export default function AddressScreen({ navigation }) {
             Alert.alert('Oops', e.message);
         }
     };
+
     return (
         <View style={styles.container}>
             <View style={styles.top_view}>
@@ -174,6 +183,7 @@ export default function AddressScreen({ navigation }) {
                 <CustomInput
                     name="pincode"
                     control={control}
+                    keyboardType="number-pad"
                     placeholder="Enter your pincode"
                     rules={{
                         required: 'pincode is required',
@@ -182,8 +192,8 @@ export default function AddressScreen({ navigation }) {
                             message: 'pincode should be at least 3 characters long',
                         },
                         maxLength: {
-                            value: 24,
-                            message: 'pincode should be max 24 characters long',
+                            value: 6,
+                            message: 'pincode should be max 6 characters long',
                         },
                     }}
                 />
@@ -191,8 +201,10 @@ export default function AddressScreen({ navigation }) {
             </View>
 
             <View style={styles.bottom_view}>
+            
                 <CustomButton text="Next" onPress={handleSubmit(Next)} />
             </View>
+           
         </View>
     )
 }

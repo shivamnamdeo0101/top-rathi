@@ -2,13 +2,14 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 
 import React, { useState } from 'react'
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MultiSelectUi from './MultiSelectUi';
 
-const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, editable, searchable, dataapi,error }) => {
+const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, editable, searchable, dataapi,seterror, error }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [search, setsearch] = useState("")
 
   function getList() {
-    return list.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
+    return list.filter((item) => search.toLowerCase().includes(item.name.toLowerCase()))
   }
 
   const CloseModal = () => {
@@ -32,11 +33,23 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, 
         onSwipeComplete={() => CloseModal()}
         swipeDirection="down"
         onBackButtonPress={() => CloseModal()}
-        style={{ flex: 1, backgroundColor: "#f0f3f5", margin: 0, marginTop: "50%", borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 16 }}
+        style={{ flex: 1, backgroundColor: "#fff", margin: 0, marginTop: "50%", borderTopLeftRadius: 10, borderTopRightRadius: 10, padding: 16 }}
       >
         <View style={{ flex: 1 }}>
-          <Text style={{ fontFamily: "Poppins-Bold", fontSize: 16 }}>SELECT {name.toUpperCase()}</Text>
-          {searchable && <TextInput
+          <View style={{width:100,height:3, borderRadius:33,backgroundColor:"#ccc",alignSelf:"center",margin:5}}>
+
+          </View>
+
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 20,color:"#15295c" ,margin:5, marginBottom:16, borderLeftColor:"#f2c305",borderLeftWidth:2,paddingLeft:10}}>SELECT {name.toUpperCase()}</Text>
+
+          <MultiSelectUi 
+            list={list}
+            setValue={setValue}
+            value={value}
+            searchAble={searchable}
+            dataapi={dataapi}
+          />
+          {/* {searchable && <TextInput
             placeholder={"Search " + name}
             value={search}
             onChangeText={(e) => setsearch(e)}
@@ -57,7 +70,10 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, 
               );
 
             })}
-          </ScrollView>
+          </ScrollView> */}
+
+          
+
         </View>
       </Modal>
       <TouchableOpacity
@@ -66,7 +82,7 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, 
           styles.container,
           {borderColor: error ? 'red' : '#e8e8e8'},
         ]}>
-        <Text style={{ paddingLeft: 5, paddingTop: 5, color: "#666", fontFamily: "Poppins-Bold" }}>{name.toUpperCase()}</Text>
+        <Text style={{ paddingLeft: 5, paddingTop: 5, color: "#15295c", fontFamily: "Poppins-SemiBold" ,fontSize:16}}>{name.toUpperCase()}</Text>
 
 
         <TextInput
@@ -92,7 +108,7 @@ export default CustomSelect
 
 const styles = StyleSheet.create({
   input: {
-
+    fontFamily:"Poppins-Regular"
   },
   container: {
     backgroundColor: 'white',

@@ -46,13 +46,15 @@ const RegisterScreen = ({ navigation }) => {
                 "state": "",
                 "city": ""
             },
-            "interest": []
+            "interest": [],
+            "notifications":[]
 
         }
         try {
 
             const res = await API.userRegister(payload)
-        
+            
+            console.log(res?.data)
 
             if (res.status === 200) {
                 dispatch(setUserDetails(res.data.data))
@@ -91,12 +93,13 @@ const RegisterScreen = ({ navigation }) => {
         <View style={{flex:1,backgroundColor:"#fff",}}>
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
+                
                 <Image
                     source={require("../assets/logo.png")}
                     style={[styles.logo, { height: height * 0.3 }]}
                     resizeMode="contain"
                 />
-
+                  <Text style={{textAlign:"center", fontFamily: "Poppins-Bold", color: "#15295c", fontSize: 23 }}>Create An Account</Text>
                 <CustomInput
                     name="name"
                     control={control}
@@ -148,11 +151,12 @@ const RegisterScreen = ({ navigation }) => {
                 />
 
                 <CustomButton
+                    
                     text="SIGNUP"
                     onPress={handleSubmit(onRegisterPressed)}
                 />
 
-                <Text style={styles.text}>
+                <Text style={{...styles.text,marginTop:10}}>
                     By registering, you confirm that you accept our{' '}
                     <Text style={styles.link} onPress={onTermsOfUsePressed}>
                         Terms of Use
@@ -189,14 +193,13 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'gray',
-        marginVertical: 10,
     },
     link: {
         color: '#FDB075',
     },
     logo: {
-        maxWidth: 100,
-        maxHeight: 100,
+        maxWidth: 70,
+        maxHeight: 70,
         borderRadius:50
       },
 });

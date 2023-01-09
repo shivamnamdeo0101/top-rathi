@@ -29,7 +29,7 @@ export default function ForgotPasswordScreen({ navigation }) {
         setloading(true)
         try {
 
-            
+
             await API.userForgotPass(data)
                 .then((res) => {
                     setloading(false)
@@ -61,48 +61,47 @@ export default function ForgotPasswordScreen({ navigation }) {
 
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
-            <View>
+        <View style={styles.root}>
 
 
-                <View style={styles.root}>
-                    <CustomInput
-                        name="email"
-                        control={control}
-                        placeholder="Enter your email"
-                        rules={{
+            <ScrollView>
+                <Text style={{ fontFamily: "Poppins-Bold", color: "#15295c", fontSize: 16, paddingRight: 20 }}>Don't worry it happens. Please enter the emaill address associated with your account.</Text>
+                <CustomInput
+                    name="email"
+                    control={control}
+                    placeholder="Enter your email"
+                    rules={{
 
-                            required: 'Email is required',
-                            pattern: { value: EMAIL_REGEX, message: 'Email is invalid' },
-                        }}
-                    />
-                    <CustomButton
+                        required: 'Email is required',
+                        pattern: { value: EMAIL_REGEX, message: 'Email is invalid' },
+                    }}
+                />
 
-                        text={loading ? "Sending email..." : "Send the verification Link"}
-                        onPress={loading ? handleSubmit : handleSubmit(SubmitEmail)}
-                    />
+            </ScrollView>
+            <CustomButton
 
-                    {(email_sent) && <Text style={{ fontSize: 14, fontFamily: "Poppins-Bold", color: "green", textAlign: "center" }}>Email sent and link expired 1 min</Text>}
+                text={loading ? "Sending email..." : "Send the verification Link"}
+                onPress={loading ? handleSubmit : handleSubmit(SubmitEmail)}
+            />
 
-                    {(counter === 0) && <Text style={{ fontSize: 12, fontFamily: "Poppins-Bold", color: "#f003", textAlign: "center" }}> Link has been expired, resend the verification email</Text>}
+            {(email_sent) && <Text style={{ fontSize: 14, fontFamily: "Poppins-Bold", color: "green", textAlign: "center" }}>Email sent and link expired 1 min</Text>}
+
+            {/* {(counter === 0) && <Text style={{ fontSize: 12, fontFamily: "Poppins-Bold", color: "#f003", textAlign: "center" }}> Link has been expired, resend the verification email</Text>} */}
 
 
 
-                </View>
 
-            </View>
-        </ScrollView>
+
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     root: {
+        flex: 1,
+        backgroundColor: "#fff",
         alignItems: 'center',
         padding: 20,
     },
-    logo: {
-        width: '70%',
-        maxWidth: 300,
-        maxHeight: 200,
-    },
+
 });

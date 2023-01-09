@@ -13,7 +13,7 @@ const CustomSelectTap = ({ list, setValue, value,error,seterror }) => {
             {
                 list.map((item,index)=>{
                    return(
-                    <TouchableOpacity style={{borderColor:value === item.name ? "#000" : "#fff",borderWidth:2 ,borderRadius:10,padding:10}} onPress={()=>setChange(item)}>
+                    <TouchableOpacity key={index} style={{borderColor:value === item.name ? "#000" : "#fff",borderWidth:2 ,borderRadius:10,padding:10}} onPress={()=>setChange(item)}>
                         <Image source={{uri:item.image}} style={styles.image}/>
                      </TouchableOpacity>
                    )

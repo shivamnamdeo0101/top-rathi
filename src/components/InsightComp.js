@@ -19,6 +19,7 @@ const InsightComp = ({navigation}) => {
   const [entries, setEntries] = useState([]);
   const dispatch = useDispatch();
   const insight = useSelector((state)=>state.NewsSlice.insight)
+
   useEffect(() => {
     async function fetchData (){
         const res = await NEWS_API.InsightFetch();
@@ -28,6 +29,8 @@ const InsightComp = ({navigation}) => {
        fetchData();
   }, []);
 
+
+  
   const Comp = ({item, index}) => {
     return (
       <View style={styles.item}>
@@ -40,6 +43,9 @@ const InsightComp = ({navigation}) => {
       </View>
     );
   };
+
+
+
 
   return (
     <View style={styles.container}>

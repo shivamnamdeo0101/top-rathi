@@ -46,7 +46,7 @@ export default function EmailVerify({ navigation, emailVerified, email, setcount
         const val = parseInt((counter - Date.now()) / 1000)
 
         if(val < 60 && val > 0){
-            Alert.alert("H")
+            Alert.alert("Verification is")
 
             return
         }

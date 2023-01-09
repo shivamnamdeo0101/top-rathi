@@ -12,7 +12,8 @@ const CustomInput = ({
   rules = {},
   placeholder,
   secureTextEntry,
-  editable
+  editable,
+  keyboardType
 }) => {
 
   const [show, setshow] = useState(secureTextEntry && true)
@@ -30,7 +31,7 @@ const CustomInput = ({
               styles.container,
               { borderColor: error ? 'red' : '#e8e8e8'},
             ]}>
-              <Text style={{paddingLeft:5,paddingTop:5,color:"#666",fontFamily:"Poppins-Bold"}}>{name.toUpperCase()} </Text>
+              <Text style={{paddingLeft:5,paddingTop:5,color:"#15295c",fontFamily:"Poppins-SemiBold",fontSize:16}}>{name.toUpperCase()} </Text>
             
             <View style={{
               flexDirection: "row",
@@ -47,10 +48,11 @@ const CustomInput = ({
               placeholder={placeholder}
               style={styles.input}
               secureTextEntry={show}
+              keyboardType={keyboardType}
             />
              {secureTextEntry && 
             <TouchableOpacity style={{width:20,height:20}}>
-           <Icon onPress={()=>setshow(!show)} name={!show ? "eye" : "eye-off"} type="ionicon" color="#000" size={20} />
+           <Icon onPress={()=>setshow(!show)} name={!show ? "eye" : "eye-off"} type="ionicon" color="#1d2740" size={20} />
             </TouchableOpacity>
             }
 
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily:"Poppins-Regular",
-    flex:1
+    flex:1,
   },
 });
 

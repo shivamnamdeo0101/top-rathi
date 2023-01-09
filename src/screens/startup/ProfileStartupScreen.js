@@ -44,6 +44,7 @@ export default function ProfileStartupScreen({ navigation }) {
         <Text style={styles.heading_text}>ARE YOU FROM SCHOOL / COLLEGE ?</Text>
 
         <CustomSelectTap 
+          
           list={[{ id: 0, name: "college",image:"https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/college.png?ik-sdk-version=javascript-1.4.3&updatedAt=1672397794520" },
            { id: 1, name: "school" ,image:"https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/school.png?ik-sdk-version=javascript-1.4.3&updatedAt=1672397813359"}]}
           setValue={setfrom_state}

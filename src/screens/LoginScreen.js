@@ -17,7 +17,7 @@ import CustomButton from "../components/CustomButton/CustomButton";
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthFetch, getAuthSuccess, setProfileDetaiils, setUserDetails } from '../store/UserSlice';
+import { getAuthFetch, getAuthSuccess, setProfileDetaiils, setProfileDone, setUserDetails } from '../store/UserSlice';
 import LoadingComp from '../components/LoadingComp';
 import { API } from '../service/apis/UserService';
 
@@ -41,6 +41,9 @@ const LoginScreen = ({ navigation }) => {
 
   const onSignInPressed = async data => {
 
+
+    console.log(data)
+
     if (userauth.isLoading) {
       return;
     }
@@ -50,15 +53,18 @@ const LoginScreen = ({ navigation }) => {
     try {
 
       const res = await API.userLogin(data)
-     
+      
       if (res.status === 200) {
         dispatch(setUserDetails(res.data.data))
         dispatch(setProfileDetaiils(res.data.data.user))
-        if (res.data.data.user.isSuccess) {
-          dispatch(getAuthSuccess())
-        } else {
-          navigation.navigate("ProfileStartup")
+        dispatch(getAuthSuccess())
+        
+        if (res.data.data.user.isProfileDone) {
+          dispatch(setProfileDone())
         }
+        // } else {
+        //   navigation.navigate("ProfileStartup")
+        // }
       }
 
 
@@ -88,12 +94,15 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: "#fff", }}>
       <ScrollView showsVerticalScrollIndicator={false}>
+        
         <View style={styles.root}>
           <Image
             source={require("../assets/logo.png")}
             style={[styles.logo, { height: height * 0.3 }]}
             resizeMode="contain"
           />
+        <Text style={{textAlign:"center", fontFamily: "Poppins-Bold", color: "#15295c", fontSize: 23 }}>Let's Sign You In</Text>
+
           <CustomInput
             name="email"
             control={control}
