@@ -94,7 +94,7 @@ const InsightScreen = ({ route, navigation }) => {
                 />
 
                 <Pagination
-                    dotsLength={post?.insight_arr.length}
+                    dotsLength={post?.insight_arr?.length}
                     activeDotIndex={activeSlide}
                     containerStyle={{ backgroundColor: "transparent" }}
                     dotStyle={{

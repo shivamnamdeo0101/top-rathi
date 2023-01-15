@@ -44,11 +44,11 @@ export const API = {
         url: `${EndPoint}private/user/${userId}`,
       })
     },
-    userGetCollection:async function(payload){
+    userGetCollection:async function(payload,pageNo){
       const userId = payload;
       return axios.request({
         method: 'get',
-        url: `${EndPoint}private/collection/${userId}`,
+        url: `${EndPoint}private/profile-collection/${userId}/${pageNo}`,
       })
     },
     userUpdateProfileImg:async function(payload){
@@ -103,6 +103,7 @@ export const API = {
         'Authorization': 'Bearer '+token, 
         'Content-Type': 'application/json'
       }
+      
       return axios.request({
         method: 'get',
         url: `${EndPoint}private/user-notifications/${userId}`,

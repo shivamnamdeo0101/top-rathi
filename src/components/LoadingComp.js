@@ -5,7 +5,7 @@ import React from 'react'
 export default function LoadingComp() {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large"  color="#f2c305"/>
+      <ActivityIndicator size="large"  color="#f5aa42"/>
     </View>
   )
 }

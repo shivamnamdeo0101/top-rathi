@@ -9,23 +9,24 @@ import { setFirstTime } from '../../store/UserSlice';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import { API } from '../../service/apis/UserService';
 import MultiSelectUi from '../../components/MultiSelectUi';
+import SelectGrid from '../../components/SelectGrid';
 
 export default function CollegeStartupScreen({ navigation }) {
   const dispatch = useDispatch();
   const [college_type, setcollege_type] = useState("")
   const [error, seterror] = useState("");
   const Next = async data => {
-  
-    if(!college_type){
+
+    if (!college_type) {
       seterror("Please select the option given")
       return
-  }
+    }
 
     try {
-      
+
       dispatch(setCollegeType(college_type))
       dispatch(setFirstTime());
-     
+
       navigation.navigate("CollegeBranch")
     } catch (e) {
       Alert.alert('Oops', e.message);
@@ -34,17 +35,21 @@ export default function CollegeStartupScreen({ navigation }) {
   return (
     <View style={styles.container}>
 
-      <View style={{flex:1}}>
-        <Text style={styles.heading_text}>SELECT YOUR COLLEGE TYPE</Text>
-        <MultiSelectUi 
+      <View style={{ flex: 1 }}>
+        <View style={{ padding: 20, paddingTop: 0 }}>
+          <Text style={styles.heading_text}>Choose the college type which you are currently pursuing .</Text>
+          <Text style={{ fontFamily: "OpenSans-Regular", color: "#637994" }} >Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0</Text>
+
+        </View>
+        <SelectGrid
           error={error}
           seterror={seterror}
-          list={[{ id: 0, name: "Diploma" }, { id: 1, name: "Graduation" },{ id: 2, name: "Post Graduation" }]}  setValue={setcollege_type} value={college_type}  />
+          list={[{ id: 0, name: "Diploma" }, { id: 1, name: "Graduation" }, { id: 2, name: "Post Graduation" }]} setValue={setcollege_type} value={college_type} />
 
       </View>
-       
+
       <View style={styles.bottom_view}>
-        <CustomButton text="Next" onPress={()=>Next()} />
+        <CustomButton text="Next" onPress={() => Next()} />
       </View>
     </View>
   )
@@ -54,7 +59,7 @@ export default function CollegeStartupScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f3f5",
+    backgroundColor: "#fff",
     padding: 10
   },
   logo: {
@@ -63,10 +68,9 @@ const styles = StyleSheet.create({
     maxHeight: 200,
   },
   heading_text: {
-    fontSize: 20,
-    color:"#000",
-    fontWeight: "bold",
-    marginBottom:10,
-    fontFamily:"Poppins-Bold"
+    fontSize: 18,
+    color: "#15295c",
+    fontFamily: "OpenSans-SemiBold",
+
   }
 });

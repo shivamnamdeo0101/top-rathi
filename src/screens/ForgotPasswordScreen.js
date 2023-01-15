@@ -65,7 +65,7 @@ export default function ForgotPasswordScreen({ navigation }) {
 
 
             <ScrollView>
-                <Text style={{ fontFamily: "Poppins-Bold", color: "#15295c", fontSize: 16, paddingRight: 20 }}>Don't worry it happens. Please enter the emaill address associated with your account.</Text>
+                <Text style={{ fontFamily: "OpenSans-SemiBold", color: "#15295c", fontSize: 16, paddingRight: 20 }}>Please enter the emaill address associated with your account.</Text>
                 <CustomInput
                     name="email"
                     control={control}

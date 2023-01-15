@@ -1,38 +1,47 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
+const CustomButton = ({ onPress, text, type = 'PRIMARY', bgColor, fgColor, grayText }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[
         styles.container,
         styles[`container_${type}`],
-        bgColor ? {backgroundColor: bgColor} : {},
+        bgColor ? { backgroundColor: bgColor } : {},
       ]}>
-      <Text
-        style={[
-          styles.text,
-          styles[`text_${type}`],
+      <View style={{flexDirection:"row",alignItems:"center"}}>
+        {grayText && <Text style={{fontFamily:"OpenSans-Regular", marginBottom:2,marginRight:8}}>
+          {grayText}
+        </Text>}
+        <Text
+          style={[
+            styles.text,
+            styles[`text_${type}`],
 
-          fgColor ? {color: fgColor,fontFamily:"Poppins-Regular"} : {},
-        ]}>
-        {text}
-      </Text>
+            fgColor ? { color: fgColor, fontFamily: "OpenSans-SemiBold" } : {},
+          ]}>
+          {text}
+        </Text>
+      </View>
+
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    padding: 10,
+    width: '95%',
+    padding: 14,
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 33,
+    alignSelf:"center"
+
   },
 
   container_PRIMARY: {
-    backgroundColor: '#f2c305',
+    backgroundColor: '#f5aa42',
+    
   },
 
   container_SECONDARY: {
@@ -44,7 +53,9 @@ const styles = StyleSheet.create({
 
   text: {
     color: 'white',
-    fontFamily:"Poppins-Bold"
+    fontFamily: "OpenSans-SemiBold",
+    textTransform: "capitalize",
+
   },
 
   text_SECONDARY: {
@@ -52,8 +63,10 @@ const styles = StyleSheet.create({
   },
 
   text_TERTIARY: {
-    color: 'gray',
-    fontFamily:"Poppins-SemiBold"
+    color: '#f5aa42',
+    fontFamily: "Poppins-SemiBold",
+    textTransform: "capitalize",
+
   },
 });
 

@@ -13,7 +13,7 @@ import PollComp from './PollComp';
 
 export default function NewsComp({ route, navigation }) {
   const uri = 'http://stackoverflow.com/questions/35531679/react-native-open-links-in-browser';
-  const { post } = route.params;
+  const { post ,fromWhere} = route.params;
 
   const collection = useSelector(state=>state.NewsSlice.collection);
   const user = useSelector(state => state.userAuth.user.user);
@@ -21,7 +21,7 @@ export default function NewsComp({ route, navigation }) {
 
   const payload = {
     "userId": user._id,
-    "postId": post._id
+    "postId": fromWhere === "collection" ?  post.newsId : post._id
   }
 
   useEffect(() => {
@@ -59,12 +59,12 @@ export default function NewsComp({ route, navigation }) {
   return (
     <View style={{ flex: 1, backgroundColor: "#fff", flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
       <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 12, backgroundColor: "#fff" }}>
-        <Ionicons name="arrow-back" color="#000" size={25} onPress={() => navigation.goBack()} />
+        <Ionicons name="arrow-back" color="#f5aa42" size={25} onPress={() => navigation.goBack()} />
         <TouchableOpacity style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onPress={() => toogleSave()}>
-          <Ionicons style={{ marginRight: 10 }} name={saved ? "bookmark" : "bookmark-outline"} color="#000" size={25} />
+          <Ionicons style={{ marginRight: 10 }} name={saved ? "bookmark" : "bookmark-outline"} color="#f5aa42" size={25} />
         </TouchableOpacity>
       </View>
-      <View style={{ padding: 8, flex: 1 }}>
+      <View style={{ padding: 8, flex: 1,margin:10,marginBottom:0,marginTop:0 }}>
 
 
 
@@ -74,29 +74,29 @@ export default function NewsComp({ route, navigation }) {
 
             <View>
 
-              <Image source={{ uri: post.image }} style={{ width: "100%", height: 200, borderRadius: 10 }} />
+              <Image source={{ uri: post?.image }} style={{ width: "100%", height: 220, borderRadius: 10 }} />
               <View style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" }}>
-                <View style={styles.tags_row}>
+                <View style={{...styles.tags_row,marginTop:10,marginBottom:10}}>
 
-                  {post.tags.map((tag) =>
+                  {post?.tags?.map((tag) =>
                     <View key={tag._id}>
-                      <Text style={styles.tag}>{tag.value}</Text>
+                      <Text style={styles.tag}>{tag?.value}</Text>
                     </View>
                   )}
                 </View>
 
               </View>
-              <Text style={{ color: "#000", fontSize: 16, fontFamily: 'Poppins-Bold' }}>{post.title}</Text>
+              <Text style={{ color: "#000", fontSize: 16, fontFamily: 'OpenSans-Bold' ,marginBottom:10}}>{post?.title}</Text>
               <Text style={{
                 color: "#666",
                 fontSize: 14,
-                fontFamily: "Poppins-Regular",
-              }}>{moment(post.timestamp).fromNow()}</Text>
+                fontFamily: "OpenSans-Regular",marginBottom:10
+              }}>{moment(post?.timestamp).fromNow()}</Text>
 
-              <Text style={{ color: "#777", fontSize: 12, fontFamily: 'Poppins-SemiBold' }}>{post.content}{post.content}{post.content}{post.content}</Text>
-              <Text style={{ color: "#034efc", fontSize: 12, marginBottom: 10 }}
+              <Text style={{ color: "#444", fontSize: 14, fontFamily: 'OpenSans-SemiBold',marginBottom:10 }}>{post?.content}{post?.content}{post?.content}{post?.content}</Text>
+              <Text style={{ color: "#034efc", fontSize: 14, marginBottom: 10,fontFamily:"OpenSans-Regular" }}
                 onPress={() => navigation.navigate("WebView", { link: post.read_more_link })}
-              >READ MORE...</Text>
+              > Read more...</Text>
             </View>
           </View>
         </ScrollView>
@@ -113,7 +113,7 @@ export default function NewsComp({ route, navigation }) {
 
             >
               <FontAwesome style={{ marginRight: 10 }} name="hand-o-right" color="#fff" size={25} />
-              <Text style={{ fontFamily: "Poppins-Regular", fontWeight: "bold", fontSize: 14, color: "#f0f3f5" }}>Fill This Form</Text>
+              <Text style={{ fontFamily: "OpenSans-Regular", fontWeight: "bold", fontSize: 14, color: "#f0f3f5" }}>Fill This Form</Text>
 
             </ImageBackground>
           </TouchableOpacity>

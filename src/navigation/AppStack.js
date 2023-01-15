@@ -31,16 +31,24 @@ export default function AppStack({navigation}) {
   
   
   return (
-    <Stack.Navigator initialRouteName={"Home"} >
+    <Stack.Navigator initialRouteName={"Home"} 
+    screenOptions={{
+      headerShadowVisible: false, headerTintColor: "#f5aa42",
+      headerTitleStyle: {
+        fontFamily: "OpenSans-SemiBold"
+      }
+
+    }}
+    >
       <Stack.Screen name="Home" component={TabStack}  options={{headerShown:false,}} />
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{headerShown:false}}/>
+      <Stack.Screen name="EditProfile" component={EditProfileScreen}  options={{ title: "Edit Profile" }}/>
       <Stack.Screen name="NewsComp" component={NewsComp} options={{headerShown:false}}/>
-      <Stack.Screen name="WebView" component={WebViewScreen}  options={{headerShown:false}}/>
-      <Stack.Screen name="Search" component={SearchScreen} options={{headerShown:false}} />
+      <Stack.Screen name="WebView" component={WebViewScreen}  options={{headerShown:false}} />
+      <Stack.Screen name="Search" component={SearchScreen}  />
       <Stack.Screen name="Insight" component={InsightScreen} options={{headerShown:false}}/>
 
      
-      <Stack.Screen name="Notification" component={NotificationScreen} options={{headerShown:false}}/>
+      <Stack.Screen name="Notification" component={NotificationScreen} options={{ title: "Notifications" }}/>
 
 
       

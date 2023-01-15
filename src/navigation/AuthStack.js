@@ -15,17 +15,26 @@ const Stack = createNativeStackNavigator();
 
 export default function AuthStack() {
   return (
-    <Stack.Navigator initialRouteName="Login" mode="modal">
-      <Stack.Screen name="Login" component={LoginScreen} options={{title:"LOGIN"}} />
-      <Stack.Screen name="Register" component={RegisterScreen} options={{title:"SIGNUP"}}/>
-      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{title:"FORGOT PASSWORD"}} />
-      
-      <Stack.Screen name="ProfileStartup" component={ProfileStartupScreen} options={{title:"FROM WHERE"}} />
-      <Stack.Screen name="SchoolStartup" component={SchoolStartupScreen} options={{title:"SCHOOL DETAILS"}}/>
-      <Stack.Screen name="CollegeStartup" component={CollegeStartupScreen} options={{title:"COLLEGE DETAILS"}}/>
-      <Stack.Screen name="CollegeBranch" component={CollegeBranchScreen} options={{title:"COLLEGE DETAILS"}}/>
-      <Stack.Screen name="SchoolStream" component={SchoolStreamScreen} options={{title:"SCHOOL DETAILS"}}/>
-      <Stack.Screen name="Address" component={AddressScreen} options={{title:"ADDRESS DETAILS"}}/>
+    <Stack.Navigator initialRouteName="Login" mode="modal"
+      screenOptions={{
+        headerShadowVisible: false, headerTintColor: "#f5aa42",
+        headerTitleStyle: {
+          fontFamily: "OpenSans-SemiBold"
+        }
+
+      }}
+
+    >
+      <Stack.Screen name="Login" component={LoginScreen} options={{ title: "Login" }} />
+      <Stack.Screen name="Register" component={RegisterScreen} options={{ title: "Signup" }} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ title: "Forgot Password" }} />
+
+      <Stack.Screen name="ProfileStartup" component={ProfileStartupScreen} options={{ title: "Are you ?", }} />
+      <Stack.Screen name="SchoolStartup" component={SchoolStartupScreen} options={{ title: "School Details" }} />
+      <Stack.Screen name="CollegeStartup" component={CollegeStartupScreen} options={{ title: "College Details" }} />
+      <Stack.Screen name="CollegeBranch" component={CollegeBranchScreen} options={{ title: "College Details" }} />
+      <Stack.Screen name="SchoolStream" component={SchoolStreamScreen} options={{ title: "School Details" }} />
+      <Stack.Screen name="Address" component={AddressScreen} options={{ title: "Address Details" }} />
     </Stack.Navigator>
   )
 }

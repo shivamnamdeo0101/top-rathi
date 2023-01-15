@@ -96,7 +96,7 @@ async function onDisplayNotification(payload) {
     body: payload.data.body,
     android: {
       channelId,
-      style: { type: AndroidStyle.BIGPICTURE, picture: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg' },
+      style: { type: AndroidStyle.BIGPICTURE, picture: payload?.data?.url },
     },
   });
 }

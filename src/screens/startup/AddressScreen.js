@@ -131,7 +131,11 @@ export default function AddressScreen({ navigation }) {
         <View style={styles.container}>
             <View style={styles.top_view}>
 
-                <Text style={styles.heading_text}>Address</Text>
+            <View style={{ padding: 20, paddingTop: 0 }}>
+                    <Text style={styles.heading_text}>Fill the address details .</Text>
+                    <Text style={{ fontFamily: "OpenSans-Regular", color: "#637994" }} >Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0</Text>
+
+                </View>
                 <CustomSelect
 
                     name="country"
@@ -146,6 +150,7 @@ export default function AddressScreen({ navigation }) {
                     editable={false}
                     searchable={true}
                     dataapi={true}
+                    data={"country"}
                 />
                 <CustomSelect
                     name="state"
@@ -180,7 +185,8 @@ export default function AddressScreen({ navigation }) {
                 />
 
 
-                <CustomInput
+                    <View style={{padding:10,paddingTop:0}}>
+                    <CustomInput
                     name="pincode"
                     control={control}
                     keyboardType="number-pad"
@@ -197,6 +203,8 @@ export default function AddressScreen({ navigation }) {
                         },
                     }}
                 />
+                    </View>
+                
 
             </View>
 
@@ -213,7 +221,7 @@ export default function AddressScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f0f3f5",
+        backgroundColor: "#fff",
         justifyContent: "space-between",
         padding: 10
     },
@@ -223,8 +231,9 @@ const styles = StyleSheet.create({
         maxHeight: 200,
     },
     heading_text: {
-        fontSize: 20,
-
-        fontWeight: "bold"
-    }
+        fontSize: 18,
+        color: "#15295c",
+        fontFamily: "OpenSans-SemiBold",
+    
+      }
 });

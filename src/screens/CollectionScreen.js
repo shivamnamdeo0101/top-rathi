@@ -12,10 +12,10 @@ const CollectionScreen = ({navigation}) => {
     <View style={{flex:1}}>
         <View style={styles.header}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <TouchableOpacity style={{ padding: 3, backgroundColor: "#fff", borderRadius: 99, marginRight: 10 }}>
+            {/* <TouchableOpacity style={{ padding: 3, backgroundColor: "#fff", borderRadius: 99, marginRight: 10 }}>
               <Ionicons name="arrow-back" color="#000" size={23} onPress={() => navigation.goBack()} />
-            </TouchableOpacity>
-            <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#000" }}>SAVED COLLECTION</Text>
+            </TouchableOpacity> */}
+          <Text style={{ fontSize: 22, fontFamily: "OpenSans-SemiBold", color: "#f5aa42",textTransform:"capitalize" }}>Saved Collection</Text>
           </View>
          
       </View>
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
       alignItems:"center",
       backgroundColor: "#fff",
       padding: 12,
-      elevation: 4
     },
 
   });

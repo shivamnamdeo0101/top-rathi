@@ -192,21 +192,20 @@ const EditProfileScreen = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
-            <View style={styles.header}>
+            {/* <View style={styles.header}>
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <TouchableOpacity style={{ padding: 3, backgroundColor: "#fff", borderRadius: 99, marginRight: 10 }}>
                         <Ionicons name="arrow-back" color="#000" size={23} onPress={() => navigation.goBack()} />
                     </TouchableOpacity>
                     <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#000" }}>EDIT PROFILE</Text>
                 </View>
-            </View>
+            </View> */}
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.root}>
                     <Text style={styles.title}>Personal Details</Text>
 
                     <CustomInput
                         name="username"
-
                         defaultValue={profile?.username}
                         control={control}
                         placeholder="Name"
@@ -431,7 +430,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         textTransform: "uppercase",
-        borderLeftColor: "#f2c305",
+        borderLeftColor: "#f5aa42",
         borderLeftWidth: 2, paddingLeft: 10,
         marginBottom: 10,
         marginTop: 10,

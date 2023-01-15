@@ -21,12 +21,10 @@ const NotificationScreen = ({ navigation }) => {
     useEffect(() => {
       const fetchData = async()=>{
         const res = await API.userNotifications(payload)
-        
         if(res?.data?.success === true){
             setlist(res?.data?.data)
             setloading(false)
         }
-        
       }
 
       fetchData()
@@ -47,26 +45,26 @@ const NotificationScreen = ({ navigation }) => {
     };
 
     const incrList= ()=>{
-        setlist(list.concat(list))
+      
     }
    
     return (
         <View style={styles.container}>
             {/* <Text style={styles.title}>Notifications</Text> */}
-            <View style={styles.header}>
+            {/* <View style={styles.header}>
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <TouchableOpacity style={{ padding: 3, backgroundColor: "#fff", borderRadius: 99, marginRight: 10 }}>
                         <Ionicons name="arrow-back" color="#000" size={23} onPress={() => navigation.goBack()} />
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#000" }}>NOTIFICATIONS</Text>
+                    <Text style={{ fontSize: 18, fontFamily: "OpenSans-Bold", color: "#000" }}>NOTIFICATIONS</Text>
                 </View>
-            </View>
+            </View> */}
 
             <View style={{flex:1, margin:10,backgroundColor:"#fff"}}>
                 <ScrollView 
                      onScroll={({nativeEvent}) => {
                         if (isCloseToBottom(nativeEvent)) {
-                            incrList()
+                           // incrList()
                         }
                         
                       }}
@@ -75,15 +73,15 @@ const NotificationScreen = ({ navigation }) => {
                     {
                         list?.map((item, index) => {
                             return (
-                                <TouchableOpacity style={{width:"100%", flexDirection:"row", backgroundColor:item?.readStatus? "#f0f3f5" :"#fff", alignItems:"flex-start",padding:6, justifyContent:"space-between", borderBottomColor:"#f8f8f8",borderBottomWidth:1}} key={index}>
+                                <TouchableOpacity style={{width:"100%", flexDirection:"row", backgroundColor:item?.readStatus? "#f0f3f5" :"#fff", alignItems:"flex-start",padding:6,borderRadius:10, justifyContent:"space-between", borderBottomColor:"#f8f8f8",borderBottomWidth:1}} key={index}>
                                    <View style={{flexDirection:"row",alignItems:"center"}}>
-                                        <View style={{width:7,height:7,backgroundColor:item?.readStatus ? "#f2c305" :"#fff",marginRight:5,borderRadius:33}}>
+                                        <View style={{width:7,height:7,backgroundColor:item?.readStatus ? "#f5aa42" :"#fff",marginRight:5,borderRadius:33}}>
                                         </View>
                                         <Image source={{uri:item?.image}} style={{width:50,height:50,marginRight:8,borderRadius:3,backgroundColor:"#eee"}}/>
 
                                    </View>
-                                    <Text style={{width:"60%", fontSize: 12, color: "#000", fontFamily: "Poppins-SemiBold" }}>{item?.text?.length>100? item?.text?.substring(0,100)+"...":item?.text}</Text>
-                                    <Text style={{ fontSize: 10,textAlign:"right", color: "#15295c", fontFamily: "Poppins-SemiBold" }}>{moment(item?.timestamp).fromNow()}</Text>
+                                    <Text style={{width:"60%", fontSize: 12, color: "#000", fontFamily: "OpenSans-SemiBold" }}>{item?.text?.length>100? item?.text?.substring(0,100)+"...":item?.text}</Text>
+                                    <Text style={{ fontSize: 10,textAlign:"right", color: "#15295c", fontFamily: "OpenSans-SemiBold" }}>{moment(item?.timestamp).fromNow()}</Text>
 
                                 </TouchableOpacity>
                             )
@@ -109,11 +107,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         textTransform: "uppercase",
-        borderLeftColor: "#f2c305",
+        borderLeftColor: "#f5aa42",
         borderLeftWidth: 2, paddingLeft: 10,
         marginBottom: 10,
         marginTop: 10,
-        fontFamily: "Poppins-SemiBold",
+        fontFamily: "OpenSans-SemiBold",
         color: '#15295c',
 
     },

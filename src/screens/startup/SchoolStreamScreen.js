@@ -4,6 +4,7 @@ import MultiSelectUi from '../../components/MultiSelectUi'
 import { useDispatch } from 'react-redux'
 import { setBranch, setClass, setStream } from '../../store/EducationSlice'
 import CustomButton from '../../components/CustomButton'
+import SelectGrid from '../../components/SelectGrid'
 
 const SchoolStreamScreen = ({ navigation }) => {
 
@@ -34,8 +35,13 @@ const SchoolStreamScreen = ({ navigation }) => {
     <View style={styles.container}>
 
       <View style={{ flex: 1 }}>
-        <Text style={styles.heading_text}>SELECT YOUR STREAM</Text>
-        <MultiSelectUi 
+        <View style={{padding:20,paddingTop:0}}>
+        <Text style={styles.heading_text}>Select your stream</Text>
+        <Text style={{fontFamily:"OpenSans-Regular",color:"#637994"}} >Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0</Text>
+
+        </View>
+      
+        <SelectGrid 
           type="class"
           error={error}
           seterror={seterror}
@@ -44,6 +50,10 @@ const SchoolStreamScreen = ({ navigation }) => {
             { id: 1, name: "Biology" },
             { id: 2, name: "Commerce" },
             { id: 3, name: "Science" },
+            { id: 4, name: "Science" },
+            { id: 5, name: "Science" },
+            { id: 6, name: "Science" },
+            { id: 7, name: "Science" },
            
 
 
@@ -68,7 +78,7 @@ export default SchoolStreamScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f3f5",
+    backgroundColor: "#fff",
     padding: 10
   },
   logo: {
@@ -77,10 +87,9 @@ const styles = StyleSheet.create({
     maxHeight: 200,
   },
   heading_text: {
-    fontSize: 20,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: 10,
-    fontFamily: "Poppins-Bold"
+    fontSize: 18,
+    color: "#15295c",
+    fontFamily: "OpenSans-SemiBold",
+
   }
 });

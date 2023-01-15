@@ -29,7 +29,7 @@ export default function SearchScreen({ navigation }) {
       if (!query) {
         setloading(false)
       }
-  
+
       if (query) {
         NEWS_API.SearchNews(query)
           .then((res) => {
@@ -60,9 +60,9 @@ export default function SearchScreen({ navigation }) {
   const renderHeader = () => (
     <View>
       {news_data ?
-        <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#000" }}>Search Results</Text>
+        <Text style={{ fontSize: 20, fontFamily: "OpenSans-Bold", color: "#000" }}>Search Results</Text>
         :
-        <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#000" }}>Top Stories</Text>
+        <Text style={{ fontSize: 20, fontFamily: "OpenSans-Bold", color: "#000" }}>Top Stories</Text>
       }
 
     </View>
@@ -89,7 +89,7 @@ export default function SearchScreen({ navigation }) {
         <View style={styles.tags_row}>
           {item.tags.map((tag) =>
             <View key={tag._id}>
-              <Text style={{ marginRight: 5, fontFamily: "Poppins-Regular", color: "#f03", fontSize: 12 }}>{tag.value}</Text>
+              <Text style={{ marginRight: 5, fontFamily: "OpenSans-Regular", color: "#f03", fontSize: 10 }}>{tag.value}</Text>
             </View>
           )}
         </View>
@@ -103,48 +103,59 @@ export default function SearchScreen({ navigation }) {
 
 
 
-
+  const SetSearch = (e)=>{
+    setloading(true)
+    setquery(e)
+  }
 
   return (
     <View style={styles.root}>
 
+      <TouchableOpacity onPress={() => navigation.navigate("Search")} style={{ width: "90%", alignSelf: "center", display: "flex", flexDirection: "row", alignItems: "center", padding: 5, backgroundColor: "#e8e8e8", margin: 5, borderRadius: 40, justifyContent: "space-around" }}>
+        <TextInput
+          placeholder='Search...'
+          editable={true}
+          onChangeText={(e) => setquery(e)}
+          value={query}
+          style={{ width: "80%", color: "#000", width: "90%", marginLeft: 10, padding: 5, borderRadius: 16, fontFamily: "OpenSans-Regular" }}
+        />
+        <Ionicons name="search" style={{ marginRight: 20 }} color="#f5aa42" size={20} />
+
+      </TouchableOpacity>
+      <>
 
 
-
-      <View style={styles.container}>
-
-
-        <TouchableOpacity onPress={() => navigation.navigate("Search")} style={{ display: "flex", flexDirection: "row", alignItems: "center", padding: 5, backgroundColor: "#f0f3f5", margin: 5, borderRadius: 40, justifyContent: "space-around" }}>
-          <Ionicons name="search" style={{ marginLeft: 10 }} color="#000" size={20} />
-          <TextInput
-            placeholder='Search...'
-            editable={true}
-            onChangeText={(e) => setquery(e)}
-            value={query}
-            style={{ width: "80%", color: "#000", width: "90%", marginLeft: 10, padding: 5, borderRadius: 16, fontFamily: "Poppins-Regular" }}
-          />
-        </TouchableOpacity>
-        <>
+        <View style={{ margin: 5 }}>
 
 
-          <View style={{ margin: 5 }}>
+          <View style={{}}>
+            {query && <FlatList
+              data={news_data?.data}
+              keyExtractor={item => item._id}
+              renderItem={renderItem}
 
-
-            <View>
-              {query && <FlatList
-
-                data={news_data?.data}
-                keyExtractor={item => item._id}
-                renderItem={renderItem}
-
-              />}
-            </View>
+            />}
           </View>
-        </>
+          {!query && <View style={{margin:10,marginTop:0}}>
+            <Text style={{ color: "#888", fontFamily: "OpenSans-Regular", fontSize: 14, margin: 10 }}>Relevant Topics</Text>
+
+            <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", margin: 10, marginTop: 0, }}>
+
+              {
+                ["Sports", "Education", "Science", "Maths", "Politics", "Government", "Admission","a"].map((item, index) => {
+                  return (
+                    <TouchableOpacity onPress={()=>SetSearch(item.toLowerCase())} key={index} style={{ marginBottom: 10, marginRight: 5, backgroundColor: "#eeeeee", paddingLeft: 15, paddingRight: 20, padding: 10, borderRadius: 33 }}>
+                      <Text style={{ color: "#000", fontFamily: "OpenSans-Regular", fontSize: 14 }}>{item}</Text>
+                    </TouchableOpacity>
+                  )
+                })
+              }
+            </View>
+          </View>}
 
 
-      </View>
-
+        </View>
+      </>
 
 
     </View>
@@ -162,19 +173,19 @@ const styles = StyleSheet.create({
   },
 
   content_data: {
-    width: "80%"
+    width: "85%"
   },
   title: {
     color: "#000",
-    fontSize: 14,
-    fontFamily: "Poppins-Bold",
+    fontSize: 10,
+    fontFamily: "OpenSans-Bold",
     width: "85%",
 
   },
   timestamp: {
-    color: "#ccc",
-    fontFamily: "Poppins-Regular",
-    fontSize: 14,
+    color: "#000",
+    fontFamily: "OpenSans-Regular",
+    fontSize: 10,
     marginBottom: 5,
 
   },
@@ -186,10 +197,10 @@ const styles = StyleSheet.create({
 
   },
   tag: {
-    backgroundColor: "#f2c305",
+    backgroundColor: "#f5aa42",
     borderRadius: 3,
     fontWeight: "bold",
-    fontSize: 12
+    fontSize: 10
   },
   post_img_slide: {
     width: 200,
@@ -216,8 +227,11 @@ const styles = StyleSheet.create({
   news_comp: {
     flexDirection: "row",
     padding: 8,
-    backgroundColor: "#f0f3f5",
-    marginBottom: 5
+    backgroundColor: "#e8e8e8",
+    marginBottom: 5,
+    margin:14,
+    marginTop:0,
+    borderRadius:14
 
 
   },
@@ -227,7 +241,7 @@ const styles = StyleSheet.create({
     maxHeight: 200,
   },
   heading: {
-    fontSize: 25,
+    fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
     color: "#000"

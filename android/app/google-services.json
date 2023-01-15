@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "418906309485-eihejlf9qte7l08ncucomtrhm94nn4r2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.toprathi",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "418906309485-jv9r66slivispvl3kl7l8uo0rrgil869.apps.googleusercontent.com",
           "client_type": 3
         }

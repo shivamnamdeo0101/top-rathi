@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ScrollView, TextInput, TouchableOpacity, Dimensions, FlatList, Button, ActivityIndicator, SafeAreaView, Alert, TouchableHighlight, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Image, RefreshControl,ScrollView, TextInput, TouchableOpacity, Dimensions, FlatList, Button, ActivityIndicator, SafeAreaView, Alert, TouchableHighlight, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingComp from '../components/LoadingComp';
@@ -16,6 +16,7 @@ import { API } from '../service/apis/UserService';
 import EmailVerify from '../components/EmailVerify';
 import ProfileTabView from '../components/ProfileTabView';
 import PollComp from '../components/PollComp';
+import NewsTabView from '../components/NewsTabView';
 
 
 export default function NewsScreen({ navigation }) {
@@ -23,9 +24,17 @@ export default function NewsScreen({ navigation }) {
   const userauth = useSelector(state => state.userAuth)
   const deviceWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
+  const [curr, setcurr] = useState("All")
 
   const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const [loading, setloading] = useState(true);
   const [news_data, set_news_data] = useState([]);
@@ -42,22 +51,22 @@ export default function NewsScreen({ navigation }) {
 
 
   const payload = { userId: userauth?.profile?._id, token: userauth?.user?.token }
-  useEffect(() => {
+  // useEffect(() => {
 
-    const fetchData = async () => {
-      const res = await API.userFetch(payload)
-      if (res.data.success) {
-        setemail(res?.data?.data?.email)
-        setemail_verified(!res?.data?.data?.emailVerified)
+  //   const fetchData = async () => {
+  //     const res = await API.userFetch(payload)
+  //     if (res.data.success) {
+  //       setemail(res?.data?.data?.email)
+  //       setemail_verified(!res?.data?.data?.emailVerified)
 
-      }
+  //     }
 
-    }
+  //   }
 
 
-    fetchData()
+  //   fetchData()
 
-  }, [email_verified, isModalVisible, counter_callback])
+  // }, [email_verified, isModalVisible, counter_callback])
 
   const [news_arr, setnews_arr] = useState([])
   var myHeaders = new Headers();
@@ -96,7 +105,7 @@ export default function NewsScreen({ navigation }) {
     //     })
 
 
-  }, [page])
+  }, [page,refreshing])
 
 
 
@@ -129,12 +138,22 @@ export default function NewsScreen({ navigation }) {
   function renderHeader() {
 
     return (
-      <View>
-        {/* <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#000" }}>Top Stories</Text>
+      <View style={{flex:1, width:"90%", flexDirection:"row",alignItems:"center",justifyContent:"space-evenly",marginBottom:10,marginLeft:20,marginRight:20}}>
+        
+         {
+          ["All","For You"].map((item,index)=>{
+            return(
+              <Text key={index} onPress={()=>setcurr(item)}style={{textAlign:"center",paddingBottom:5,width:"50%",fontSize:20,fontFamily:"OpenSans-SemiBold",color:item===curr ? "#f5aa42" : "#000",borderBottomColor:item===curr ? "#f5aa42" : "#fff",borderBottomWidth:2}}>{item}</Text>
+
+            )
+          })
+         }
+       
+        {/* <Text style={{ fontSize: 20, fontFamily: "OpenSans-Bold", color: "#000" }}>Top Stories</Text>
         <CarouselComp navigation={navigation} /> */}
-        <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#000", borderLeftColor: "#f2c305", borderLeftWidth: 2, paddingLeft: 10 }}>Top Insights</Text>
-        <InsightComp navigation={navigation} />
-        <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#000", borderLeftColor: "#f2c305", borderLeftWidth: 2, paddingLeft: 10, marginBottom: 5 }}>For You</Text>
+        {/* <Text style={{ fontSize: 20, fontFamily: "OpenSans-Bold", color: "#000", borderLeftColor: "#f5aa42", borderLeftWidth: 2, paddingLeft: 10 }}>Top Insights</Text> */}
+        {/* <InsightComp navigation={navigation} />
+        <Text style={{ fontSize: 20, fontFamily: "OpenSans-Bold", color: "#000", borderLeftColor: "#f5aa42", borderLeftWidth: 2, paddingLeft: 10, marginBottom: 5 }}>For You</Text> */}
 
       </View>
     )
@@ -161,33 +180,33 @@ export default function NewsScreen({ navigation }) {
 
 
   const renderItem = ({ item, index }) => (
-   
-  <View>
-   
-      <TouchableOpacity style={styles.news_comp} key={index} onPress={() => navigation.navigate("NewsComp", { post: item })}>
-      <Image style={styles.post_img} source={{ uri: item.image }} />
+
+    <View>
       
-      <View style={styles.content_data}>
+      <TouchableOpacity style={styles.news_comp} key={index} onPress={() => navigation.navigate("NewsComp", { "post": item,"fromWhere":"newsscreen" })}>
+        <Image style={styles.post_img} source={{ uri: item.image }} />
 
-        <View style={styles.tags_row}>
-          {item.tags.map((tag) =>
-            <View key={tag._id}>
-              <Text style={{ marginRight: 5, fontFamily: "Poppins-Regular", color: "#545063", fontSize: 14 }}>{tag.value}</Text>
-            </View>
-          )}
-          <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
+        <View style={styles.content_data}>
+
+          <View style={styles.tags_row}>
+            {item.tags.map((tag) =>
+              <View key={tag._id}>
+                <Text style={{ marginRight: 5, fontFamily: "OpenSans-Regular", color: "#545063", fontSize: 14 }}>{tag.value}</Text>
+              </View>
+            )}
+            <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
+          </View>
+
+          <Text style={styles.title}>{item.title.length > 100 ? item.title.substring(0, 100) + "..." : item.title}</Text>
+          <Text style={styles.content}>{item.content.length > 400 ? item.content.substring(0, 400) + "..." : item.content + item.content + item.content}</Text>
+
         </View>
+      </TouchableOpacity>
 
-        <Text style={styles.title}>{item.title.length > 100 ? item.title.substring(0, 100) + "..." : item.title}</Text>
-        <Text style={styles.content}>{item.content.length > 400 ? item.content.substring(0, 400) + "..." : item.content + item.content + item.content}</Text>
+      {item.poll_title && <PollComp navigation={navigation} user={userauth?.user?.user} post={item} />}
+    </View>
 
-      </View>
-    </TouchableOpacity>
-            
-          {  item.poll_title && <PollComp navigation={navigation} user={userauth?.user?.user} post={item} />}
-  </View>
 
-   
   );
 
 
@@ -211,7 +230,7 @@ export default function NewsScreen({ navigation }) {
 
   return (
     <View style={styles.root}>
-      
+
       {/* <Modal isVisible={email_verified} style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 
         <View style={{ flex: 1, alignItems: 'center', }}>
@@ -225,7 +244,7 @@ export default function NewsScreen({ navigation }) {
 
           <View style={{ flex: 1, backgroundColor: 'white', padding: 10, borderRadius: 10, }}>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10 }}>
-              <Text style={{ fontSize: 20, fontFamily: "Poppins-Bold", color: "#000", textAlign: "center" }}>Verify Your Email</Text>
+              <Text style={{ fontSize: 20, fontFamily: "OpenSans-Bold", color: "#000", textAlign: "center" }}>Verify Your Email</Text>
 
             </View>
 
@@ -251,32 +270,27 @@ export default function NewsScreen({ navigation }) {
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingLeft: 10, paddingRight: 10 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image style={{ width: 20, height: 35, backgroundColor: "#ccc" }} source={{ uri: "https://ik.imagekit.io/lajz2ta7n/LOGO/logoApp.jpeg" }} />
-            <Text style={{ fontFamily: "Anton-Regular", color: "#f2c305", fontSize: 25  }}>TOP<Text style={{ color: "#000" }}>RATHI</Text></Text>
+            <Text style={{ fontFamily: "Anton-Regular", color: "#f5aa42", fontSize: 25 }}>TOP<Text style={{ color: "#000" }}>RATHI</Text></Text>
           </View>
 
 
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Pressable onPress={() => navigation.navigate("Search")} style={{ width: 40, height: 40, display: "flex", flexDirection: "row", alignItems: "center", padding: 1, backgroundColor: "#f0f3f5", margin: 5, borderRadius: 40, justifyContent: "space-between" }}>
-              <Ionicons name="search-outline" style={{ marginLeft: 10 }} color="#000" size={20} />
+            <Pressable onPress={() => navigation.navigate("Search")} style={{ width: 40, height: 40, display: "flex", flexDirection: "row", alignItems: "center", padding: 1, backgroundColor: "#e8e8e8", margin: 5, borderRadius: 40, justifyContent: "space-between" }}>
+              <Ionicons name="search-outline" style={{ marginLeft: 10 }} color="#555" size={20} />
             </Pressable>
-            <Pressable onPress={() => navigation.navigate("Notification")} style={{ width: 40, height: 40, display: "flex", flexDirection: "row", position:"relative", alignItems: "center", padding: 1, backgroundColor: "#f0f3f5", margin: 5, borderRadius: 40, justifyContent: "space-between" }}>
-              <Ionicons name="notifications-outline" style={{ marginLeft: 10 }} color="#000" size={20} />
-              <Text style={{width:20,height:20,textAlign:"center", borderRadius:99,fontFamily:"Poppins-SemiBold",color:"#fff",alignSelf:"flex-end", position:"relative",marginBottom:20,marginRight:16, backgroundColor:"#f03"}}>3</Text>
+            <Pressable onPress={() => navigation.navigate("Notification")} style={{ width: 40, height: 40, display: "flex", flexDirection: "row", position: "relative", alignItems: "center", padding: 1, backgroundColor: "#e8e8e8", margin: 5, borderRadius: 40, justifyContent: "space-between" }}>
+              <Ionicons name="notifications-outline" style={{ marginLeft: 10 }} color="#777" size={20} />
+              <Text style={{ width: 20, height: 20, textAlign: "center", borderRadius: 99, fontFamily: "OpenSans-SemiBold", color: "#fff", alignSelf: "flex-end", position: "relative", marginBottom: 20, marginRight: 16, backgroundColor: "#f03" }}>3</Text>
             </Pressable>
             {/* <TouchableOpacity onPress={() => navigation.navigate("Search")} style={{ width: 40, height: 40, display: "flex", flexDirection: "row", alignItems: "center", padding: 1, backgroundColor: "#f0f3f5", margin: 5, borderRadius: 40, justifyContent: "space-between" }}>
               <Ionicons name="search" style={{ marginLeft: 10 }} color="#000" size={20} />
             </TouchableOpacity> */}
           </View>
         </View>
-
-        <>
-
+        
           <View style={{ margin: 5 }}>
-
-            <View>
-
+          
               <FlatList
-
                 style={{ marginBottom: 100 }}
                 data={news_arr}
                 keyExtractor={(item, index) => index}
@@ -288,12 +302,12 @@ export default function NewsScreen({ navigation }) {
                 onEndReached={fetchMoreData}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={separator}
+                refreshControl={
+                  <RefreshControl refreshing={refreshing} colors={["#f5aa42" ]}nRefresh={onRefresh} />
+                }
               />
-            </View>
+            
           </View>
-        </>
-
-
       </View>
 
     </View>
@@ -316,13 +330,13 @@ const styles = StyleSheet.create({
   title: {
     color: "#000",
     fontSize: 16,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "OpenSans-Bold",
 
 
   },
   timestamp: {
-    color: "#ccc",
-    fontFamily: "Poppins-Regular",
+    color: "#000",
+    fontFamily: "OpenSans-Regular",
     fontSize: 14,
     marginBottom: 5,
 
@@ -337,7 +351,7 @@ const styles = StyleSheet.create({
 
   },
   tag: {
-    backgroundColor: "#f2c305",
+    backgroundColor: "#f5aa42",
     borderRadius: 3,
     fontWeight: "bold",
     fontSize: 12
@@ -353,12 +367,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   post_img: {
-    width: "100%", height: 200, borderTopLeftRadius: 10, borderTopRightRadius: 10
+    width: "100%", height: 230, borderTopLeftRadius: 10, borderTopRightRadius: 10
 
   },
   content: {
-    fontSize: 10,
-    fontFamily: "Poppins-Regular",
+    fontSize: 12,
+    fontFamily: "OpenSans-Regular",
     color: "#555",
     marginTop: 10
   },

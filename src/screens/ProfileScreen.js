@@ -97,10 +97,10 @@ export default function ProfileScreen({ navigation }) {
     <ImageBackground blurRadius={30} source={{uri:image ? image : "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small/user-profile-icon-free-vector.jpg"}} style={{ flex:1,height:"100%",width:"100%"}}>
       <View style={styles.header}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <TouchableOpacity style={{ padding: 3, backgroundColor: "#fff", borderRadius: 99, marginRight: 10 }}>
+            {/* <TouchableOpacity style={{ padding: 3, backgroundColor: "#fff", borderRadius: 99, marginRight: 10 }}>
               <Ionicons name="arrow-back" color="#000" size={23} onPress={() => navigation.goBack()} />
-            </TouchableOpacity>
-            <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#000" }}>PROFILE</Text>
+            </TouchableOpacity> */}
+          <Text style={{ fontSize: 22, fontFamily: "OpenSans-SemiBold", color: "#f5aa42",textTransform:"capitalize" }}>Profile</Text>
           </View>
           
       </View>
@@ -137,7 +137,7 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f3f5",
+    backgroundColor: "#fff",
 
   },
   top: {

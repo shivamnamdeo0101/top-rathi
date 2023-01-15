@@ -16,9 +16,9 @@ export default function ProfileStartupScreen({ navigation }) {
   const dispatch = useDispatch();
   const [from_state, setfrom_state] = useState("")
   const [error, seterror] = useState("")
-  const Next =  () => {
+  const Next = () => {
 
-    if(!from_state){
+    if (!from_state) {
       seterror("Please select the value")
       return
     }
@@ -41,19 +41,23 @@ export default function ProfileStartupScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.top_view}>
 
-        <Text style={styles.heading_text}>ARE YOU FROM SCHOOL / COLLEGE ?</Text>
+        <View style={{ padding: 20, paddingTop: 0 }}>
+          <Text style={styles.heading_text}>Are you a college student or school student ?</Text>
+          <Text style={{ fontFamily: "OpenSans-Regular", color: "#637994" }} >Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0</Text>
 
-        <CustomSelectTap 
-          
-          list={[{ id: 0, name: "college",image:"https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/college.png?ik-sdk-version=javascript-1.4.3&updatedAt=1672397794520" },
-           { id: 1, name: "school" ,image:"https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/school.png?ik-sdk-version=javascript-1.4.3&updatedAt=1672397813359"}]}
+        </View>
+
+        <CustomSelectTap
+
+          list={[{ id: 0, name: "college", image: "https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/college.png" },
+          { id: 1, name: "school", image: "https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/school.png" }]}
           setValue={setfrom_state}
           value={from_state}
           error={error}
           seterror={seterror}
         />
-        
-        
+
+
       </View>
 
       <View style={styles.bottom_view}>
@@ -77,10 +81,9 @@ const styles = StyleSheet.create({
     maxHeight: 200,
   },
   heading_text: {
-    fontSize: 20,
-    color:"#000",
-    fontWeight: "bold",
-    textAlign:"center",
-    marginBottom:20
+    fontSize: 18,
+    color: "#15295c",
+    fontFamily: "OpenSans-SemiBold",
+
   }
 });

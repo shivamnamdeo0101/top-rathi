@@ -29,7 +29,7 @@ async function onDisplayNotification(payload) {
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log(remoteMessage,"Index")
-//    onDisplayNotification(remoteMessage)
+     onDisplayNotification(remoteMessage)
 
 });
 

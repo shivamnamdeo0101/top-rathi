@@ -62,13 +62,13 @@ const PersonalRoute = () => {
           <Text style={styles.route_comp_text}>{user?.username}</Text>
         </View>
         
-        <View style={styles.route_comp_view}>
+        <View style={{...styles.route_comp_view}}>
           <Text style={styles.route_comp_title}>EMAIL</Text>
           <Text style={styles.route_comp_text}>{user?.email} </Text>
-          {user?.emailVerified ? <Text style={{color:"#fff",fontSize:12,backgroundColor:"green",width:60,padding:4,textAlign:"center",borderRadius:10}}>VERIFIED</Text>
-            : <View style={{flexDirection:"row",alignItems:"center",}}>
-              <Text style={{color:"#fff",fontSize:12,backgroundColor:"red",width:70,padding:4,textAlign:"center",borderRadius:10}}>UNVERIFIED</Text>
-              <Text onPress={()=>sendVerify()} style={{fontSize:12,color:"green",padding:4,textAlign:"center",borderRadius:10,fontFamily:"Poppins-SemiBold"}}> {loading ? "Sending email.." : sent? "Email Sent. Click to resend" : "Send email to verify" } </Text>
+          {user?.emailVerified ? <Text style={{color:"#fff",fontSize:12,backgroundColor:"green",width:60,padding:4,textAlign:"center",borderRadius:10,}}>VERIFIED</Text>
+            : <View style={{flexDirection:"row",alignItems:"center"}}>
+              <Text style={{color:"#fff",fontSize:12,backgroundColor:"red",width:100,padding:4,textAlign:"center",borderRadius:10}}>UNVERIFIED</Text>
+              <Text onPress={()=>sendVerify()} style={{fontSize:12,color:"green",padding:4,textAlign:"center",borderRadius:10,fontFamily:"OpenSans-SemiBold"}}> {loading ? "Sending email.." : sent? "Email Sent. Click to resend" : "Send email to verify" } </Text>
             </View>
           }
         </View>
@@ -80,7 +80,7 @@ const PersonalRoute = () => {
                 {
                   user?.interest.map((item,index)=>{
                     return(
-                      <Text key={index} style={{marginRight:6,fontFamily:"Poppins-Regular",backgroundColor:"#f0f3f5",padding:3,borderRadius:5,fontSize:12}}>{item.name}</Text>
+                      <Text key={index} style={{marginRight:6,fontFamily:"OpenSans-Regular",backgroundColor:"#f0f3f5",padding:3,borderRadius:5,fontSize:12}}>{item.name}</Text>
                      )
                   })
                 }
@@ -171,7 +171,7 @@ export default function ProfileTabView({navigation}) {
   const renderTabBar = props => (
     <TabBar
       {...props}
-      labelStyle={{fontSize:12,fontFamily:"Poppins-Bold"}}
+      labelStyle={{fontSize:12,fontFamily:"OpenSans-Bold"}}
       activeColor='#f5ae0a' 
       inactiveColor="#ccc"
       indicatorStyle={{ backgroundColor: '#f5ae0a' }}
@@ -204,7 +204,7 @@ export default function ProfileTabView({navigation}) {
 const styles = StyleSheet.create({
   route: { flex: 1, backgroundColor: '#fff',padding:10 },
   route_comp_view:{padding:10,borderWidth:2,borderColor:"#f0f3f5",borderRadius:10,marginBottom:10},
-  route_title:{fontFamily:"Poppins-Bold",fontSize:18,color:"#ccc"},
-  route_comp_title:{fontFamily:"Poppins-Bold",fontSize:12,color:"#000"},
-  route_comp_text:{fontFamily:"Poppins-Regular",fontSize:14,color:"#888"}
+  route_title:{fontFamily:"OpenSans-SemiBold",fontSize:18,color:"#000",textTransform:"capitalize",margin:8},
+  route_comp_title:{fontFamily:"OpenSans-Bold",fontSize:12,color:"#000"},
+  route_comp_text:{fontFamily:"OpenSans-Regular",fontSize:14,color:"#000"}
 });

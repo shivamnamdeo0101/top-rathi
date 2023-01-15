@@ -4,7 +4,7 @@ import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MultiSelectUi from './MultiSelectUi';
 
-const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, editable, searchable, dataapi,seterror, error }) => {
+const CustomSelect = ({ name, list, defaultValue, placeholder, data, setValue, value, editable, searchable, dataapi, seterror, error }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [search, setsearch] = useState("")
 
@@ -36,18 +36,19 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, 
         style={{ flex: 1, backgroundColor: "#fff", margin: 0, marginTop: "50%", borderTopLeftRadius: 10, borderTopRightRadius: 10, padding: 16 }}
       >
         <View style={{ flex: 1 }}>
-          <View style={{width:100,height:3, borderRadius:33,backgroundColor:"#ccc",alignSelf:"center",margin:5}}>
+          <View style={{ width: 100, height: 3, borderRadius: 33, backgroundColor: "#ccc", alignSelf: "center", margin: 5 }}>
 
           </View>
 
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 20,color:"#15295c" ,margin:5, marginBottom:16, borderLeftColor:"#f2c305",borderLeftWidth:2,paddingLeft:10}}>SELECT {name.toUpperCase()}</Text>
+          <Text style={{ fontFamily: "OpenSans-SemiBold", fontSize: 20, color: "#15295c", margin: 5, marginBottom: 16, textTransform: "capitalize", borderLeftColor: "#f5aa42", borderLeftWidth: 2, paddingLeft: 10 }}>Select {name}</Text>
 
-          <MultiSelectUi 
+          <MultiSelectUi
             list={list}
             setValue={setValue}
             value={value}
             searchAble={searchable}
             dataapi={dataapi}
+            data={data}
           />
           {/* {searchable && <TextInput
             placeholder={"Search " + name}
@@ -72,7 +73,7 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, 
             })}
           </ScrollView> */}
 
-          
+
 
         </View>
       </Modal>
@@ -80,9 +81,13 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, 
         onPress={() => setModalVisible(true)}
         style={[
           styles.container,
-          {borderColor: error ? 'red' : '#e8e8e8'},
+          { borderColor: error ? 'red' : '#e8e8e8' },
         ]}>
-        <Text style={{ paddingLeft: 5, paddingTop: 5, color: "#15295c", fontFamily: "Poppins-SemiBold" ,fontSize:16}}>{name.toUpperCase()}</Text>
+        <View>
+          <Text style={{ padding: 10, paddingTop: 0, paddingLeft: 20, color: "#15295c", fontFamily: "OpenSans-SemiBold", fontSize: 16, textTransform: "capitalize" }}>{name} </Text>
+
+        </View>
+
 
 
         <TextInput
@@ -95,11 +100,11 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, setValue, value, 
           editable={editable}
 
         />
-        
+
       </TouchableOpacity>
       {error && (
-            <Text style={{color: 'red', alignSelf: 'stretch'}}>{error || 'Error'}</Text>
-          )}
+        <Text style={{ color: 'red', alignSelf: 'stretch' }}>{error || 'Error'}</Text>
+      )}
     </View>
   )
 }
@@ -108,14 +113,17 @@ export default CustomSelect
 
 const styles = StyleSheet.create({
   input: {
-    fontFamily:"Poppins-Regular"
+    fontFamily: "OpenSans-Regular",
+    borderColor: '#e8e8e8',
+    borderWidth: 2,
+    borderRadius: 33,
+    paddingLeft: 20,
   },
   container: {
     backgroundColor: 'white',
     width: '100%',
 
-    borderColor: '#e8e8e8',
-    borderWidth: 1,
+
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
