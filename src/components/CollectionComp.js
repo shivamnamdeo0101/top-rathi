@@ -15,31 +15,43 @@ const CollectionComp = ({ navigation, user }) => {
   const [len, setlen] = useState(0)
   const [list, setlist] = useState([])
   const [refreshing, setRefreshing] = React.useState(false);
+
   
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
-
-
   useEffect(() => {
     const fetchData = async () => {
       const res = await API.userGetCollection(user._id, pageNo);
-      if (res.data.success) {
-        setlen(res.data.length)
-        if(len >= list.length){
-          setlist([...list, ...res?.data?.data])
+      if (res.data.success){
+        if(res.data.length > 0){
+         // setlist([...list,...res.data.data])
+          dispatch(setCollection([...collection,...res.data.data]))
         }
-        console.log(list)
-        //dispatch(setCollection([...list, ...res?.data?.data]))
         setloading(false);
       }
     }
     fetchData()
 
-  }, [pageNo,refreshing])
+  }, [pageNo])
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+
+    
+  }, []);
+
+  
+  const fetchCollectionData = async () => {
+    const res = await API.userGetCollection(user._id, pageNo);
+    if (res.data.success) {
+      dispatch(setCollection(res?.data?.data))
+    }
+  }
+
+
+
 
   if (loading) {
     return (
@@ -47,7 +59,7 @@ const CollectionComp = ({ navigation, user }) => {
     )
   }
 
-  if (list.length === 0) {
+  if (collection?.length === 0) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Text style={{ color: "#000", fontFamily: "OpenSans-Bold" }}>You don't have any collection !</Text>
@@ -63,6 +75,7 @@ const CollectionComp = ({ navigation, user }) => {
     // }
 
   }
+
 
   const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     const paddingToBottom = 20;
@@ -80,19 +93,16 @@ const CollectionComp = ({ navigation, user }) => {
         showsVerticalScrollIndicator={false}
         onScroll={({ nativeEvent }) => {
           if (isCloseToBottom(nativeEvent)) {
-
-            if (len  >= ((pageNo-1) * 8)) {
               setpageNo(pageNo + 1)
-            }
-
+              console.log(pageNo)
           }
 
         }}
       >
-        {list?.map((post, index) =>
+        {collection?.map((post, index) =>
           <View key={index}>
 
-
+            <Text>{index+1}</Text>
             <TouchableOpacity style={styles.news_comp} key={post?._id} onPress={() => routeNavigation(post)}>
               <Image style={styles.post_img} source={{ uri: post?.image }} />
 

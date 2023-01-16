@@ -46,6 +46,7 @@ export const NEWS_API = {
             method: 'delete',
             url: `${EndPoint}private/collection`,
             data:payload
+            
         })
     },
     GetToCollection: async function (payload) {

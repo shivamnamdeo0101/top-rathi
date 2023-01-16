@@ -7,22 +7,30 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 import { NEWS_API } from '../service/apis/NewsService';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PollComp from './PollComp';
+import { setCollection } from '../store/NewsSlice';
+import { API } from '../service/apis/UserService';
 
 
 export default function NewsComp({ route, navigation }) {
   const uri = 'http://stackoverflow.com/questions/35531679/react-native-open-links-in-browser';
   const { post ,fromWhere} = route.params;
-
+  const dispatch = useDispatch();
   const collection = useSelector(state=>state.NewsSlice.collection);
   const user = useSelector(state => state.userAuth.user.user);
   const [saved, setsaved] = useState(false);
 
+
+
+
   const payload = {
     "userId": user._id,
-    "postId": fromWhere === "collection" ?  post.newsId : post._id
+    "postId": fromWhere ==="newsscreen" ? post._id : post.newsId
   }
+
+
+  console.log(payload)
 
   useEffect(() => {
     try {
@@ -39,19 +47,30 @@ export default function NewsComp({ route, navigation }) {
     }
   }, [saved])
 
+  
+
+  const fetchCollectionData = async () => {
+    const res = await API.userGetCollection(user._id, 1);
+    if (res.data.success) {
+      dispatch(setCollection(res?.data?.data))
+    }
+  }
 
 
   const toogleSave = async () => {
 
     if (saved) {
       await NEWS_API.RemToCollection(payload).then((res) => {
+        console.log(res.data,"Delete===================");
         setsaved(false)
       })
     } else {
       await NEWS_API.AddToCollection(payload).then((res) => {
+        
         setsaved(true)
       })
     }
+    fetchCollectionData()
 
   }
 
