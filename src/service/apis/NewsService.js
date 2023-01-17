@@ -24,11 +24,11 @@ export const NEWS_API = {
             url: `${EndPoint}private/insight`,
         })
     },
-    SearchNews: async function (payload) {
-          
+    SearchNews: async function (payload,pageNo) {
+        
         return axios.request({
             method: 'get',
-            url: `${EndPoint}private/search/${payload}`,
+            url: `${EndPoint}private/search/${payload}/${pageNo}`,
         })
     },
 

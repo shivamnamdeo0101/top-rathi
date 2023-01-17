@@ -20,9 +20,9 @@ export default function SearchScreen({ navigation }) {
   const dispatch = useDispatch();
   const [loading, setloading] = useState(true);
   const [query, setquery] = useState("");
-  const [news_data, set_news_data] = useState([]);
-
-
+  const [news_data, set_news_data] = useState({});
+  const [pageNo, setpageNo] = useState(1)
+  const [news_arr, setnews_arr] = useState([])
   useEffect(() => {
 
     try {
@@ -30,18 +30,25 @@ export default function SearchScreen({ navigation }) {
         setloading(false)
       }
 
-      if (query) {
-        NEWS_API.SearchNews(query)
+      const fetchData = async () => {
+
+        await NEWS_API.SearchNews(query, pageNo)
           .then((res) => {
             set_news_data(res.data)
+            setnews_arr([...news_arr, ...res.data.data])
             setloading(false)
           })
       }
+
+      if (query) {
+        fetchData()
+      }
+
     } catch (error) {
       console.log(error)
     }
 
-  }, [query, loading])
+  }, [query, loading, pageNo])
 
 
   const separator = () => (
@@ -54,7 +61,9 @@ export default function SearchScreen({ navigation }) {
     )
   }
   const fetchMoreData = () => {
-    { console.log(news_data.count) }
+
+    setpageNo(pageNo + 1)
+    console.log(pageNo)
   }
 
   const renderHeader = () => (
@@ -80,32 +89,54 @@ export default function SearchScreen({ navigation }) {
   )
 
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.news_comp} key={item._id} onPress={() => navigation.navigate("NewsComp", { post: item })}>
-      <Image style={styles.post_img} source={{ uri: item.image }} />
+  const RenderItem = ({ item }) => {
+    return (
+      <TouchableOpacity style={{ ...styles.news_comp }} key={item._id} onPress={() => navigation.navigate("NewsComp", { post: item })}>
+        <Image style={styles.post_img} source={{ uri: item.image }} />
 
-      <View style={styles.content_data}>
+        <View style={styles.content_data}>
 
-        <View style={styles.tags_row}>
-          {item.tags.map((tag) =>
-            <View key={tag._id}>
-              <Text style={{ marginRight: 5, fontFamily: "OpenSans-Regular", color: "#f03", fontSize: 10 }}>{tag.value}</Text>
-            </View>
-          )}
+          <View style={styles.tags_row}>
+            {item.tags.map((tag) =>
+              <View key={tag._id}>
+                <Text style={{ marginRight: 5, fontFamily: "OpenSans-Regular", color: "#f03", fontSize: 10 }}>{tag.value}</Text>
+              </View>
+            )}
+          </View>
+
+
+          <Text style={styles.title}>{item.title.length > 60 ? item.title.substring(0, 60) + "..." : item.title}</Text>
+          <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
         </View>
+      </TouchableOpacity>
+    )
 
-
-        <Text style={styles.title}>{item.title.length > 60 ? item.title.substring(0, 60) + "..." : item.title}</Text>
-        <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  }
 
 
 
-  const SetSearch = (e)=>{
-    setloading(true)
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    let offset = 0;
+    const currentOffset = contentOffset.y;
+    const dif = currentOffset - (offset || 0);
+
+    if (Math.abs(dif) < 3) {
+      console.log('unclear');
+    } else if (dif < 0) {
+      console.log('up');
+    } else {
+      console.log('down');
+      setpageNo(pageNo + 1)
+    }
+
+    offset = currentOffset;
+  };
+
+
+  const SetSearch = (e) => {
+    
     setquery(e)
+    setnews_arr([])
   }
 
   return (
@@ -115,7 +146,7 @@ export default function SearchScreen({ navigation }) {
         <TextInput
           placeholder='Search...'
           editable={true}
-          onChangeText={(e) => setquery(e)}
+          onChangeText={(e) => SetSearch(e)}
           value={query}
           style={{ width: "80%", color: "#000", width: "90%", marginLeft: 10, padding: 5, borderRadius: 16, fontFamily: "OpenSans-Regular" }}
         />
@@ -126,25 +157,18 @@ export default function SearchScreen({ navigation }) {
 
 
         <View style={{ margin: 5 }}>
-
-
-          <View style={{}}>
-            {query && <FlatList
-              data={news_data?.data}
-              keyExtractor={item => item._id}
-              renderItem={renderItem}
-
-            />}
-          </View>
-          {!query && <View style={{margin:10,marginTop:0}}>
+          {/* 
+{    query && <Text style={{fontFamily:"OpenSans-SemiBold" ,color:"#f5aa42",marginLeft:16,marginBottom:10}}>Search Results : {news_data.count}</Text>
+}          */}
+     {!query && <View style={{ margin: 10, marginTop: 0 }}>
             <Text style={{ color: "#888", fontFamily: "OpenSans-Regular", fontSize: 14, margin: 10 }}>Relevant Topics</Text>
 
             <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", margin: 10, marginTop: 0, }}>
 
               {
-                ["Sports", "Education", "Science", "Maths", "Politics", "Government", "Admission","a"].map((item, index) => {
+                ["Sports", "Education", "Science", "Maths", "Politics", "Government", "Admission", "AI"].map((item, index) => {
                   return (
-                    <TouchableOpacity onPress={()=>SetSearch(item.toLowerCase())} key={index} style={{ marginBottom: 10, marginRight: 5, backgroundColor: "#eeeeee", paddingLeft: 15, paddingRight: 20, padding: 10, borderRadius: 33 }}>
+                    <TouchableOpacity onPress={() => SetSearch(item.toLowerCase())} key={index} style={{ marginBottom: 10, marginRight: 5, backgroundColor: "#eeeeee", paddingLeft: 15, paddingRight: 20, padding: 10, borderRadius: 33 }}>
                       <Text style={{ color: "#000", fontFamily: "OpenSans-Regular", fontSize: 14 }}>{item}</Text>
                     </TouchableOpacity>
                   )
@@ -154,6 +178,31 @@ export default function SearchScreen({ navigation }) {
           </View>}
 
 
+          <View style={{marginBottom:100}}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              onScroll={({ nativeEvent }) => {
+                isCloseToBottom(nativeEvent)
+              }}
+            >
+              <View>
+                {query &&
+                  news_arr?.map((item, index) => {
+                    return (
+                      <View key={index} style={{}}>
+                        <RenderItem item={item} />
+                      </View>
+                    )
+                  })
+
+                }
+              </View>
+
+
+            </ScrollView>
+              
+          </View>
+         
         </View>
       </>
 
@@ -229,9 +278,9 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: "#e8e8e8",
     marginBottom: 5,
-    margin:14,
-    marginTop:0,
-    borderRadius:14
+    margin: 14,
+    marginTop: 0,
+    borderRadius: 14
 
 
   },

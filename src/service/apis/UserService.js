@@ -98,7 +98,7 @@ export const API = {
     },
 
     userNotifications:async function(payload){
-      const {userId,token} = payload; 
+      const {userId,token,pageNo} = payload; 
       const headers = { 
         'Authorization': 'Bearer '+token, 
         'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ export const API = {
       
       return axios.request({
         method: 'get',
-        url: `${EndPoint}private/user-notifications/${userId}`,
+        url: `${EndPoint}private/user-notifications/${userId}/${pageNo}`,
         headers:headers
       })
     },

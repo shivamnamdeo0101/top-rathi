@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PollComp from './PollComp';
 import { setCollection } from '../store/NewsSlice';
 import { API } from '../service/apis/UserService';
+import LoadingComp from './LoadingComp';
 
 
 export default function NewsComp({ route, navigation }) {
@@ -20,17 +21,41 @@ export default function NewsComp({ route, navigation }) {
   const collection = useSelector(state=>state.NewsSlice.collection);
   const user = useSelector(state => state.userAuth.user.user);
   const [saved, setsaved] = useState(false);
+  const token = useSelector(state => state.userAuth.user.token);
+  const [loading, setloading] = useState(true)
+  const [fetchedPost, setfetchedPost] = useState({})
 
+  const getIdFrom = {
+    "collection":post?.newsId,
+    "newsscreen":post?._id,
+    "notification":post?.refId
+  }
 
 
 
   const payload = {
     "userId": user._id,
-    "postId": fromWhere ==="newsscreen" ? post._id : post.newsId
+    "postId": getIdFrom[fromWhere]
   }
 
+  const getNewsPayload = {
+    "token":token,
+    "postId":getIdFrom[fromWhere]
+  }
 
-  console.log(payload)
+  useEffect(() => {
+    try {
+      const fetchData = async()=>{
+        await NEWS_API.GetNewsById(getNewsPayload).then((res) => {
+          setfetchedPost(res.data.data)
+          setloading(false)
+        })
+      }
+      fetchData()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [loading])
 
   useEffect(() => {
     try {
@@ -70,10 +95,15 @@ export default function NewsComp({ route, navigation }) {
         setsaved(true)
       })
     }
-    fetchCollectionData()
+    //fetchCollectionData()
 
   }
 
+  if(loading){
+    return(
+      <LoadingComp />
+    )
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff", flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
@@ -87,17 +117,17 @@ export default function NewsComp({ route, navigation }) {
 
 
 
-        <ScrollView showsVerticalScrollIndicator={true}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
 
 
             <View>
 
-              <Image source={{ uri: post?.image }} style={{ width: "100%", height: 220, borderRadius: 10 }} />
+              <Image source={{ uri: fetchedPost?.image }} style={{ width: "100%", height: 220, borderRadius: 10 }} />
               <View style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" }}>
                 <View style={{...styles.tags_row,marginTop:10,marginBottom:10}}>
 
-                  {post?.tags?.map((tag) =>
+                  {fetchedPost?.tags?.map((tag) =>
                     <View key={tag._id}>
                       <Text style={styles.tag}>{tag?.value}</Text>
                     </View>
@@ -105,28 +135,28 @@ export default function NewsComp({ route, navigation }) {
                 </View>
 
               </View>
-              <Text style={{ color: "#000", fontSize: 16, fontFamily: 'OpenSans-Bold' ,marginBottom:10}}>{post?.title}</Text>
+              <Text style={{ color: "#000", fontSize: 16, fontFamily: 'OpenSans-Bold' ,marginBottom:10}}>{fetchedPost?.title}</Text>
               <Text style={{
                 color: "#666",
                 fontSize: 14,
                 fontFamily: "OpenSans-Regular",marginBottom:10
-              }}>{moment(post?.timestamp).fromNow()}</Text>
+              }}>{moment(fetchedPost?.timestamp).fromNow()}</Text>
 
-              <Text style={{ color: "#444", fontSize: 14, fontFamily: 'OpenSans-SemiBold',marginBottom:10 }}>{post?.content}{post?.content}{post?.content}{post?.content}</Text>
+              <Text style={{ color: "#444", fontSize: 14, fontFamily: 'OpenSans-SemiBold',marginBottom:10 }}>{fetchedPost?.content}{fetchedPost?.content}{fetchedPost?.content}{fetchedPost?.content}</Text>
               <Text style={{ color: "#034efc", fontSize: 14, marginBottom: 10,fontFamily:"OpenSans-Regular" }}
-                onPress={() => navigation.navigate("WebView", { link: post.read_more_link })}
+                onPress={() => navigation.navigate("WebView", { link: fetchedPost?.read_more_link })}
               > Read more...</Text>
             </View>
           </View>
         </ScrollView>
         {
-          post.poll_title && <PollComp navigation={navigation} user={user} post={post} />
+          fetchedPost.poll_title && <PollComp navigation={navigation} user={user} post={fetchedPost} />
         }
         {
-          post.form_link &&
-          <TouchableOpacity onPress={() => navigation.navigate("WebView", { link: post.form_link })}>
+          fetchedPost.form_link &&
+          <TouchableOpacity onPress={() => navigation.navigate("WebView", { link: fetchedPost?.form_link })}>
             <ImageBackground
-              source={{ uri: post.image }}
+              source={{ uri: fetchedPost?.image }}
               borderRadius={5}
               blurRadius={90} style={{ display: 'flex', flexDirection: "row", alignItems: "center", backgroundColor: "#f0f3f5", padding: 10, margin: 10, marginLeft: 0, width: 150, }}
 

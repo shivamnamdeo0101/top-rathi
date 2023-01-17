@@ -21,16 +21,13 @@ const CollectionComp = ({ navigation, user }) => {
     const fetchData = async () => {
       const res = await API.userGetCollection(user._id, pageNo);
       if (res.data.success){
-        if(res.data.length > 0){
-         // setlist([...list,...res.data.data])
           dispatch(setCollection([...collection,...res.data.data]))
-        }
         setloading(false);
       }
     }
     fetchData()
 
-  }, [pageNo])
+  }, [pageNo,refreshing])
 
 
   const onRefresh = React.useCallback(() => {
@@ -101,8 +98,6 @@ const CollectionComp = ({ navigation, user }) => {
       >
         {collection?.map((post, index) =>
           <View key={index}>
-
-            <Text>{index+1}</Text>
             <TouchableOpacity style={styles.news_comp} key={post?._id} onPress={() => routeNavigation(post)}>
               <Image style={styles.post_img} source={{ uri: post?.image }} />
 

@@ -69,15 +69,7 @@ export default function NewsScreen({ navigation }) {
   // }, [email_verified, isModalVisible, counter_callback])
 
   const [news_arr, setnews_arr] = useState([])
-  var myHeaders = new Headers();
 
-
-
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
   useEffect(() => {
     const fetchData = async () => {
       const payload = {
