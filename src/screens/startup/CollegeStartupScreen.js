@@ -13,11 +13,14 @@ import SelectGrid from '../../components/SelectGrid';
 
 export default function CollegeStartupScreen({ navigation }) {
   const dispatch = useDispatch();
-  const [college_type, setcollege_type] = useState("")
+  const [college_type, setcollege_type] = useState({})
+
+  const sch = useSelector(state=>state?.SchFilterListSlice);
+
   const [error, seterror] = useState("");
   const Next = async data => {
 
-    if (!college_type) {
+    if (!college_type?.label) {
       seterror("Please select the option given")
       return
     }
@@ -44,7 +47,7 @@ export default function CollegeStartupScreen({ navigation }) {
         <SelectGrid
           error={error}
           seterror={seterror}
-          list={[{ id: 0, name: "Diploma" }, { id: 1, name: "Graduation" }, { id: 2, name: "Post Graduation" }]} setValue={setcollege_type} value={college_type} />
+          list={sch?.educationType} setValue={setcollege_type} value={college_type} />
 
       </View>
 

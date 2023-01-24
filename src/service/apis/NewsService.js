@@ -31,6 +31,12 @@ export const NEWS_API = {
             url: `${EndPoint}private/search/${payload}/${pageNo}`,
         })
     },
+    SearchTitle: async function (payload) {
+        return axios.request({
+            method: 'get',
+            url: `${EndPoint}private/search-title/${payload}`,
+        })
+    },
 
     AddToCollection: async function (payload) {
           

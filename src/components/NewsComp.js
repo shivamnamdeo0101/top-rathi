@@ -28,7 +28,8 @@ export default function NewsComp({ route, navigation }) {
   const getIdFrom = {
     "collection":post?.newsId,
     "newsscreen":post?._id,
-    "notification":post?.refId
+    "notification":post?.refId,
+    "search":post?._id,
   }
 
 
@@ -95,7 +96,7 @@ export default function NewsComp({ route, navigation }) {
         setsaved(true)
       })
     }
-    //fetchCollectionData()
+    fetchCollectionData()
 
   }
 

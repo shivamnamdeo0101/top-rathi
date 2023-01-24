@@ -26,15 +26,32 @@ export default function AddressScreen({ navigation }) {
 
     const edu = useSelector(state => state.EducationSlice)
 
-    const [country, setcountry] = useState("")
-    const [state, setstate] = useState("")
-    const [city, setcity] = useState("")
+    const [country, setcountry] = useState({})
+    const [state, setstate] = useState({})
+    const [city, setcity] = useState({})
+
+    const sch = useSelector(state => state?.SchFilterListSlice)
+
+
+    const modifyRegion = (jsonArr, type) => {
+        return jsonArr.map(
+            obj => {
+                return {
+                    "_id": obj?._id,
+                    "label": obj?.name,
+                    "value": obj?.iso2,
+                }
+            }
+        );
+
+    }
 
     useEffect(() => {
         const fetchCountries = async () => {
             const res = await DATA_API.GetCountries()
             if (res.status == '200') {
-                setcountry_list(res?.data)
+                console.log()
+                setcountry_list(modifyRegion(res?.data, "c"))
             }
         }
         fetchCountries()
@@ -46,34 +63,36 @@ export default function AddressScreen({ navigation }) {
 
         const fetchStates = async () => {
 
-            const c = country.split("-")[0];
-            console.log(c)
+            const c = country?.value;
+
             const res = await DATA_API.GetStates(c)
             if (res.status == '200') {
-                setstate_list(res?.data)
+                setstate_list(modifyRegion(res?.data, "s"))
             }
         }
 
+        if (country)
             fetchStates()
-        
 
-       
+
+
     }, [country])
 
     useEffect(() => {
 
         const fetchCities = async () => {
-            const c = country.split("-")[0];
-            const s = state.split("-")[0];
+            const c = country?.value;
+            const s = state?.value;
             const res = await DATA_API.GetCities(c, s)
             if (res.status == '200') {
-                setcities_list(res?.data)
+                setcities_list(modifyRegion(res?.data, "city"))
             }
         }
 
+        if (state && country)
             fetchCities()
-        
-       
+
+
     }, [state])
 
     const Next = async data => {
@@ -83,6 +102,7 @@ export default function AddressScreen({ navigation }) {
             const payload = {
                 "user_data": {
                     "education": {
+                        "fromWhere": edu?.fromWhere,
                         "college": {
                             "college_type": edu?.college_type,
                             "branch": edu?.branch
@@ -98,26 +118,26 @@ export default function AddressScreen({ navigation }) {
                         "city": city,
                         "pincode": data?.pincode
                     },
-                    "isProfileDone":profileDone,
-                    "notifyToken":""
+                    "isProfileDone": profileDone,
+                    "notifyToken": ""
                 }
             }
 
 
             dispatch(setAddress(payload.user_data.address))
 
-            await API.userUpdate({ payload: payload, userId: userauth._id,token:userToken })
+            await API.userUpdate({ payload: payload, userId: userauth._id, token: userToken })
                 .then(res => {
                     console.log(JSON.stringify(res.data.data))
                 })
 
 
-                
+
             const res = await API.userSuccess({ isSuccess: true, userId: userauth._id })
             console.log(res)
             if (res.status === 200) {
 
-               dispatch(getAuthSuccess())
+                dispatch(getAuthSuccess())
             }
 
 
@@ -131,7 +151,7 @@ export default function AddressScreen({ navigation }) {
         <View style={styles.container}>
             <View style={styles.top_view}>
 
-            <View style={{ padding: 20, paddingTop: 0 }}>
+                <View style={{ padding: 20, paddingTop: 0 }}>
                     <Text style={styles.heading_text}>Fill the address details .</Text>
                     <Text style={{ fontFamily: "OpenSans-Regular", color: "#637994" }} >Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0</Text>
 
@@ -185,34 +205,34 @@ export default function AddressScreen({ navigation }) {
                 />
 
 
-                    <View style={{padding:10,paddingTop:0}}>
+                <View style={{ padding: 10, paddingTop: 0 }}>
                     <CustomInput
-                    name="pincode"
-                    control={control}
-                    keyboardType="number-pad"
-                    placeholder="Enter your pincode"
-                    rules={{
-                        required: 'pincode is required',
-                        minLength: {
-                            value: 3,
-                            message: 'pincode should be at least 3 characters long',
-                        },
-                        maxLength: {
-                            value: 6,
-                            message: 'pincode should be max 6 characters long',
-                        },
-                    }}
-                />
-                    </View>
-                
+                        name="pincode"
+                        control={control}
+                        keyboardType="number-pad"
+                        placeholder="Enter your pincode"
+                        rules={{
+                            required: 'pincode is required',
+                            minLength: {
+                                value: 3,
+                                message: 'pincode should be at least 3 characters long',
+                            },
+                            maxLength: {
+                                value: 6,
+                                message: 'pincode should be max 6 characters long',
+                            },
+                        }}
+                    />
+                </View>
+
 
             </View>
 
             <View style={styles.bottom_view}>
-            
+
                 <CustomButton text="Next" onPress={handleSubmit(Next)} />
             </View>
-           
+
         </View>
     )
 }
@@ -234,6 +254,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "#15295c",
         fontFamily: "OpenSans-SemiBold",
-    
-      }
+
+    }
 });

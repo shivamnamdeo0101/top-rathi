@@ -11,9 +11,7 @@ import Snackbar from 'react-native-snackbar';
 
 
 const PersonalRoute = () => {
-  const user = useSelector(state=>state.userAuth.profile)
-
- 
+  const user = useSelector(state=>state?.userAuth?.profile)
 
   const [loading, setloading] = useState(false)
   const [sent, setsent] = useState(false)
@@ -80,7 +78,7 @@ const PersonalRoute = () => {
                 {
                   user?.interest.map((item,index)=>{
                     return(
-                      <Text key={index} style={{marginRight:6,fontFamily:"OpenSans-Regular",backgroundColor:"#f0f3f5",padding:3,borderRadius:5,fontSize:12}}>{item.name}</Text>
+                      <Text key={index} style={{marginRight:6,fontFamily:"OpenSans-Regular",backgroundColor:"#f0f3f5",padding:3,borderRadius:5,fontSize:12}}>{item.label}</Text>
                      )
                   })
                 }
@@ -105,22 +103,22 @@ const EducationRoute = () =>  {
        <Text style={styles.route_title}>EDUCATIONAL DETAILS</Text>
        <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>CLASS</Text>
-          <Text style={styles.route_comp_text}>{user?.education?.school?.class_}</Text>
+          <Text style={styles.route_comp_text}>{user?.education?.school?.class_?.label}</Text>
         </View>
         
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>STREAM</Text>
-          <Text style={styles.route_comp_text}>{user?.education?.school?.stream}</Text>
+          <Text style={styles.route_comp_text}>{user?.education?.school?.stream?.label}</Text>
         </View>
 
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>COLLEGE TYPE</Text>
-          <Text style={styles.route_comp_text}>{user?.education?.college?.college_type}</Text>
+          <Text style={styles.route_comp_text}>{user?.education?.college?.college_type?.label}</Text>
         </View>
 
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>BRANCH</Text>
-          <Text style={styles.route_comp_text}>{user?.education?.college?.branch}</Text>
+          <Text style={styles.route_comp_text}>{user?.education?.college?.branch?.label}</Text>
         </View>
     </View>
   )
@@ -134,15 +132,15 @@ const AddressRoute = () => {
         <Text style={styles.route_title}>ADDRESS DETAILS</Text>
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>COUNTRY</Text>
-          <Text style={styles.route_comp_text}>{user?.address?.country}</Text>
+          <Text style={styles.route_comp_text}>{user?.address?.country?.label}</Text>
         </View>
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>STATE</Text>
-          <Text style={styles.route_comp_text}>{user?.address?.state}</Text>
+          <Text style={styles.route_comp_text}>{user?.address?.state?.label}</Text>
         </View>
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>CITY</Text>
-          <Text style={styles.route_comp_text}>{user?.address?.city}</Text>
+          <Text style={styles.route_comp_text}>{user?.address?.city?.label}</Text>
         </View>
         <View style={styles.route_comp_view}>
           <Text style={styles.route_comp_title}>PINCODE</Text>

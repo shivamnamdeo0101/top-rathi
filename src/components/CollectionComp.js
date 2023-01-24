@@ -27,7 +27,7 @@ const CollectionComp = ({ navigation, user }) => {
     }
     fetchData()
 
-  }, [pageNo,refreshing])
+  }, [pageNo])
 
 
   const onRefresh = React.useCallback(() => {

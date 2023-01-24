@@ -17,35 +17,16 @@ import ProfileTabView from '../components/ProfileTabView';
 export default function ProfileScreen({ navigation }) {
 
   const dispatch = useDispatch();
-  const user = useSelector(state => state.userAuth.user.user)
-
-  const token = useSelector(state=>state.userAuth.user.token)
-
-  const [profile, setprofile] = useState(user)
-  const education = useSelector(state => state.EducationSlice)
+    const education = useSelector(state => state.EducationSlice)
 
   const address = useSelector(state => state.userAuth.address)
-
-
-
-
   const [image, setimage] = useState("");
 
+  const user = useSelector(state => state.userAuth.user.user)
+  const profile = useSelector(state => state.userAuth.user.user)
+  const token = useSelector(state=>state.userAuth.user.token)
   const payload = { userId: user._id,token:token }
-  useEffect(() => {
 
-    const fetchData = async () => {
-      const res = await API.userFetch(payload)
-      if (res.data.success) {
-        setprofile(res.data.data)
-        dispatch(setProfileDetaiils(res.data.data))
-      }
-    }
-
-
-    fetchData()
-
-  }, [user])
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,22 +1,22 @@
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
 import MultiSelectUi from '../../components/MultiSelectUi'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setBranch, setClass, setStream } from '../../store/EducationSlice'
 import CustomButton from '../../components/CustomButton'
 import SelectGrid from '../../components/SelectGrid'
 
 const SchoolStreamScreen = ({ navigation }) => {
 
-  const [stream, setstream] = useState("")
+  const [stream, setstream] = useState({})
   const [error, seterror] = useState("")
   const dispatch = useDispatch();
 
-
+  const sch = useSelector(state=>state?.SchFilterListSlice);
 
   const Next = () => {
 
-    if(!stream){
+    if(!stream?.label){
         seterror("Please select the option given")
         return
     }
@@ -45,19 +45,7 @@ const SchoolStreamScreen = ({ navigation }) => {
           type="class"
           error={error}
           seterror={seterror}
-          list={[
-            { id: 0, name: "Mathematics" },
-            { id: 1, name: "Biology" },
-            { id: 2, name: "Commerce" },
-            { id: 3, name: "Science" },
-            { id: 4, name: "Science" },
-            { id: 5, name: "Science" },
-            { id: 6, name: "Science" },
-            { id: 7, name: "Science" },
-           
-
-
-          ]}
+          list={sch?.stream}
           setValue={setstream} value={stream}
         />
 

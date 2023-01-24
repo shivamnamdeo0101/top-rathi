@@ -12,26 +12,35 @@ export default function ProfileStartupScreen({ navigation }) {
   const { control, handleSubmit, watch } = useForm();
   const [user, setuser] = useState({});
   const pwd = watch('password');
-  const education = useSelector(state => state.EducationSlice);
+  const education = useSelector(state => state?.EducationSlice);
+
+
+
   const dispatch = useDispatch();
-  const [from_state, setfrom_state] = useState("")
+  const [fromState, setfromState] = useState({})
   const [error, seterror] = useState("")
   const Next = () => {
 
-    if (!from_state) {
+    if (!fromState?.label) {
       seterror("Please select the value")
       return
     }
-    console.log(from_state)
+
+    delete fromState?.image;
+    
+
     try {
-      dispatch(setFromWhere(from_state))
-      console.log(JSON.stringify(education));
-      if (from_state == "school") {
+      
+      dispatch(setFromWhere(fromState))
+      if (fromState?.value == "school") {
         navigation.navigate("SchoolStartup")
       }
-      if (from_state == "college") {
+      if (fromState?.value == "college") {
         navigation.navigate("CollegeStartup")
       }
+
+
+      
       seterror("")
     } catch (e) {
       Alert.alert('Oops', e.message);
@@ -49,10 +58,10 @@ export default function ProfileStartupScreen({ navigation }) {
 
         <CustomSelectTap
 
-          list={[{ id: 0, name: "college", image: "https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/college.png" },
-          { id: 1, name: "school", image: "https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/school.png" }]}
-          setValue={setfrom_state}
-          value={from_state}
+          list={[{ indexId: 2, value: "college",label: "College", image: "https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/college.png" },
+          { indexId: 1,  value: "school",label: "School", image: "https://ik.imagekit.io/lajz2ta7n/FROM_WHERE/school.png" }]}
+          setValue={setfromState}
+          value={fromState}
           error={error}
           seterror={seterror}
         />

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
 import MultiSelectUi from '../../components/MultiSelectUi'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setBranch } from '../../store/EducationSlice'
 import CustomButton from '../../components/CustomButton'
 import { setProfileDone } from '../../store/UserSlice'
@@ -9,15 +9,16 @@ import SelectGrid from '../../components/SelectGrid'
 
 const CollegeBranchScreen = ({ navigation }) => {
 
-    const [branch, setbranch] = useState("")
+    const [branch, setbranch] = useState({})
     const [error, seterror] = useState("")
     const dispatch = useDispatch();
-
+    
+    const sch = useSelector(state=>state?.SchFilterListSlice);
 
 
     const Next = () => {
 
-        if (!branch) {
+        if (!branch?.label) {
             seterror("Please select the option given")
             return
         }
@@ -45,7 +46,7 @@ const CollegeBranchScreen = ({ navigation }) => {
                 <SelectGrid searchAble={true}
                     error={error}
                     seterror={seterror}
-                    list={[{ id: 0, name: "Computer Science" }, { id: 1, name: "Information Technology" }, { id: 2, name: "Civil engineering" }, { id: 3, name: "Mech" }, { id: 4, name: "Electical Engineering" }]} setValue={setbranch} value={branch} />
+                    list={sch?.branch} setValue={setbranch} value={branch} />
 
             </View>
             <View style={styles.bottom_view}>

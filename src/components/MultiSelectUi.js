@@ -11,24 +11,16 @@ const MultiSelectUi = ({ searchAble, data, error, seterror, list, setValue, valu
 
 
   const getData = () => {
-    return list.filter((item) => item?.name?.toLowerCase().includes(search?.toLowerCase()))
+    return list?.filter((item) => item?.label?.toLowerCase().includes(search?.toLowerCase()))
   }
 
   const handleValue = (item) => {
-    if (dataapi) {
-      setValue(item.iso2 + "-" + item.name)
-    } else {
-      setValue(item.name)
-    }
+    setValue(item)
     seterror && seterror("")
   }
 
   function getColor(item) {
-    if (dataapi) {
-      return (item.iso2 + "-" + item.name) === value;
-    } else {
-      return item?.name === value;
-    }
+   return item?.label === value?.label;
   }
 
   return (
@@ -56,14 +48,13 @@ const MultiSelectUi = ({ searchAble, data, error, seterror, list, setValue, valu
 
               return (
                 <TouchableOpacity onPress={() => handleValue(item)} key={index} style={{ width: "95%", alignSelf: "center", flexDirection: "row", alignItems: "center", alignContent: "center", borderWidth: 2, borderColor: getColor(item) ? "#f5aa42" : "#e8e8e8", borderRadius: 10, margin: 10, marginBottom: 0, marginLeft: 0, padding: 14 }}>
-                 {data === "country" && <View style={{width:"20%", flexDirection: "row",alignItems:"center" ,marginRight:10,justifyContent:"space-between"}}>
-                    <Text style={{ fontFamily: "OpenSans-SemiBold", textAlign: "center", fontSize: 16, textTransform: "uppercase", color: "#000" }}>{item?.iso2}</Text>
-
-                    <Image source={{ uri: `https://countryflagsapi.com/png/` + item?.name }} style={{ width: 25, height: 20, backgroundColor: "#ccc", borderRadius: 2 }} />
+                 {data === "country" && <View style={{width:"20%", flexDirection: "row",alignItems:"center" ,justifyContent:"space-between"}}>
+                    
+                    <Image source={{ uri: `https://countryflagsapi.com/png/` + item?.label }} style={{ width: 25, height: 20, backgroundColor: "#ccc", borderRadius: 2 }} />
 
 
                   </View>}
-                  <Text style={{ marginLeft: 10, fontFamily: "OpenSans-SemiBold", textAlign: "center", fontSize: 16, textTransform: "capitalize", color: "#000" }}>{item?.name}</Text>
+                  <Text style={{ fontFamily: "OpenSans-SemiBold", textAlign: "center", fontSize: 16, textTransform: "capitalize", color: "#000" }}>{item?.label }</Text>
                 </TouchableOpacity>
               )
             })

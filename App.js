@@ -23,6 +23,7 @@ import { Alert } from 'react-native';
 import notifee, { AndroidStyle, AndroidColor } from '@notifee/react-native';
 import { flushHomeData } from './src/store/NewsSlice';
 import { API } from './src/service/apis/UserService';
+import ReduxSetup from './src/components/ReduxSetup';
 
 
 
@@ -128,6 +129,7 @@ export default function App() {
         <React.Fragment>
           <App />
           <Root />
+          <ReduxSetup />
         </React.Fragment>
       </PersistGate>
     </Provider >

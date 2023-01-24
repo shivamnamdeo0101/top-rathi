@@ -1151,6 +1151,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@miblanchard/react-native-slider@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@miblanchard/react-native-slider/-/react-native-slider-2.2.0.tgz#5d03cf49516ad0a3b4011fbcad53cb379800832b"
+  integrity sha512-LepVGFVy6KtDVgMRIAAJJKQCXbcADkzK2R61t3LkD+IF2wG1J4I4KVo99GAsvU0EBKeCsjHPkR+6LGnB6xGzVA==
+
 "@notifee/react-native@7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-7.0.1.tgz#a142ee365593f07f216f69d454f0353854508595"

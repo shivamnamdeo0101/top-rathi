@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
-  class_:"",
-  stream:"",
-  branch:"",
-  college_type:"",
-  formWhere:"",
+  class_:{},
+  stream:{},
+  branch:{},
+  college_type:{},
+  fromwhere:{},
+  
+  
   isLoading: false,
   isSuccess: false,
   errMsg: '',
@@ -17,7 +19,7 @@ export const EducationSlice = createSlice({
   reducers: {
     
     setFromWhere:(state,action)=>{
-        state.formWhere = action.payload
+        state.fromwhere = action.payload
     },
     setClass:(state,action)=>{
         state.class_ = action.payload
@@ -28,6 +30,10 @@ export const EducationSlice = createSlice({
     setBranch:(state,action)=>{
       state.branch = action.payload
     },
+    
+
+
+
     setCollegeType:(state,action)=>{
       state.college_type = action.payload
     },

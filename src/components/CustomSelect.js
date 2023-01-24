@@ -93,8 +93,8 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, data, setValue, v
         <TextInput
           name={name}
           defaultValue={defaultValue}
-          value={value}
-          onChangeText={(e) => { setValue(e) }}
+          value={value?.label}
+          onChangeText={(e) => { setValue(e)}}
           placeholder={placeholder}
           style={styles.input}
           editable={editable}

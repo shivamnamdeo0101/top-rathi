@@ -18,6 +18,7 @@ export const UserSlice = createSlice({
       state.isLoading = true;
       state.user = action.payload;
     },
+
     getAuthSuccess: (state) => {
       state.isLoading = false;
       state.isSuccess = true;
@@ -28,19 +29,19 @@ export const UserSlice = createSlice({
       state.isProfileDone = true;
     },
 
-
     setUserDetails: (state, action) => {
       state.user = action.payload;
     },
+
     setProfileDetaiils: (state, action) => {
       state.profile = action.payload;
     },
+
     setAddress: (state, action) => {
       state.address = action.payload;
       state.isProfileDone = true;
     },
     
-
     registerAuthUser:(state,action)=>{
         state.isLoading = true;
     },

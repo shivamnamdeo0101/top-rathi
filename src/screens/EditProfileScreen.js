@@ -25,9 +25,7 @@ const EditProfileScreen = ({ navigation }) => {
     const [user, setuser] = useState({});
     const pwd = watch('password');
     const userauth = useSelector(state => state.userAuth?.user?.user);
-    const profile = useSelector(state => state.userAuth.profile);
-
-    console.log(userauth)
+    const profile = useSelector(state => state?.userAuth?.profile);
 
     const dispatch = useDispatch();
     const [selectedItems, setselectedItems] = useState([])
@@ -46,17 +44,32 @@ const EditProfileScreen = ({ navigation }) => {
     const [Interest, setInterest] = useState(profile?.interest)
     const [branch, setBranch] = useState(profile?.education?.college?.branch)
     const [class_state, setclass_state] = useState(profile?.education?.school?.class_)
-    const [from_state, setfrom_state] = useState(profile?.education?.college ? "college" : "school")
+    const [from_state, setfrom_state] = useState(profile?.education?.formWhere)
     const [college_type, setcollege_type] = useState(profile?.education?.college?.college_type)
 
+    const sch = useSelector(state => state?.SchFilterListSlice)
+    const edu = useSelector(state => state?.EducationSlice)
 
+
+    const modifyRegion = (jsonArr) => {
+        return jsonArr.map(
+          obj => {
+            return {
+              "_id": obj._id,
+              "label": obj.name,
+              "value": obj.iso2,
+            }
+          }
+        );
+    
+      }
 
 
     useEffect(() => {
         const fetchCountries = async () => {
             const res = await DATA_API.GetCountries()
             if (res.status == '200') {
-                setcountry_list(res?.data)
+                setcountry_list(modifyRegion(res?.data))
             }
         }
         fetchCountries()
@@ -67,10 +80,10 @@ const EditProfileScreen = ({ navigation }) => {
     useEffect(() => {
 
         const fetchStates = async () => {
-            const c = country.split("-")[0];
+            const c = country?.value;
             const res = await DATA_API.GetStates(c)
             if (res.status == '200') {
-                setstate_list(res?.data)
+                setstate_list(modifyRegion(res?.data))
             }
         }
 
@@ -80,11 +93,11 @@ const EditProfileScreen = ({ navigation }) => {
     useEffect(() => {
 
         const fetchCities = async () => {
-            const c = country.split("-")[0];
-            const s = state.split("-")[0];
+            const c = country?.value;
+            const s = state?.value
             const res = await DATA_API.GetCities(c, s)
             if (res.status == '200') {
-                setcities_list(res?.data)
+                setcities_list(modifyRegion(res?.data))
             }
         }
 
@@ -116,6 +129,8 @@ const EditProfileScreen = ({ navigation }) => {
         })
     }
 
+
+
     const onRegisterPressed = async data => {
 
         const { email, username } = data;
@@ -130,6 +145,7 @@ const EditProfileScreen = ({ navigation }) => {
                 "username": username,
                 "address": address_obj,
                 "education": {
+                    "fromWhere":edu?.fromWhere,
                     "school": {
                         "class_": class_state,
                         "stream": stream
@@ -241,7 +257,7 @@ const EditProfileScreen = ({ navigation }) => {
                     <CustomSelect
                         name="from where"
                         control={control}
-                        list={[{ id: 0, name: "college" }, { id: 1, name: "school" }]}
+                        list={sch?.fromWhere}
                         placeholder="From Where School Or College"
                         setValue={setfrom_state}
                         value={from_state}
@@ -253,7 +269,7 @@ const EditProfileScreen = ({ navigation }) => {
                     <CustomSelect
                         name="College Type"
                         control={control}
-                        list={[{ id: 0, name: "Graduation" }, { id: 1, name: "Post Graduation" }]}
+                        list={sch?.educationType}
                         placeholder="College Type"
                         setValue={setcollege_type}
                         value={college_type}
@@ -267,7 +283,7 @@ const EditProfileScreen = ({ navigation }) => {
                     <CustomSelect
                         name="branch"
                         control={control}
-                        list={[{ id: 0, name: "IT" }, { id: 1, name: "CS" }, { id: 2, name: "Civil" },]}
+                        list={sch?.branch}
                         defaultValue={profile?.education?.college?.branch}
                         placeholder="Branch"
                         setValue={setBranch}
@@ -286,18 +302,18 @@ const EditProfileScreen = ({ navigation }) => {
                         name="Class"
                         control={control}
                         list={[
-                            { id: 0, name: "Class 1" },
-                            { id: 1, name: "Class 2" },
-                            { id: 2, name: "Class 3" },
-                            { id: 3, name: "Class 4" },
-                            { id: 4, name: "Class 5" },
-                            { id: 5, name: "Class 6" },
-                            { id: 6, name: "Class 7" },
-                            { id: 7, name: "Class 8" },
-                            { id: 8, name: "Class 9" },
-                            { id: 9, name: "Class 10" },
-                            { id: 10, name: "Class 11" },
-                            { id: 11, name: "Class 12" },
+                            { id: 0, label: "Class 1" },
+                            { id: 1, label: "Class 2" },
+                            { id: 2, label: "Class 3" },
+                            { id: 3, label: "Class 4" },
+                            { id: 4, label: "Class 5" },
+                            { id: 5, label: "Class 6" },
+                            { id: 6, label: "Class 7" },
+                            { id: 7, label: "Class 8" },
+                            { id: 8, label: "Class 9" },
+                            { id: 9, label: "Class 10" },
+                            { id: 10, label: "Class 11" },
+                            { id: 11, label: "Class 12" },
 
 
                         ]}
@@ -315,7 +331,7 @@ const EditProfileScreen = ({ navigation }) => {
                     <CustomSelect
                         name="stream"
                         control={control}
-                        list={[{ id: 0, name: "math" }, { id: 1, name: "science" }, { id: 2, name: "history" },]}
+                        list={sch?.stream}
                         defaultValue={profile?.education?.school?.stream}
                         placeholder="Stream"
                         setValue={setStream}
@@ -332,8 +348,8 @@ const EditProfileScreen = ({ navigation }) => {
                     <CustomMultiSelect
                         name="interest"
                         control={control}
-                        list={[{ id: 0, name: "math" }, { id: 1, name: "science" }, { id: 2, name: "history" },]}
-                        defaultValue={Interest}
+                        list={sch?.interest}
+                        defaultValue={Interest ? Interest : []}
                         placeholder="interest"
                         setValue={setInterest}
                         value={Interest}

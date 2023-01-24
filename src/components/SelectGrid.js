@@ -10,24 +10,16 @@ const SelectGrid = ({ searchAble, data, error, seterror, list, setValue, value, 
 
 
     const getData = () => {
-        return list.filter((item) => item?.name?.toLowerCase().includes(search?.toLowerCase()))
+        return list?.filter((item) => item?.label?.toLowerCase().includes(search?.toLowerCase()))
     }
 
     const handleValue = (item) => {
-        if (dataapi) {
-            setValue(item.iso2 + "-" + item.name)
-        } else {
-            setValue(item.name)
-        }
+        setValue(item)
         seterror && seterror("")
     }
 
     function getColor(item) {
-        if (dataapi) {
-            return (item.iso2 + "-" + item.name) === value;
-        } else {
-            return item?.name === value;
-        }
+        return item?._id === value?._id;
     }
 
     return (
@@ -56,13 +48,13 @@ const SelectGrid = ({ searchAble, data, error, seterror, list, setValue, value, 
 
 
                                 <TouchableOpacity style={{ width: "40%", borderRadius: 10, height: 100, margin: 5, marginBottom: 10 }} key={index} onPress={() => handleValue(item)}>
-                                    <ImageBackground blurRadius={9} resizeMode="cover" borderRadius={10} source={{ uri: `https://source.unsplash.com/featured/?${item?.name}` }} onPress={() => handleValue(item)} key={index} style={{
+                                    <ImageBackground blurRadius={9} resizeMode="cover" borderRadius={10} source={{ uri: `https://source.unsplash.com/featured/?${item?.label}` }} onPress={() => handleValue(item)} key={index} style={{
                                         flex: 1,
                                         justifyContent: 'center',
                                         borderRadius: 13,
                                         borderColor: getColor(item) ? "#f5aa42" : "#eee", borderWidth: 2
                                     }}>
-                                        <Text style={{ color: "#fff", backgroundColor: "#000", padding: 5, fontFamily: "OpenSans-Regular", fontWeight: "400", textAlign: "center", fontSize: 14 }}>{item?.name}</Text>
+                                        <Text style={{ color: "#fff", backgroundColor: "#000", padding: 5, fontFamily: "OpenSans-Regular", fontWeight: "400", textAlign: "center", fontSize: 14,textTransform:"capitalize" }}>{item?.label}</Text>
 
                                     </ImageBackground>
                                 </TouchableOpacity>

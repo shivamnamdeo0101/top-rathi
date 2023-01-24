@@ -37,7 +37,6 @@ export const API = {
         'Authorization': 'Bearer '+token, 
         'Content-Type': 'application/json'
       }
-      
       return axios.request({
         method: 'get',
         headers:headers,

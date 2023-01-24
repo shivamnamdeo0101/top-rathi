@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView ,ImageB
 import React, { useState, useEffect } from 'react'
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MultiSelectUi from './MultiSelectUi';
 
 const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, value, editable }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -15,7 +14,7 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
 
 
   const getList = () => {
-    return list.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
+    return list.filter((item) => item?.label.toLowerCase().includes(search.toLowerCase()))
   }
 
 
@@ -28,7 +27,7 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
     if (!IsAvail(e)) {
       setselectedInterest(current => [...current, e]);
     } else {
-      const res = selectedInterest.filter((item) => item.name !== e.name);
+      const res = selectedInterest.filter((item) => item?.label !== e.label);
       setselectedInterest(res)
 
     }
@@ -38,8 +37,8 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
 
   const IsAvail = (e) => {
     const li = []
-    Object.values(selectedInterest).forEach((item) => li.push(item.name))
-    return li.includes(e.name)
+    Object.values(selectedInterest).forEach((item) => li.push(item?.label))
+    return li.includes(e.label)
 
   }
 
@@ -63,7 +62,7 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
         <View style={{ flexDirection: "row", width: "95%", alignSelf: "center", padding: 10, borderRadius: 33, flexWrap: "wrap", ...styles.input }}>
           {[...selectedInterest].length > 0 ? [...selectedInterest].map((item, index) =>
             <Text key={index} style={{ color: "#000", borderRadius: 8, fontFamily: "OpenSans-Regular", marginRight: 5, backgroundColor: "#f0f3f5", padding: 5, marginTop: 5 }}>
-              {item.name}
+              {item?.label}
             </Text>
           )
 
@@ -103,13 +102,13 @@ const CustomMultiSelect = ({ name, list, defaultValue, placeholder, setValue, va
                   return (
 
                       <TouchableOpacity style={{ width: "40%", borderRadius: 10, height: 100, margin: 5, marginBottom: 10 }} key={index} onPress={() => addToList(item)}>
-                        <ImageBackground blurRadius={9} resizeMode="cover" borderRadius={10} source={{ uri: `https://source.unsplash.com/featured/?${item?.name}` }}  key={index} style={{
+                        <ImageBackground blurRadius={2} resizeMode="cover" borderRadius={10} source={{ uri: `https://source.unsplash.com/featured/?${item?.value}` }}  key={index} style={{
                           flex: 1,
                           justifyContent: 'center',
                           borderRadius: 13,
                           borderColor: IsAvail(item) ? "#f5aa42" : "#eee", borderWidth: 2
                         }}>
-                          <Text style={{ color: "#fff", backgroundColor: "#000", padding: 5, fontFamily: "OpenSans-Regular", fontWeight: "400", textAlign: "center", fontSize: 14 ,textTransform:"capitalize"}}>{item?.name}</Text>
+                          <Text style={{ color: "#fff", backgroundColor: "#000", padding: 5, fontFamily: "OpenSans-Regular", fontWeight: "400", textAlign: "center", fontSize: 14 ,textTransform:"capitalize"}}>{item?.label}</Text>
 
                         </ImageBackground>
                       </TouchableOpacity>

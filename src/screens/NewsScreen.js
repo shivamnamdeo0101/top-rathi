@@ -17,6 +17,7 @@ import EmailVerify from '../components/EmailVerify';
 import ProfileTabView from '../components/ProfileTabView';
 import PollComp from '../components/PollComp';
 import NewsTabView from '../components/NewsTabView';
+import { setProfileDetaiils } from '../store/UserSlice';
 
 
 export default function NewsScreen({ navigation }) {
@@ -48,6 +49,20 @@ export default function NewsScreen({ navigation }) {
   const [email_verified, setemail_verified] = useState(false);
   const [counter_callback, setcounter_callback] = useState(0);
 
+  const user = useSelector(state => state?.userAuth?.user?.user)
+  const token = useSelector(state=>state?.userAuth?.user?.token)
+  const profilePayload = { userId: user?._id,token:token }
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      const res = await API.userFetch(profilePayload)
+      if (res.data.success) {
+        dispatch(setProfileDetaiils(res?.data?.data))
+      }
+    }
+    fetchData()
+  }, [])
 
 
   const payload = { userId: userauth?.profile?._id, token: userauth?.user?.token }
@@ -97,7 +112,7 @@ export default function NewsScreen({ navigation }) {
     //     })
 
 
-  }, [page,refreshing])
+  }, [page])
 
 
 
@@ -119,10 +134,10 @@ export default function NewsScreen({ navigation }) {
   }
   const fetchMoreData = () => {
 
-    if (news_arr.length < news_data.count) {
+  //  if (news_arr.length < news_data.count) {
       setPage(page + 1)
       console.log(page)
-    }
+  //  }
 
 
   }
@@ -294,9 +309,9 @@ export default function NewsScreen({ navigation }) {
                 onEndReached={fetchMoreData}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={separator}
-                refreshControl={
-                  <RefreshControl refreshing={refreshing} colors={["#f5aa42" ]}nRefresh={onRefresh} />
-                }
+                // refreshControl={
+                //   <RefreshControl refreshing={refreshing} colors={["#f5aa42" ]}nRefresh={onRefresh} />
+                // }
               />
             
           </View>

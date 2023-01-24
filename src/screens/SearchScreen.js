@@ -23,15 +23,16 @@ export default function SearchScreen({ navigation }) {
   const [news_data, set_news_data] = useState({});
   const [pageNo, setpageNo] = useState(1)
   const [news_arr, setnews_arr] = useState([])
+  const [titleArr, settitleArr] = useState([])
+
+
   useEffect(() => {
 
     try {
       if (!query) {
         setloading(false)
       }
-
       const fetchData = async () => {
-
         await NEWS_API.SearchNews(query, pageNo)
           .then((res) => {
             set_news_data(res.data)
@@ -48,7 +49,7 @@ export default function SearchScreen({ navigation }) {
       console.log(error)
     }
 
-  }, [query, loading, pageNo])
+  }, [pageNo])
 
 
   const separator = () => (
@@ -82,6 +83,25 @@ export default function SearchScreen({ navigation }) {
 
     </View>
   )
+
+  function SearchTitleComp() {
+    return (
+      <View style={{marginBottom:100, margin: 16, marginTop: 0, marginLeft: 20, marginRight: 20 }}>
+        <ScrollView>
+          {
+            titleArr?.map((item, index) => {
+              return (
+                <TouchableOpacity style={{ backgroundColor: "#e8e8e8", padding: 14, marginBottom: 10,borderRadius:8 }} key={index}>
+                  <Text>{item?.title?.length > 40 ? item?.title?.substring(0,40) : item?.title}</Text>
+                </TouchableOpacity>
+              )
+            })
+          }
+        </ScrollView>
+      </View>
+    )
+  }
+
   const renderEmpty = () => (
     <View style={styles.emptyText}>
       <Text>No Data at the moment</Text>
@@ -91,7 +111,7 @@ export default function SearchScreen({ navigation }) {
 
   const RenderItem = ({ item }) => {
     return (
-      <TouchableOpacity style={{ ...styles.news_comp }} key={item._id} onPress={() => navigation.navigate("NewsComp", { post: item })}>
+      <TouchableOpacity style={{ ...styles.news_comp }} key={item._id} onPress={() => navigation.navigate("NewsComp", { post: item,fromWhere:"search" })}>
         <Image style={styles.post_img} source={{ uri: item.image }} />
 
         <View style={styles.content_data}>
@@ -134,9 +154,31 @@ export default function SearchScreen({ navigation }) {
 
 
   const SetSearch = (e) => {
-    
     setquery(e)
+  }
+
+  const callSearch = async ()=>{
+    if(query?.length <= 0){
+      return
+    }
+    setloading(true)
     setnews_arr([])
+    try {
+      await NEWS_API.SearchNews(query, 1)
+          .then((res) => {
+            set_news_data(res.data)
+            setnews_arr(res.data.data)
+      })
+
+      setloading(false)
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getList = ()=>{
+    return news_arr.filter((item)=>item?.title?.toLowerCase()?.includes(query?.toLowerCase()))
   }
 
   return (
@@ -150,7 +192,7 @@ export default function SearchScreen({ navigation }) {
           value={query}
           style={{ width: "80%", color: "#000", width: "90%", marginLeft: 10, padding: 5, borderRadius: 16, fontFamily: "OpenSans-Regular" }}
         />
-        <Ionicons name="search" style={{ marginRight: 20 }} color="#f5aa42" size={20} />
+        <Ionicons name="search" onPress={()=>callSearch()} style={{ marginRight: 20 }} color="#f5aa42" size={20} />
 
       </TouchableOpacity>
       <>
@@ -160,7 +202,10 @@ export default function SearchScreen({ navigation }) {
           {/* 
 {    query && <Text style={{fontFamily:"OpenSans-SemiBold" ,color:"#f5aa42",marginLeft:16,marginBottom:10}}>Search Results : {news_data.count}</Text>
 }          */}
-     {!query && <View style={{ margin: 10, marginTop: 0 }}>
+
+
+
+          {!query && <View style={{ margin: 10, marginTop: 0 }}>
             <Text style={{ color: "#888", fontFamily: "OpenSans-Regular", fontSize: 14, margin: 10 }}>Relevant Topics</Text>
 
             <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", margin: 10, marginTop: 0, }}>
@@ -176,10 +221,11 @@ export default function SearchScreen({ navigation }) {
               }
             </View>
           </View>}
-
+          {/* <SearchTitleComp /> */}
 
           <View style={{marginBottom:100}}>
             <ScrollView
+         
               showsVerticalScrollIndicator={false}
               onScroll={({ nativeEvent }) => {
                 isCloseToBottom(nativeEvent)
@@ -187,7 +233,7 @@ export default function SearchScreen({ navigation }) {
             >
               <View>
                 {query &&
-                  news_arr?.map((item, index) => {
+                  getList()?.map((item, index) => {
                     return (
                       <View key={index} style={{}}>
                         <RenderItem item={item} />
@@ -202,7 +248,7 @@ export default function SearchScreen({ navigation }) {
             </ScrollView>
               
           </View>
-         
+
         </View>
       </>
 

@@ -4,16 +4,17 @@ import React from 'react'
 const CustomSelectTap = ({ list, setValue, value,error,seterror }) => {
 
     const setChange = (item)=>{
-        setValue(item.name)
+        setValue(item)
         seterror("")
     }
+    
 
     return (
         <View style={styles.container}>
             {
-                list.map((item,index)=>{
+                list?.map((item,index)=>{
                    return(
-                    <TouchableOpacity key={index} style={{borderColor:value === item.name ? "#15295c" : "#fff",borderWidth:2 ,borderRadius:10,padding:10}} onPress={()=>setChange(item)}>
+                    <TouchableOpacity key={index} style={{borderColor:value?.indexId === item?.indexId ? "#15295c" : "#fff",borderWidth:2 ,borderRadius:10,padding:10}} onPress={()=>setChange(item)}>
                         <Image source={{uri:item.image}} style={styles.image}/>
                      </TouchableOpacity>
                    )
