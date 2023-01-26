@@ -23,6 +23,7 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, data, setValue, v
     } else {
       setValue(item.name)
     }
+    
   }
 
   return (
@@ -49,6 +50,7 @@ const CustomSelect = ({ name, list, defaultValue, placeholder, data, setValue, v
             searchAble={searchable}
             dataapi={dataapi}
             data={data}
+            CloseModal={CloseModal}
           />
           {/* {searchable && <TextInput
             placeholder={"Search " + name}

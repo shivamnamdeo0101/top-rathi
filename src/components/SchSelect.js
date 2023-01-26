@@ -40,7 +40,7 @@ const SchSelect = ({ list, setValue, value, name }) => {
                         setValue={setValue}
                         value={value}
                         searchAble={true}
-                       
+                        CloseModal={toogleModal}
                     />
 
                 </View>

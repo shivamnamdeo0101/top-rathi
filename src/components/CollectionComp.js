@@ -21,7 +21,8 @@ const CollectionComp = ({ navigation, user }) => {
     const fetchData = async () => {
       const res = await API.userGetCollection(user._id, pageNo);
       if (res.data.success){
-          dispatch(setCollection([...collection,...res.data.data]))
+          setlist([...list,...res.data.data])
+          dispatch(setCollection([...list,...res.data.data]))
         setloading(false);
       }
     }

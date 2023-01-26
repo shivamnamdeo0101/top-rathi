@@ -16,6 +16,7 @@ import { API } from '../service/apis/UserService';
 import { DATA_API } from '../service/apis/DataService';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import messaging from '@react-native-firebase/messaging';
+import { setFromWhere } from '../store/EducationSlice';
 
 const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -30,6 +31,7 @@ const EditProfileScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const [selectedItems, setselectedItems] = useState([])
 
+    const edu = useSelector(state => state?.EducationSlice)
     const [country_list, setcountry_list] = useState([]);
     const [state_list, setstate_list] = useState([]);
     const [cities_list, setcities_list] = useState([]);
@@ -44,11 +46,11 @@ const EditProfileScreen = ({ navigation }) => {
     const [Interest, setInterest] = useState(profile?.interest)
     const [branch, setBranch] = useState(profile?.education?.college?.branch)
     const [class_state, setclass_state] = useState(profile?.education?.school?.class_)
-    const [from_state, setfrom_state] = useState(profile?.education?.formWhere)
+    const [from_state, setfrom_state] = useState(profile?.education?.fromWhere)
     const [college_type, setcollege_type] = useState(profile?.education?.college?.college_type)
 
     const sch = useSelector(state => state?.SchFilterListSlice)
-    const edu = useSelector(state => state?.EducationSlice)
+    
 
 
     const modifyRegion = (jsonArr) => {
@@ -104,26 +106,28 @@ const EditProfileScreen = ({ navigation }) => {
         fetchCities()
     }, [state])
 
-    const checkPresent = (name, arr) => {
+    console.log(edu,"Edu-------------")
 
-        return arr.some(e => e.name === name);
+    const checkPresent = (value, arr) => {
+
+        return arr.some(e => e.value === value);
     }
 
     const switchSubcription = async ({ prevInterest, currInterest }) => {
 
         await currInterest.forEach(async (item) => {
-            if (!checkPresent(item?.name, prevInterest)) {
+            if (!checkPresent(item?.value, prevInterest)) {
                 await messaging()
-                    .subscribeToTopic(item?.name)
-                    .then(() => console.log(item?.name, 'Subscribed to topic!'));
+                    .subscribeToTopic(item?.value)
+                    .then(() => console.log(item?.value, 'Subscribed to topic!'));
             }
 
         })
         await prevInterest.forEach(async (item) => {
-            if (!checkPresent(item?.name, currInterest)) {
+            if (!checkPresent(item?.value, currInterest)) {
                 await messaging()
-                    .unsubscribeFromTopic(item?.name)
-                    .then(() => console.log(item?.name, 'UnsubscribeFromTopic to topic!'));
+                    .unsubscribeFromTopic(item?.value)
+                    .then(() => console.log(item?.value, 'UnsubscribeFromTopic to topic!'));
             }
 
         })
@@ -133,6 +137,7 @@ const EditProfileScreen = ({ navigation }) => {
 
     const onRegisterPressed = async data => {
 
+        dispatch(setFromWhere(from_state))
         const { email, username } = data;
         const address_obj = {
             "country": country,
@@ -145,7 +150,7 @@ const EditProfileScreen = ({ navigation }) => {
                 "username": username,
                 "address": address_obj,
                 "education": {
-                    "fromWhere":edu?.fromWhere,
+                    "fromWhere":from_state,
                     "school": {
                         "class_": class_state,
                         "stream": stream
@@ -168,7 +173,7 @@ const EditProfileScreen = ({ navigation }) => {
 
                     if (res?.status === 200) {
                         await switchSubcription({ prevInterest: profile?.interest, currInterest: tempInterest })
-                        dispatch(setProfileDetaiils(res.data.data))
+                        dispatch(setProfileDetaiils(res?.data?.data))
                         dispatch(setLoadingUser(false))
                         Snackbar.show({
                             text: 'Profile Updated...',
@@ -176,7 +181,7 @@ const EditProfileScreen = ({ navigation }) => {
                             action: {
                                 text: 'OK',
                                 textColor: 'green',
-                                onPress: () => { dispatch(setProfileDetaiils(res.data.data)) },
+                                onPress: () => {},
                             },
                         })
                         navigation.navigate("PROFILE")

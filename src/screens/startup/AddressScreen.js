@@ -102,7 +102,7 @@ export default function AddressScreen({ navigation }) {
             const payload = {
                 "user_data": {
                     "education": {
-                        "fromWhere": edu?.fromWhere,
+                        "fromWhere": edu?.fromwhere,
                         "college": {
                             "college_type": edu?.college_type,
                             "branch": edu?.branch

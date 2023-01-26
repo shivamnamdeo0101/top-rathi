@@ -33,43 +33,7 @@ const Stack = createNativeStackNavigator();
 
 export default function AppStack({navigation}) {
   const isProfileDone = useSelector((state)=>state?.userAuth?.user?.user?.isProfileDone)
-  const dispatch = useDispatch()
   
-  useEffect(() => {
-    const fetchData = async () => {
-      
-      await SCH_API.getSchFilter("fromwhere").then((res) => {
-        dispatch(setFromWhere(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("educationtype").then((res) => {
-        dispatch(setEducationType(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("authority").then((res) => {
-        dispatch(setAuthority(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("caste").then((res) => {
-        dispatch(setCaste(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("region").then((res) => {
-        dispatch(setRegion(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("examlist").then((res) => {
-        dispatch(setExamList(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("stream").then((res) => {
-        dispatch(setStreamList(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("branch").then((res) => {
-        dispatch(setBranchList(res?.data?.data))
-      })
-      await SCH_API.getSchFilter("interest").then((res) => {
-        dispatch(setInterestList(res?.data?.data))
-      })
-    }
-
-    fetchData()
-  }, [])
-
 
   
   return (

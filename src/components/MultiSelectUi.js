@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const MultiSelectUi = ({ searchAble, data, error, seterror, list, setValue, value, dataapi }) => {
+const MultiSelectUi = ({ searchAble, data, error, seterror, list, setValue, value, dataapi,CloseModal }) => {
 
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -17,6 +17,7 @@ const MultiSelectUi = ({ searchAble, data, error, seterror, list, setValue, valu
   const handleValue = (item) => {
     setValue(item)
     seterror && seterror("")
+    CloseModal && CloseModal()
   }
 
   function getColor(item) {

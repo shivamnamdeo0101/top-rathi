@@ -10,6 +10,28 @@ import SchSelect from '../components/SchSelect';
 import CustomButton from '../components/CustomButton';
 import { setSchObj } from '../store/SchFilterSlice';
 
+
+const genderList  = [
+  {
+    _id:0,
+    indexId:1,
+    value:"female",
+    label:"Female"
+  },
+  {
+    _id:1,
+    indexId:2,
+    value:"male",
+    label:"Male"
+  },
+  {
+    _id:2,
+    indexId:3,
+    value:"transgender",
+    label:"Transgender"
+  }
+]
+
 const SchFilterScreen = ({ navigation }) => {
     const modalTrue = useSelector(state => state?.NewsSlice?.schFilterDone)
     const [modalVisible, setmodalVisible] = useState(true)
@@ -20,12 +42,15 @@ const SchFilterScreen = ({ navigation }) => {
     const [caste, setcaste] = useState(sch?.schObj?.caste)
     const [annualIncome, setannualIncome] = useState(sch?.schObj?.annualIncome)
     const [age, setage] = useState(sch?.schObj?.age)
+    const [gender, setgender] = useState(sch?.schObj?.gender)
     const [lastExam, setlastExam] = useState(sch?.schObj?.lastExam)
     const [lastExmPercentage, setlastExmPercentage] = useState(sch?.schObj?.lastExmPercentage)
-    const [domicileState, setdomicileState] = useState(sch?.schObj?.domicileState)
+    const [region, setregion] = useState(sch?.schObj?.region)
     const [authority, setauthority] = useState(sch?.schObj?.authority)
     const dispatch = useDispatch()
     const user = useSelector(state => state.userAuth.profile)
+
+
 
     const toogleModal = () => {
         dispatch(setSchDone(!modalTrue))
@@ -35,10 +60,11 @@ const SchFilterScreen = ({ navigation }) => {
             "educationType": user?.education?.college?.college_type,
             "caste": caste,
             "fromWhere": edu?.fromWhere,
-            "domicileState": domicileState,
+            "region": region,
             "lastExam": lastExam,
             "lastExmPercentage": lastExmPercentage,
-            "age": age
+            "age": age,
+            "gender":gender
         }
         dispatch(setSchObj(reduxPayload))
     }
@@ -60,12 +86,13 @@ const SchFilterScreen = ({ navigation }) => {
 
                         <View style={{ margin: 10, padding: 10 }}>
                             <SchModalList list={sch?.caste} name="Select Caste" setValue={setcaste} value={caste} />
+                            <SchModalList list={genderList} name="Select Gender" setValue={setgender} value={gender} />
                             <SchModalList list={sch?.authority} name="Select Authority" setValue={setauthority} value={authority} />
                             <SliderComp setValue={setannualIncome} name="Annual Income" value={annualIncome} min={0} max={1000000} step={10000} valueText={"Amount "} suffix={"INR"} />
                             <SliderComp setValue={setage} name="Age" value={age} min={0} max={150} valueText={"Age In Years"} step={1} suffix={"Years"} />
                             <SliderComp setValue={setlastExmPercentage} name="Last Exam Appeard Percentage" value={lastExmPercentage} min={0} max={100} valueText={"Percentage "} step={1} suffix={"%"} />
 
-                            <SchSelect name="Your Region" setValue={setdomicileState} value={domicileState} list={sch?.region} />
+                            <SchSelect name="Your Region" setValue={setregion} value={region} list={sch?.region} />
                             <SchSelect name="Last Appeared Exam" setValue={setlastExam} value={lastExam} list={sch?.examlist} />
                         </View>
 

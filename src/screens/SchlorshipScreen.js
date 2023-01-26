@@ -30,17 +30,19 @@ const SchlorshipScreen = ({ navigation }) => {
         "educationType": user?.education?.college?.college_type?.indexId,
         "caste": schObj?.caste?.indexId,
         "fromWhere": education?.fromwhere?.indexId,
-        "domicileState": schObj?.domicileState?.indexId,
+        "region": schObj?.region?.indexId,
         "lastExam": schObj?.lastExam?.indexId,
         "lastExmPercentage": schObj?.lastExmPercentage && schObj?.lastExmPercentage[0],
-        "age": schObj?.age && schObj?.age[0]
+        "age": schObj?.age && schObj?.age[0],
+        "gender": schObj?.gender?.indexId,
     }
 
 
-    console.log("Post Payload",payload)
+   
     useEffect(() => {
         const fetchData = async () => {
             await SCH_API.SchFetch(payload).then((res) => {
+                console.log(res?.data)
                 dispatch(setSchList(res?.data?.data))
             })
         }
