@@ -2,6 +2,8 @@ import { View, Text, Image, SafeAreaView, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SCH_API } from '../service/apis/SchService';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import RenderHtml from '../components/RenderHtml';
+import LoadingComp from '../components/LoadingComp';
 
 
 const li = [
@@ -29,11 +31,12 @@ const SchDetailsScreen = ({ route, navigation }) => {
 
   const { id } = route?.params;
   const [schData, setschData] = useState({})
+  const [loading, setloading] = useState(true)
   useEffect(() => {
     const fetchData = async () => {
       await SCH_API.getSchById(id).then((res) => {
-        console.log(res?.data?.data[0])
         setschData(res?.data?.data[0])
+        setloading(false)
       })
     }
 
@@ -69,6 +72,11 @@ const SchDetailsScreen = ({ route, navigation }) => {
     )
   }
 
+  if (loading) {
+    return (
+      <LoadingComp />
+    )
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -78,10 +86,11 @@ const SchDetailsScreen = ({ route, navigation }) => {
 
         <Image source={{ uri: 'https://i.ytimg.com/vi/cASlIybYBqU/maxresdefault.jpg' }} style={{ width: '100%', height: 250 }} />
 
-        {schData?.schlorshipData?.schDetails && <RenderList list={schData?.schlorshipData?.schDetails} heading={"Schlorship Details"} />}
+        <RenderHtml value={schData?.schlorshipData}/>
+        {/* {schData?.schlorshipData?.schDetails && <RenderList list={schData?.schlorshipData?.schDetails} heading={"Schlorship Details"} />}
         {schData?.schlorshipData?.docRequired && <RenderList list={schData?.schlorshipData?.docRequired} heading={"Documents Required"} />}
         {schData?.schlorshipData?.awards && <RenderList list={schData?.schlorshipData?.awards} heading={"Awards"} />}
-        {schData?.schlorshipData?.impNotes && <RenderList list={schData?.schlorshipData?.impNotes} heading={"Important Notes"} />}
+        {schData?.schlorshipData?.impNotes && <RenderList list={schData?.schlorshipData?.impNotes} heading={"Important Notes"} />} */}
 
 
       </ScrollView>

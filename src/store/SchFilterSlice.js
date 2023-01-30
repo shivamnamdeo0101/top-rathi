@@ -9,6 +9,7 @@ const initialState = {
     branch: [],
     stream: [],
     examlist: [],
+    annualIncomeList: [],
     lastExam: {},
     schObj:{}
 
@@ -47,6 +48,9 @@ export const SchFilterSlice = createSlice({
         setStreamList: (state, action) => {
             state.stream = action.payload;
         },
+        setAnnualIncomeList: (state, action) => {
+            state.annualIncomeList = action.payload;
+        },
         setSchObj: (state, action) => {
             state.schObj = action.payload;
         },
@@ -57,6 +61,6 @@ export const SchFilterSlice = createSlice({
         },
     },
 });
-export const { setFromWhere, setEducationType, setCaste, setAuthority, setRegion, setExamList, setInterestList,setSchObj, setBranchList, setStreamList } = SchFilterSlice.actions;
+export const { setFromWhere, setEducationType, setAnnualIncomeList,setCaste, setAuthority, setRegion, setExamList, setInterestList,setSchObj, setBranchList, setStreamList } = SchFilterSlice.actions;
 
 export default SchFilterSlice.reducer;

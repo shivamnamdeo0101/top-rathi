@@ -44,7 +44,7 @@ const SchFilterScreen = ({ navigation }) => {
     const [age, setage] = useState(sch?.schObj?.age)
     const [gender, setgender] = useState(sch?.schObj?.gender)
     const [lastExam, setlastExam] = useState(sch?.schObj?.lastExam)
-    const [lastExmPercentage, setlastExmPercentage] = useState(sch?.schObj?.lastExmPercentage)
+    const [percentage, setpercentage] = useState(sch?.schObj?.percentage)
     const [region, setregion] = useState(sch?.schObj?.region)
     const [authority, setauthority] = useState(sch?.schObj?.authority)
     const dispatch = useDispatch()
@@ -62,8 +62,7 @@ const SchFilterScreen = ({ navigation }) => {
             "fromWhere": edu?.fromWhere,
             "region": region,
             "lastExam": lastExam,
-            "lastExmPercentage": lastExmPercentage,
-            "age": age,
+            "percentage": percentage,
             "gender":gender
         }
         dispatch(setSchObj(reduxPayload))
@@ -88,9 +87,10 @@ const SchFilterScreen = ({ navigation }) => {
                             <SchModalList list={sch?.caste} name="Select Caste" setValue={setcaste} value={caste} />
                             <SchModalList list={genderList} name="Select Gender" setValue={setgender} value={gender} />
                             <SchModalList list={sch?.authority} name="Select Authority" setValue={setauthority} value={authority} />
-                            <SliderComp setValue={setannualIncome} name="Annual Income" value={annualIncome} min={0} max={1000000} step={10000} valueText={"Amount "} suffix={"INR"} />
-                            <SliderComp setValue={setage} name="Age" value={age} min={0} max={150} valueText={"Age In Years"} step={1} suffix={"Years"} />
-                            <SliderComp setValue={setlastExmPercentage} name="Last Exam Appeard Percentage" value={lastExmPercentage} min={0} max={100} valueText={"Percentage "} step={1} suffix={"%"} />
+                            <SliderComp setValue={setpercentage} name="Last Exam Appeard Percentage" value={percentage} min={0} max={100} valueText={"Percentage "} step={1} suffix={"%"} />
+
+                            {/* <SliderComp setValue={setage} name="Age" value={age} min={0} max={150} valueText={"Age In Years"} step={1} suffix={"Years"} /> */}
+                            <SchSelect list={sch?.annualIncomeList} name="Select Annual Income" setValue={setannualIncome} value={annualIncome} />
 
                             <SchSelect name="Your Region" setValue={setregion} value={region} list={sch?.region} />
                             <SchSelect name="Last Appeared Exam" setValue={setlastExam} value={lastExam} list={sch?.examlist} />

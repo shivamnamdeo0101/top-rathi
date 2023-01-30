@@ -4,6 +4,7 @@ import { SCH_API } from '../service/apis/SchService'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSchList , setSchDone} from '../store/NewsSlice'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import LoadingComp from '../components/LoadingComp'
 
 const SchlorshipScreen = ({ navigation }) => {
 
@@ -14,7 +15,7 @@ const SchlorshipScreen = ({ navigation }) => {
     const schDone = useSelector(state=>state?.NewsSlice?.schFilterDone)
     const schObj = useSelector(state => state?.SchFilterListSlice?.schObj)
     const user = useSelector(state => state.userAuth.profile)
-
+    const [loading, setloading] = useState(true)
 
     useEffect(() => {
         if(!schDone){
@@ -25,25 +26,25 @@ const SchlorshipScreen = ({ navigation }) => {
 
 
     const payload = {
-        "annualIncome":schObj?.annualIncome && schObj?.annualIncome[0],
+        "annualIncome":schObj?.annualIncome?.indexId,
         "authority": schObj?.authority?.indexId,
         "educationType": user?.education?.college?.college_type?.indexId,
         "caste": schObj?.caste?.indexId,
         "fromWhere": education?.fromwhere?.indexId,
         "region": schObj?.region?.indexId,
         "lastExam": schObj?.lastExam?.indexId,
-        "lastExmPercentage": schObj?.lastExmPercentage && schObj?.lastExmPercentage[0],
-        "age": schObj?.age && schObj?.age[0],
+        "percentage": schObj?.percentage && schObj?.percentage[0],
         "gender": schObj?.gender?.indexId,
     }
 
+    console.log(payload,"Payload----------")
 
    
     useEffect(() => {
         const fetchData = async () => {
             await SCH_API.SchFetch(payload).then((res) => {
-                console.log(res?.data)
                 dispatch(setSchList(res?.data?.data))
+                setloading(false)
             })
         }
         fetchData()
@@ -54,6 +55,11 @@ const SchlorshipScreen = ({ navigation }) => {
         dispatch(setSchDone(!schDone))
     }
 
+    if(loading){
+        return(
+            <LoadingComp />
+        )
+    }
 
     return (
         <View style={styles.container}>

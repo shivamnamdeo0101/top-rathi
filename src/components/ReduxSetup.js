@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React,{useEffect} from 'react'
 import { SCH_API } from '../service/apis/SchService'
-import { setAuthority, setBranchList, setCaste, setEducationType, setExamList, setFromWhere, setInterestList, setRegion, setStreamList } from '../store/SchFilterSlice'
+import { setAnnualIncomeList, setAuthority, setBranchList, setCaste, setEducationType, setExamList, setFromWhere, setInterestList, setRegion, setStreamList } from '../store/SchFilterSlice'
 import { setStream } from '../store/EducationSlice'
 import { useDispatch } from 'react-redux'
 
@@ -38,6 +38,11 @@ const ReduxSetup = () => {
             await SCH_API.getSchFilter("interest").then((res) => {
                 dispatch(setInterestList(res?.data?.data))
             })
+            await SCH_API.getSchFilter("annualincome").then((res) => {
+                dispatch(setAnnualIncomeList(res?.data?.data))
+            })
+
+            
         }
 
         fetchData()

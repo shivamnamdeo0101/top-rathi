@@ -28,7 +28,7 @@ const GoogleButton = ({action,navigation}) => {
     
         try {
             
-          const res = await API.userLogin(data)
+          const res = await API.googleLogin(data)
           if (res.status === 200) {
             
             dispatch(setUserDetails(res.data.data))
@@ -57,45 +57,18 @@ const GoogleButton = ({action,navigation}) => {
       };
 
       const onRegisterPressed = async data => {
-        const { password, email, name,profile_img } = data;
-        const payload = {
-
-            "username": "Shivam",
-            "email": email,
-            "password": password,
-            "profile_img":profile_img,
-            "education": {
-                "school": {
-                    "class_": "",
-                    "stream": ""
-                },
-                "college": {
-                    "college_type": "",
-                    "branch": ""
-                }
-            },
-            "address": {
-                "country": "",
-                "state": "",
-                "city": ""
-            },
-            "interest": [],
-            "notifications": []
-
-        }
-
-        console.log(payload)
+        
 
         try {
 
-            const res = await API.userRegister(payload)
+            const res = await API.googleRegister(data)
 
             console.log(res?.data)
 
             if (res.status === 200) {
-                dispatch(setUserDetails(res.data.data))
-                dispatch(setProfileDetaiils(res.data.data.user))
-                if (res.data.data.user.isSuccess) {
+                dispatch(setUserDetails(res?.data?.data))
+                dispatch(setProfileDetaiils(res?.data?.data?.user))
+                if (res?.data?.data?.user?.isSuccess) {
                     dispatch(getAuthSuccess())
                 } else {
                     navigation.navigate("ProfileStartup")
@@ -111,12 +84,11 @@ const GoogleButton = ({action,navigation}) => {
         try {
           await GoogleSignin.hasPlayServices();
           const userInfo = await GoogleSignin.signIn();
-            
           const payload = {
             "email":userInfo?.user?.email,
             "password":userInfo?.user?.email,
             "profile_img":userInfo?.user?.photo,
-            
+            "username":userInfo?.user?.name,
           }
           if(action === "login"){
             await onSignInPressed(payload)
@@ -145,6 +117,11 @@ const GoogleButton = ({action,navigation}) => {
 
     const registerAction = ()=>{
         signIn()
+    }
+
+    const signOut = async ()=>{
+      await GoogleSignin.signOut();
+      await GoogleSignin.revokeAccess();
     }
 
     return (
