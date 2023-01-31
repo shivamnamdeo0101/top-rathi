@@ -81,6 +81,12 @@ const GoogleButton = ({action,navigation}) => {
 
 
     const signIn = async () => {
+
+        if(GoogleSignin.isSignedIn){
+          GoogleSignin.signOut();
+          GoogleSignin.revokeAccess()
+        }
+
         try {
           await GoogleSignin.hasPlayServices();
           const userInfo = await GoogleSignin.signIn();

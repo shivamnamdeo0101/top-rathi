@@ -9,6 +9,7 @@ import SchModalList from '../components/SchModalList';
 import SchSelect from '../components/SchSelect';
 import CustomButton from '../components/CustomButton';
 import { setSchObj } from '../store/SchFilterSlice';
+import SchInput from '../components/SchInput';
 
 
 const genderList  = [
@@ -56,7 +57,6 @@ const SchFilterScreen = ({ navigation }) => {
         dispatch(setSchDone(!modalTrue))
         const reduxPayload = {
             "annualIncome": annualIncome,
-            "authority": authority,
             "educationType": user?.education?.college?.college_type,
             "caste": caste,
             "fromWhere": edu?.fromWhere,
@@ -86,11 +86,12 @@ const SchFilterScreen = ({ navigation }) => {
                         <View style={{ margin: 10, padding: 10 }}>
                             <SchModalList list={sch?.caste} name="Select Caste" setValue={setcaste} value={caste} />
                             <SchModalList list={genderList} name="Select Gender" setValue={setgender} value={gender} />
-                            <SchModalList list={sch?.authority} name="Select Authority" setValue={setauthority} value={authority} />
+                            {/* <SchModalList list={sch?.authority} name="Select Authority" setValue={setauthority} value={authority} /> */}
                             <SliderComp setValue={setpercentage} name="Last Exam Appeard Percentage" value={percentage} min={0} max={100} valueText={"Percentage "} step={1} suffix={"%"} />
-
+                            
+                            <SchInput setValue={setannualIncome} name="Annual Income" value={annualIncome} />
                             {/* <SliderComp setValue={setage} name="Age" value={age} min={0} max={150} valueText={"Age In Years"} step={1} suffix={"Years"} /> */}
-                            <SchSelect list={sch?.annualIncomeList} name="Select Annual Income" setValue={setannualIncome} value={annualIncome} />
+                            {/* <SchSelect list={sch?.annualIncomeList} name="Select Annual Income" setValue={setannualIncome} value={annualIncome} /> */}
 
                             <SchSelect name="Your Region" setValue={setregion} value={region} list={sch?.region} />
                             <SchSelect name="Last Appeared Exam" setValue={setlastExam} value={lastExam} list={sch?.examlist} />

@@ -7,11 +7,21 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { useDispatch, useSelector } from 'react-redux'
 import { flushAuthData } from '../store/UserSlice';
+import { flushHomeData } from '../store/NewsSlice';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const SettingScreen = ({ navigation }) => {
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.userAuth.profile)
+
+  const logoutFlush = ()=>{
+    dispatch(flushAuthData())
+    dispatch(flushHomeData())
+    GoogleSignin.revokeAccess();
+    GoogleSignin.signOut();
+
+  }
 
   const logoutUser = () => {
     Alert.alert(
@@ -23,7 +33,7 @@ const SettingScreen = ({ navigation }) => {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "OK", onPress: () => dispatch(flushAuthData()) }
+        { text: "OK", onPress: () =>logoutFlush()}
       ]
     );
 

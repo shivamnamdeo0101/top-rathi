@@ -26,8 +26,7 @@ const SchlorshipScreen = ({ navigation }) => {
 
 
     const payload = {
-        "annualIncome":schObj?.annualIncome?.indexId,
-        "authority": schObj?.authority?.indexId,
+        "annualIncome":parseInt(schObj?.annualIncome),
         "educationType": user?.education?.college?.college_type?.indexId,
         "caste": schObj?.caste?.indexId,
         "fromWhere": education?.fromwhere?.indexId,
