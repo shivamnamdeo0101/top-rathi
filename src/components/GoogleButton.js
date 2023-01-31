@@ -64,6 +64,7 @@ const GoogleButton = ({action,navigation}) => {
             const res = await API.googleRegister(data)
 
             console.log(res?.data)
+            
 
             if (res.status === 200) {
                 dispatch(setUserDetails(res?.data?.data))
