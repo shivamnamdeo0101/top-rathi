@@ -4,6 +4,9 @@ import { EndPoint } from '../../utils/EndPoint';
 
 export const SCH_API = {
 
+
+
+    
     SchFetch: async function (payload) {
         return axios.request({
             method: 'post',

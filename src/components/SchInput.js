@@ -10,7 +10,7 @@ const SchInput = ({  setValue, value, name }) => {
             <Text style={{ fontSize: 16, fontFamily: "OpenSans-SemiBold", color: "#15295c", textTransform: "capitalize", }}>{name}</Text>
 
            <TextInput 
-                placeholder='Enter your annual Income'
+                placeholder={'Enter your '+name}
                 value={value}
                 keyboardType="numeric"
                 onChangeText={setValue}

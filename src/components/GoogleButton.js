@@ -29,24 +29,44 @@ const GoogleButton = ({action,navigation}) => {
         try {
             
           const res = await API.googleLogin(data)
+
           if (res.status === 200) {
-            
-            dispatch(setUserDetails(res.data.data))
-            dispatch(setProfileDetaiils(res.data.data.user))
-            dispatch(getAuthSuccess())
-            
-            if (res.data.data.user.isProfileDone) {
-              dispatch(setProfileDone())
+            dispatch(setUserDetails(res?.data?.data))
+            dispatch(setProfileDetaiils(res?.data?.data?.user))
+            if (res?.data?.data?.user?.isSuccess) {
+                dispatch(getAuthSuccess())
+            } else {
+                navigation.navigate("ProfileStartup")
             }
+        }
+        
+          // if (res.status === 200) {
+            
+          //   dispatch(setUserDetails(res.data.data))
+          //   dispatch(setProfileDetaiils(res.data.data.user))
+          //   dispatch(getAuthSuccess())
+            
+          //   if (res.data.data.user.isProfileDone) {
+          //     dispatch(setProfileDone())
+          //   }
+            
 
             
 
-            // await GoogleSignin.revokeAccess();
-            // } else {
-            //   navigation.navigate("ProfileStartup")
-            // }
-          }
-    
+          //   // await GoogleSignin.revokeAccess();
+          //   // } else {
+          //   //   navigation.navigate("ProfileStartup")
+          //   // }
+          // }
+          if (res.status === 200) {
+            dispatch(setUserDetails(res?.data?.data))
+            dispatch(setProfileDetaiils(res?.data?.data?.user))
+            if (res?.data?.data?.user?.isSuccess) {
+                dispatch(getAuthSuccess())
+            } else {
+                navigation.navigate("ProfileStartup")
+            }
+        }
     
         } catch (e) {
           Alert.alert('Oops', e.message);
@@ -55,6 +75,8 @@ const GoogleButton = ({action,navigation}) => {
     
     
       };
+
+    
 
       const onRegisterPressed = async data => {
         

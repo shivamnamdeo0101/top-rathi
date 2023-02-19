@@ -57,13 +57,15 @@ const CollectionComp = ({ navigation, user }) => {
     )
   }
 
+  
   if (collection?.length === 0) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ color: "#000", fontFamily: "OpenSans-Bold" }}>You don't have any collection !</Text>
-      </View>
+    return(
+        <View style={{flex:1}}>
+            <Image style={{flex:1,height:"100%",width:"100%"}}source={require("../assets/Collection.png")}/>
+        </View>
     )
-  }
+}
+
   const routeNavigation = (post) => {
     navigation.navigate("NewsComp", { "post": post,"fromWhere":"collection" })
     // if(post?.news_type === "feed" || post?.news_type === "slide" ){

@@ -50,6 +50,16 @@ const NotificationScreen = ({ navigation }) => {
         navigation.navigate("NewsComp", { "post": post, "fromWhere": "notification" })
     }
 
+    
+    if(list?.length === 0){
+        return(
+            <View style={{flex:1}}>
+                <Image style={{flex:1,height:"100%",width:"100%"}}source={require("../assets/Notification.png")}/>
+            </View>
+        )
+    }
+
+
     return (
         <View style={styles.container}>
             {/* <Text style={styles.title}>Notifications</Text> */}
